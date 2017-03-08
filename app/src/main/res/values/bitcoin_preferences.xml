@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fees_entries">
+        <item>Low</item>
+        <item>Normal</item>
+        <item>High</item>
+    </string-array>
+
+    <string-array name="fees_values">
+        <item>10000</item>
+        <item>45000</item>
+        <item>100000</item>
+    </string-array>
+
+    <string-array name="currency_entries">
+        <item>Euros</item>
+        <item>Dollars</item>
+        <item>Pesos</item>
+        <item>Zlotys</item>
+    </string-array>
+
+    <string-array name="currency_values">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>MXN</item>
+        <item>PLN</item>
+    </string-array>
+</resources>

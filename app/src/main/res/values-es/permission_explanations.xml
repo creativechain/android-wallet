@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enable_permissions">Habilitar permisos</string>
+    <string name="explanations_sms">Necesitamos este permiso para facilitarte la optención del código recibido por sms.</string>
+    <string name="explanations_camera">Necesitamos este permisos para poder escanear códigos QR.</string>
+    <string name="explanations_location">Necesitamos estos permisos para obtener tu ubicación y mostrate los cajeros automáticos que están cerca.</string>
+    <string name="explanations_contacts">Necesitamos este permiso para que puedas elegir contactos guardados en el dispositivo.</string>
+    <string name="explanations_phone_state">Necesitamos este permiso para trabajar en segundo plano.</string>
+    <string name="explanations_storage">Necesitamos este permiso para poder usar el almacenamiento externo. Es necesario para hacer copias de seguridad.</string>
+    <string name="camera_permission">Permiso para usar la cámara</string>
+    <string name="storage_permission">Permiso de almacenamiento externo</string>
+</resources>

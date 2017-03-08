@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/activity_welcome"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blurred_background"
+    android:orientation="vertical"
+    tools:context=".ui.main.WelcomeActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true">
+
+    <crea.wallet.lite.widget.FontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/welcome_title"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        app:font="roboto_light"
+        android:textSize="25sp"/>
+
+    <crea.wallet.lite.widget.FontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/what_is_bitcoin"
+        android:textSize="12sp"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:bufferType="spannable"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/options"
+        android:padding="20dp"
+        android:background="@color/white_smoke"
+        android:visibility="visible">
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_start"
+            app:font="roboto_bold"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/gray_868"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                android:background="@drawable/btn_effect_transparent_without_border">
+
+                <crea.wallet.lite.widget.FontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_new_wallet_explain"
+                    android:textColor="@color/gray_868"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/option_create_wallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/create_new_wallet"
+                    android:textSize="10sp"
+                    android:textColor="@color/gray_868"
+                    android:gravity="center"
+                    android:background="@drawable/btn_effect_blurred"
+                    android:textAllCaps="false"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_marginTop="20dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_weight="0.2"
+                android:layout_height="120dp">
+
+                <View
+                    android:layout_height="match_parent"
+                    android:background="@color/gray_868"
+                    android:layout_width="1px"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/btn_effect_transparent_without_border">
+
+                <crea.wallet.lite.widget.FontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/generate_existing_wallet_explain"
+                    android:textColor="@color/gray_868"
+                    android:gravity="center"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/option_generate_wallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/generate_existing_wallet"
+                    android:textSize="10sp"
+                    android:textColor="@color/gray_868"
+                    android:gravity="center"
+                    android:background="@drawable/btn_effect_blurred"
+                    android:textAllCaps="false"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:layout_marginTop="20dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tasks"
+        android:visibility="gone"
+        android:background="@color/white_smoke">
+
+        <crea.wallet.lite.widget.FontTextView
+            android:id="@+id/result_status"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            app:font="material_icon"
+            android:text="\ue83b"
+            android:gravity="center"
+            android:textColor="@color/green"
+            android:textSize="55sp"
+            android:visibility="gone"/>
+
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:id="@+id/progress"/>
+
+        <crea.wallet.lite.widget.FontTextView
+            android:id="@+id/progress_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:layout_marginLeft="20dp"
+            android:text="Generating Mnemonic code list..."
+            android:textColor="@color/gray_868"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+
+</LinearLayout>

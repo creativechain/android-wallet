@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="crea.wallet.lite"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <application
+        android:name=".application.WalletApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="btcwallet.db"/>
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1"/>
+
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".ui.main.BitcoinTransactionActivity"
+            android:label="@string/activity_bitcoin_transaction"
+            android:theme="@style/AppTheme.TransactionTheme">
+        </activity>
+        <activity
+            android:name=".ui.tool.QRScannerActivity"
+            android:label="@string/qr_scanner"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.tool.SeedActivity"
+            android:label="@string/activity_seed"/>
+        <activity android:name=".ui.tool.PinActivity"/>
+
+        <service
+            android:name=".service.BitcoinService"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.main.WelcomeActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Fullscreen">
+        </activity>
+        <activity
+            android:name=".ui.tool.SendBitcoinActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="bitcoin"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.address.AddressBookActivity"
+            android:label="@string/address_book"
+            android:theme="@style/AppTheme.NoShadowActionBar">
+        </activity>
+        <activity
+            android:name=".ui.main.SettingsActivity"
+            android:label="@string/activity_settings">
+        </activity>
+        <activity
+            android:name=".ui.main.SplashActivity"
+            android:theme="@style/AppTheme.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

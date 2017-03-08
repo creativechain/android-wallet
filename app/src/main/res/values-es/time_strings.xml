@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="yesterday_at">Ayer, a las %1$s</string>
+    <string name="day_at">%1$s %2$d, a las %3$s</string>
+    <string name="month_at">%1$s %2$d de %3$s, a las %4$s</string>
+    <string name="year_at">%1$s %2$d de %3$s, %4$d a las %5$s</string>
+    <string name="today_at">Hoy, a las %1$s</string>
+    <string name="tomorrow_at">Mañana, a las %1$s</string>
+    
+    <string name="seconds_ago">hace %1$d segundos</string>
+    <string name="a_second_ago">hace un segundo</string>
+    <string name="minutes_ago">hace %1$d minutos</string>
+    <string name="a_minute_ago">hace un minuto</string>
+    <string name="hours_ago">hace %1$d horas</string>
+    <string name="a_hour_ago">hace una hora</string>
+    <string name="a_day_ago">hace un día</string>
+    <string name="days_ago">hace %1$d días</string>
+    <string name="a_month_ago">hace un mes</string>
+    <string name="months_ago">hace %1$d meses</string>
+    <string name="a_year_ago">hace un año</string>
+    <string name="years_ago">hace %1$d años</string>
+</resources>

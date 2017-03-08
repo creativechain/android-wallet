@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_blurred"
+    tools:context=".ui.main.BitcoinTransactionActivity">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentPadding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <crea.wallet.lite.widget.FontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transaction_hash"
+                app:font="roboto_bold"
+                android:textSize="15sp"/>
+
+            <crea.wallet.lite.widget.FontTextView
+                android:id="@+id/tx_hash"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="282fdbc7139669cad97468949285ccf102f289f54f0dc3d9a6653448bab41192"
+                
+                android:gravity="center_vertical" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <crea.wallet.lite.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/amount_dots"
+                    
+                    app:font="roboto_bold"/>
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:gravity="right"
+                    android:text="0.00001 CREA" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fee"
+                    
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/fee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    
+                    android:gravity="right"
+                    android:text="0.0000226 CREA" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <crea.wallet.lite.widget.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirmations"
+                    
+                    app:font="roboto_bold"/>
+
+                <TextView
+                    android:id="@+id/confirmations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    
+                    android:gravity="right"
+                    android:text="0" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:contentPadding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <crea.wallet.lite.widget.FontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sender"
+                app:font="roboto_bold"
+                android:textSize="15sp"/>
+
+            <crea.wallet.lite.widget.FontTextView
+                android:id="@+id/sender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                
+                android:text="Bárcenas \n(1AdeSusCuentaEnSuizaJAsdA)" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:contentPadding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <crea.wallet.lite.widget.FontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/addressee"
+                app:font="roboto_bold"
+                android:textSize="15sp"/>
+
+            <crea.wallet.lite.widget.FontTextView
+                android:id="@+id/addressee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                
+                android:text="My wallet (1ASsdrgSDFwASdqdWERfgvsdsfASdfw)" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

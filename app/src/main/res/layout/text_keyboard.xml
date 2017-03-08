@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_background"
+    android:id="@+id/keyboard">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <crea.wallet.lite.widget.FontTextView
+            android:id="@+id/key_q"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="Q"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="W"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_w"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="E"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_e"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="R"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_r"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="T"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_t"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="Y"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_y"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="U"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_u"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="I"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_i"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="O"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_o"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="P"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_p"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="A"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_a"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="S"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_s"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="D"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_d"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="F"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_f"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="G"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_g"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="H"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_h"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="J"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_j"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="K"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_k"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="L"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_l"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/key_ok"
+            android:layout_weight="0.1"
+            app:srcCompat="@drawable/ic_check"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="Z"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_z"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="X"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_x"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="C"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_c"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="V"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_v"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="B"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_b"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="N"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_n"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <crea.wallet.lite.widget.FontTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:font="raleway_bold"
+            android:text="M"
+            android:textSize="30dp"
+            android:textColor="@color/text_effect_white_disabled_white"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:id="@+id/key_m"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            app:srcCompat="@drawable/ic_backspace"
+            android:id="@+id/key_erase"
+            android:background="@drawable/btn_effect_transparent_without_border" />
+        
+    </LinearLayout>
+
+</LinearLayout>

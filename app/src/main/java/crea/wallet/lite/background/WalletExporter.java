@@ -1,0 +1,92 @@
+package crea.wallet.lite.background;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+
+import crea.wallet.lite.util.Utils;
+import crea.wallet.lite.wallet.WalletHelper;
+import com.chip_chap.services.task.Task;
+
+import org.creacoinj.wallet.DeterministicSeed;
+
+import java.util.List;
+
+/**
+ * Created by ander on 25/06/15.
+ */
+public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
+
+    private static final String TAG = "WalletExporter";
+    /**
+     * Method to export the MnemonicCode valueOf a wallet.
+     */
+    public static final int MNEMONIC_CODE = 1;
+    /**
+     * Method to export the DeterministicSeed valueOf a wallet.
+     */
+    public static final int DETERMINISTIC_SEED = 0;
+    private String key;
+    private Task<Bundle> task;
+    private int mode = 0;
+
+    /**
+     * Create a WalletExporter that export a MnemonicCode or DeterministicSeed of wallet.
+     * @param key the key of wallet.
+     * @param task the Task that will be executed in Exception error.
+     * @param mode the exporter mode. Can be: <b/><pre/>
+     *             {@link WalletExporter#MNEMONIC_CODE}<b/><pre/>
+     *             {@link WalletExporter#DETERMINISTIC_SEED}
+     */
+    public WalletExporter(String key, Task<Bundle> task, int mode) {
+        this.key = key;
+        this.task = task;
+        this.mode = mode;
+    }
+
+    /**
+     * Create a WalletExporter that export a DeterministicSeed of wallet.
+     * @param key the key of wallet.
+     * @param task the Task that will be executed in Exception error.
+     */
+    public WalletExporter(String key, Task<Bundle> task) {
+        this.key = key;
+        this.task = task;
+    }
+
+    @Override
+    protected Bundle doInBackground(Void... voids) {
+        long creationTime;
+        try {
+            String k = Utils.encryptInSHA2(key, 3);
+            WalletHelper.INSTANCE.decrypt(k);
+        } catch (Throwable e) {
+            Log.e(TAG, "Failed to decrypt wallet", e);
+        }
+        String seed;
+        switch (mode) {
+            default:
+                DeterministicSeed dSeed = WalletHelper.INSTANCE.getKeyChainSeed();
+                seed = getMnemonicCodeAsString(dSeed.getMnemonicCode());
+                creationTime = dSeed.getCreationTimeSeconds();
+                break;
+        }
+
+        Log.i(TAG, "seed: " + seed + ", creation time: " + creationTime);
+        WalletHelper.INSTANCE.encrypt(key);
+        Bundle bundle = new Bundle();
+        bundle.putString("exported", seed);
+        bundle.putLong("creation_time", creationTime);
+        return bundle;
+    }
+
+    private String getMnemonicCodeAsString(List<String> mnemonicCode) {
+        return TextUtils.join(" ", mnemonicCode);
+    }
+
+    @Override
+    public void onPostExecute(Bundle data) {
+        task.doTask(data);
+    }
+}

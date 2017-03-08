@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2B47FF</color>
+    <color name="colorPrimaryDark">#17247c</color>
+    <color name="colorPrimaryHint">#97384a</color>
+    <color name="colorPrimaryObscure">#151e56</color>
+    <color name="colorPrimaryBlurred">#862b47ff</color>
+    <color name="colorAccent">#FFE242</color>
+
+    <color name="gray_333">#333333</color>
+    <color name="gray_474">#474747</color>
+    <color name="gray_2e2">#2e2e2e</color>
+    <color name="gray_868">#7e7e7e</color>
+
+    <color name="white_smoke">#f4f4f4</color>
+    <color name="white_blurred">#daffffff</color>
+    <color name="blurred">#b25b5b5b</color>
+    <color name="green">#67ff3d</color>
+    <color name="sending_transaction">#90de7a</color>
+    <color name="signing_transaction">#3d5e34</color>
+    <color name="unconfirmed_input">#90de7a</color>
+    <color name="prepared_transaction">#283d20</color>
+    <color name="red">#FF2F57</color>
+    <color name="unconfirmed_output">#ff738e</color>
+</resources>

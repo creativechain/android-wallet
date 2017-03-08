@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enable_permissions">Enable permissions</string>
+    <string name="explanations_sms">We need this permission to provide the code received in the sms that you send.</string>
+    <string name="explanations_camera">We need this permission to scan the QR code.</string>
+    <string name="explanations_location">We need these permissions to get your location and show you the atms that you\'re near.</string>
+    <string name="explanations_contacts">We need this permission so that you can choose a number from your contacts list.</string>
+    <string name="explanations_phone_state">We need these permissions in order to work in the background and that you can receive notificacions from our service.</string>
+    <string name="explanations_storage">We need this permission to be able to use the external storage in some situations necessary.</string>
+
+    <string name="camera_permission">Camera permission</string>
+    <string name="storage_permission">Storage permission</string>
+</resources>

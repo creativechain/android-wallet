@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+apply plugin: 'androidsvgdrawable'
+
+android {
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+    defaultConfig {
+        applicationId "crea.wallet.lite"
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'lib/x86_64/darwin/libscrypt.dylib'
+        exclude 'lib/x86_64/freebsd/libscrypt.so'
+        exclude 'lib/x86_64/linux/libscrypt.so'
+        exclude 'com/google/thirdparty/publicsuffix/PublicSuffixPatterns.gwt.xml'
+        exclude 'com/google/thirdparty/publicsuffix/PublicSuffixType.gwt.xml'
+        exclude 'org/bitcoinj/crypto/mnemonic/wordlist/english.txt'
+        exclude 'org/bitcoinj/crypto/cacerts'
+        exclude 'org.bitcoin.production.checkpoints.txt'
+        exclude 'org.bitcoin.test.checkpoints.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+}
+
+repositories {
+    maven { url 'http://dl.bintray.com/madcyph3r/maven/' }
+    maven { url 'http://dl.bintray.com/amulyakhare/maven' }
+    maven { url "https://jitpack.io" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://github.com/omadahealth/omada-nexus/raw/master/release" }
+    jcenter()
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/chipchap-services-0.8.3.jar')
+    compile files('libs/creacoinj-core.jar')
+/*    compile('com.github.tony19:logback-android-classic:1.1.1-5') {
+        exclude(group: 'com.google.android', module: 'android')
+    }*/
+    compile 'com.google.protobuf:protobuf-java:2.6.1'
+    compile 'com.android.support:multidex:1.0.1'
+
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:cardview-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+
+    compile 'com.google.zxing:core:3.2.1'
+    compile 'me.dm7.barcodescanner:zxing:1.7'
+    compile 'net.glxn.qrgen:android:2.0'
+
+    //ACTIVE ANDROID
+    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+
+    //PIN ACTIVITY
+    compile ('com.github.orangegangsters:lollipin:2.0.0@aar') {
+        transitive = true
+    }
+
+    //TAGVIEW
+    compile 'com.github.kaedea:Android-Cloud-TagView-Plus:5a49f4fbb6'
+
+    compile 'me.zhanghai.android.materialprogressbar:library:1.3.0'
+
+    //SETTINGS
+    compile 'com.takisoft.fix:preference-v7:24.2.1.0'
+}
+
+task svgToMipmapPng(type: fr.avianey.androidsvgdrawable.gradle.SvgDrawableTask) {
+    from = files('graphics/mipmap')
+    to = file('src/main/res')
+    targetedDensities = ['hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']
+    outputFormat = 'PNG'
+    outputType = 'mipmap'
+}
+
+task svgToDrawablePng(type: fr.avianey.androidsvgdrawable.gradle.SvgDrawableTask) {
+    from = files('graphics/drawable')
+    to = file('src/main/res')
+    targetedDensities = ['hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']
+    outputFormat = 'PNG'
+    outputType = 'drawable'
+}
