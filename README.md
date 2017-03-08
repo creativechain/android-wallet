@@ -2,8 +2,6 @@
 
 Implementation of [creacoinj][creacoinj] library in Android
 
-[creacoinj]: https://github.com/creativechain/creacoinj
-
 ## Requirements
 
  - Last version of [Android Studio][studio].
@@ -31,3 +29,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ~~~
+
+[creacoinj]: https://github.com/creativechain/creacoinj
+[studio]: https://developer.android.com/studio/index.html
