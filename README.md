@@ -9,7 +9,7 @@ Implementation of [creacoinj][creacoinj] library in Android
  - Last version of [Android Studio][studio].
  - Device or Emulator (available in Android Studio) with Android 4.0.1 or later
 
-## Warnign
+## Warning
 
 This project uses the main network. On 01/05/2017 the main network will generate a new genesis block.
 This means that all the transactions and blocks generated up to that date will be discarded by the network.
