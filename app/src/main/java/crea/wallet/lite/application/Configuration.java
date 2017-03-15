@@ -108,8 +108,14 @@ public class Configuration {
 				curr = Currency.EUR;
 				break;
 		}
+		long val = prefs.getLong(key, 0);
 
-		return com.chip_chap.services.cash.coin.base.Coin.fromCurrency(curr, 1 / (prefs.getLong(key, 0) / 1e8d));
+		if (val >= 1) {
+			return com.chip_chap.services.cash.coin.base.Coin.fromCurrency(curr, 1 / (val / 1e8d));
+		} else {
+			return com.chip_chap.services.cash.coin.base.Coin.fromCurrency(curr, 0);
+		}
+
 	}
 
 	public com.chip_chap.services.cash.coin.base.Coin getPriceForMainCurrency() {
