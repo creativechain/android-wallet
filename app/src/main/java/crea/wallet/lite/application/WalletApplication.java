@@ -89,7 +89,7 @@ public class WalletApplication extends Application {
         blockchainServiceResetBlockchainIntent = new Intent(
                 BlockchainService.ACTION_RESET_BLOCKCHAIN, null, this, BitcoinService.class);
 
-        new PriceUpdater().start();
+        //new PriceUpdater().start();
         walletFile = Constants.WALLET.FIRST_WALLET_FILE;
         if (loadWalletHelper()) {
             afterLoadWallet();
