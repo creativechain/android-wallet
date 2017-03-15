@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Creacoin Lite Wallet</string>
+    <string name="app_name">Creativechain Wallet</string>
     <string name="available_amount">Available amount</string>
     <string name="bitcoin_address">Creacoin address</string>
     <string name="blockchain_download">Blockchain download</string>
@@ -80,10 +80,9 @@
     <string name="to_qr_code">To QR code</string>
     <string name="without_name">Without name</string>
     <string name="network_fee">Network fee</string>
-    <string name="welcome_title">Welcome to your new Creacoin wallet</string>
+    <string name="welcome_title">Welcome to your new Creativechain wallet</string>
     <string name="what_is_bitcoin">
-        \tCreacoin is a consensus network that enables a new payment system completely digital. It is the first payment network decentralized, which means that there is an authority focused on or intermediaries, that controls the system.\n\n
-        \tWorks since 2009. Creacoin is compared to the cash on hand to operate through the internet. Part of its power lies in that it is possible to send money from any part of the world, securely and instantly with very small commissions.</string>
+        \tCreativechain is a decentralized platform for the registration and distribution of content that certifies the authorship and license of any work or creation making them indelible. A tool for the empowerment of artists and all kinds of creative people who produce, share and distribute digital content. The platform applies the power of attorney of the revolutionary Blockchain technology in the process of registering content to create incorruptible time stamps that certify the intellectual property of any digital work.</string>
     <string name="welcome_start">As you want to start?</string>
     <string name="create_new_wallet">New wallet</string>
     <string name="create_new_wallet_explain">Create a new wallet with new addresses</string>

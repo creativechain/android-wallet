@@ -306,12 +306,12 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
 		@Override
 		public void onPeerConnected(final Peer peer, final int peerCount) {
-
+			Log.i(TAG, "Connected " + peer.getAddress().toString());
 		}
 
 		@Override
 		public void onPeerDisconnected(final Peer peer, final int peerCount) {
-
+			Log.i(TAG, "Disconnected " + peer.getAddress().toString());
 		}
 
 		@Override
@@ -485,9 +485,9 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						String[] peers = {"5.189.181.124", "80.241.212.178", "139.59.177.141"};
-						PeerAddress[] peerAddresses = new PeerAddress[peers.length];
-						for (int x = 0; x < peerAddresses.length; x++) {
+						String[] peers = {"80.241.212.178"};
+
+						for (int x = 0; x < peers.length; x++) {
 							try {
 								peerGroup.addAddress(new PeerAddress(NETWORK_PARAMETERS, InetAddress.getByName(peers[x]), NETWORK_PARAMETERS.getPort()));
 							} catch (UnknownHostException e) {

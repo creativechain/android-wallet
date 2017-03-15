@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Creacoin Lite Wallet</string>
+    <string name="app_name">Creativechain Wallet</string>
     <string name="available_amount">Cantidad disponible</string>
     <string name="bitcoin_address">Dirección creacoin</string>
     <string name="blockchain_download">Descarga de la cadena de bloques</string>
@@ -84,10 +84,9 @@
     <string name="generate_existing_wallet_explain">Crea una cartera a partir de una lista de palabras</string>
     <string name="network_fee">Comisión de red</string>
     <string name="welcome_start">¿Cómo quieres empezar?</string>
-    <string name="welcome_title">Bienvenido a tu nueva cartera creacoin</string>
+    <string name="welcome_title">Bienvenido a tu nueva cartera de Creativechain</string>
     <string name="what_is_bitcoin">
-        \tcreacoin es un concenso de red que permite un nuevo sistema de pago totalmente digital. Es la primera red de pago descentralizada, lo que significa que no existe una autoridad centra o intermediarios que controla el sistema.\n\n
-        \tFunciona desde 2009. creacoin es comparado al dinero en efectivo para operar a través de internet. Parte de su potencia radica en que es posible enviar dinero desde cualquier parte del mundo, de forma segura e instantánea con comisiones muy pequeñas.</string>
+        \tCreativechain es una plataforma descentralizada para el registro y distribución de contenidos que certifica la autoría y licencia de cualquier obra o creación que los haga indelebles. Una herramienta para el empoderamiento de artistas y todo tipo de personas creativas que producen, comparten y distribuyen contenidos digitales. La plataforma aplica el poder de la revolucionaria tecnología Blockchain en el proceso de registrar el contenido para crear sellos de tiempo incorruptibles que certifican la propiedad intelectual de cualquier obra digital.</string>
     <string name="without_name">Sin nombre</string>
     <string name="broadcasting_transaction_in_nodes">Publicando transacción en %1$d nodos creacoin.</string>
     <string name="invalid_bitcoin_address">Dirección creacoin no válida</string>

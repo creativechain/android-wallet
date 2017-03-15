@@ -15,6 +15,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.activeandroid.app.Application;
+
 import crea.wallet.lite.R;
 import crea.wallet.lite.background.PriceUpdater;
 import crea.wallet.lite.service.BitcoinService;
@@ -30,6 +31,8 @@ import org.creacoinj.core.VerificationException;
 import org.creacoinj.crypto.MnemonicCode;
 import org.creacoinj.crypto.MnemonicException;
 import org.creacoinj.wallet.UnreadableWalletException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
