@@ -266,6 +266,7 @@ public class WalletHelper {
             sReq = SendRequest.to(address, coinsToSent);
         }
 
+        sReq.feePerKb = Configuration.getInstance().getTransactionFee();
         wallets.get(f).completeTx(sReq);
         return sReq;
     }
