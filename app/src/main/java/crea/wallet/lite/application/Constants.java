@@ -42,14 +42,14 @@ public final class Constants {
 	public final static class APP {
 
 		public static final String VERSION = BuildConfig.VERSION_NAME;
-		public static final String CHIPCHAP_PATH = FILES.DATA_DIRECTORY.getAbsolutePath() + "/ChipChap/";
+		public static final String CHIPCHAP_PATH = FILES.DATA_DIRECTORY.getAbsolutePath() + "/Creativechain/";
 		public static final String BARCODE_PATH = CHIPCHAP_PATH + "Barcode/";
 
 		/** Folder for backups */
 		public static final String BACKUP_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ChipChap/Backup/";
 
 		/** User-agent to use for network access. */
-		public static final String CLIENT_NAME = "ChipChap Wallet";
+		public static final String CLIENT_NAME = "Creativechain Wallet";
 
 		/** MIME type used for transmitting single transactions. */
 		public static final String MIMETYPE_TRANSACTION = "application/x-btctx";
@@ -67,7 +67,7 @@ public final class Constants {
 		public static final String DEFAULT_EXCHANGE_CURRENCY = "EUR";
 
 		/** Recipient e-mail address for reports. */
-		public static final String REPORT_EMAIL = "support@chip-chap.com";
+		public static final String REPORT_EMAIL = "info@creativechain.org";
 	}
 
 	public final static class WALLET {
