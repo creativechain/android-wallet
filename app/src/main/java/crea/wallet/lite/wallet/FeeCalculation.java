@@ -75,7 +75,7 @@ public class FeeCalculation {
         if (emptyWallet) {
             sReq = SendRequest.emptyWallet(address);
         } else {
-            PaymentIntent pi = PaymentIntent.fromBitcoinUri(new BitcoinURI("bitcoin:" + address.toString() + "?amount=" + BitCoin.valueOf(amountToSent.longValue()).getDoubleValue()));
+            PaymentIntent pi = PaymentIntent.fromBitcoinUri(new BitcoinURI("creacoin:" + address.toString() + "?amount=" + BitCoin.valueOf(amountToSent.longValue()).getDoubleValue()));
             sReq = pi.toSendRequest();
         }
 
