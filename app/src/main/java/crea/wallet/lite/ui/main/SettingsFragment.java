@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
@@ -34,6 +35,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
+
+        ListPreference feepreference = (ListPreference) findPreference("transaction_fee");
+        if (feepreference.getValue() == null) {
+            feepreference.setValueIndex(0);
+        }
 
         final Preference seedPreference = findPreference("export_seed");
         seedPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
