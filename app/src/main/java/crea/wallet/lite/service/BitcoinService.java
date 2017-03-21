@@ -478,11 +478,11 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						String[] peers = {"80.241.212.178", "217.182.129.22"};
+						String[] peers = {"80.241.212.178", "217.182.129.22", "5.189.181.124", "5.189.152.67"};
 
-						for (int x = 0; x < peers.length; x++) {
+						for (String peer : peers) {
 							try {
-								peerGroup.addAddress(new PeerAddress(NETWORK_PARAMETERS, InetAddress.getByName(peers[x]), NETWORK_PARAMETERS.getPort()));
+								peerGroup.addAddress(new PeerAddress(NETWORK_PARAMETERS, InetAddress.getByName(peer), NETWORK_PARAMETERS.getPort()));
 							} catch (UnknownHostException e) {
 								e.printStackTrace();
 							}
@@ -490,47 +490,6 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 						return null;
 					}
 				}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-
-/*				peerGroup.addPeerDiscovery(new PeerDiscovery() {
-					private final PeerDiscovery normalPeerDiscovery = new DnsDiscovery(Constants.WALLET.NETWORK_PARAMETERS);
-
-					@Override
-					public InetSocketAddress[] getPeers(long services, final long timeoutValue, final TimeUnit timeoutUnit) throws PeerDiscoveryException {
-						final List<InetSocketAddress> peers = new LinkedList<InetSocketAddress>();
-
-						boolean needsTrimPeersWorkaround = false;
-
-						if (hasTrustedPeer) {
-							Log.i(TAG, "trusted peer '" + trustedPeerHost + "'" + (connectTrustedPeerOnly ? " only" : ""));
-
-							final InetSocketAddress addr = new InetSocketAddress(trustedPeerHost, Constants.WALLET.NETWORK_PARAMETERS.getPort());
-							if (addr.getAddress() != null) {
-								peers.add(addr);
-								needsTrimPeersWorkaround = true;
-							}
-						}
-
-						if (!connectTrustedPeerOnly) {
-							peers.addAll(Arrays.asList(normalPeerDiscovery.getPeers(services, timeoutValue, timeoutUnit)));
-						}
-
-						// workaround because PeerGroup will shuffle peers
-						if (needsTrimPeersWorkaround) {
-							while (peers.size() >= maxConnectedPeers)
-								peers.remove(peers.size() - 1);
-						}
-
-						InetSocketAddress[] isas = new InetSocketAddress[0];
-						Log.e(TAG,"Peers: " + peers.toString());
-						return peers.toArray(isas);
-					}
-
-					@Override
-					public void shutdown() {
-						normalPeerDiscovery.shutdown();
-					}
-				});*/
 
 				new AsyncTask<Void, Void, Void>() {
 

@@ -239,9 +239,9 @@ public class WalletApplication extends Application {
     public int maxConnectedPeers() 	{
         final int memoryClass = activityManager.getMemoryClass();
         if (memoryClass <= Constants.MEMORY_CLASS_LOWEND) {
-            return 4;
+            return 1;
         } else {
-            return 6;
+            return 2;
         }
     }
 
