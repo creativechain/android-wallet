@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="282fdbc7139669cad97468949285ccf102f289f54f0dc3d9a6653448bab41192"
-                
+                android:textIsSelectable="true"
                 android:gravity="center_vertical" />
 
             <LinearLayout
@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                
+                android:textIsSelectable="true"
                 android:text="Bárcenas \n(1AdeSusCuentaEnSuizaJAsdA)" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -158,7 +158,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                
+                android:textIsSelectable="true"
                 android:text="My wallet (1ASsdrgSDFwASdqdWERfgvsdsfASdfw)" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
