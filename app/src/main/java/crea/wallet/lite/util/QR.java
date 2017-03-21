@@ -49,7 +49,7 @@ public class QR {
     }
 
     public static Bitmap fromBitcoinUri(String address, BitCoin amount) {
-        return fromUri(Uri.parse("bitcoin:" + address + (amount != null ? "?amount=" + amount.toPlainString() : "")));
+        return fromUri(Uri.parse("creacoin:" + address + (amount != null ? "?amount=" + amount.toPlainString() : "")));
     }
 
     public static Bitmap fromBitcoinUri(String address) {
@@ -114,8 +114,8 @@ public class QR {
     }
 
     public static AlertDialog bitcoinQrDialog(Activity activity, String data) {
-        if (!data.startsWith("bitcoin:")) {
-            data = "bitcoin:" + data;
+        if (!data.startsWith("creacoin:")) {
+            data = "creacoin:" + data;
         }
         return bitcoinQrDialog(activity, fromString(data), null);
     }
