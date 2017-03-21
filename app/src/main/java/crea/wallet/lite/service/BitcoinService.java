@@ -47,7 +47,7 @@ import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
-import crea.wallet.lite.ui.main.BitcoinTransactionActivity;
+import crea.wallet.lite.ui.main.CoinTransactionActivity;
 import crea.wallet.lite.ui.main.MainActivity;
 import crea.wallet.lite.util.TimeUtils;
 import crea.wallet.lite.wallet.WalletHelper;
@@ -56,11 +56,11 @@ import com.chip_chap.services.cash.coin.BitCoin;
 import com.chip_chap.services.status.TransactionStatus;
 import com.chip_chap.services.task.Task;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
+import com.chip_chap.services.transaction.ChipChapTransaction;
 
 import org.creacoinj.core.Address;
 import org.creacoinj.core.Block;
 import org.creacoinj.core.BlockChain;
-import org.creacoinj.core.CheckpointManager;
 import org.creacoinj.core.Coin;
 import org.creacoinj.core.FilteredBlock;
 import org.creacoinj.core.Peer;
@@ -74,9 +74,6 @@ import org.creacoinj.core.TransactionConfidence.ConfidenceType;
 import org.creacoinj.core.listeners.DownloadProgressTracker;
 import org.creacoinj.core.listeners.PeerConnectedEventListener;
 import org.creacoinj.core.listeners.PeerDisconnectedEventListener;
-import org.creacoinj.net.discovery.DnsDiscovery;
-import org.creacoinj.net.discovery.PeerDiscovery;
-import org.creacoinj.net.discovery.PeerDiscoveryException;
 import org.creacoinj.store.BlockStore;
 import org.creacoinj.store.BlockStoreException;
 import org.creacoinj.store.SPVBlockStore;
@@ -84,20 +81,15 @@ import org.creacoinj.utils.Threading;
 import org.creacoinj.wallet.Wallet;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -211,7 +203,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 			transaction.setTitle(title);
 			transaction.setTxHash(tx.getHashAsString());
 			transaction.setStatus(TransactionStatus.OK);
-			transaction.setDate(String.valueOf(System.currentTimeMillis()));
+			transaction.setDate(String.valueOf(tx.getUpdateTime().getTime()));
 
 			if (cashIn) {
 				transaction.setSatoshis(WalletHelper.INSTANCE.getValueSentToMe(tx).getValue());
@@ -264,7 +256,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
 		if (notificationCount < 2) {
 			msg = getString(R.string.notif_cash_in, bitCoin.toFriendlyString(), person);
-			intent = new Intent(this, BitcoinTransactionActivity.class);
+			intent = new Intent(this, CoinTransactionActivity.class);
 		} else {
 			msg = getString(R.string.notif_accumulated_amount, bitCoin.toFriendlyString(), notificationCount);
 			intent = new Intent(this, MainActivity.class);
@@ -344,6 +336,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 			blockSpeed++;
 
 			delayHandler.removeCallbacksAndMessages(null);
+//			refreshConfirmations(height, block);
 
 			final long now = System.currentTimeMillis();
 
@@ -485,7 +478,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						String[] peers = {"80.241.212.178"};
+						String[] peers = {"80.241.212.178", "217.182.129.22"};
 
 						for (int x = 0; x < peers.length; x++) {
 							try {
@@ -666,6 +659,18 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 		}
 	}
 
+	private void refreshConfirmations(long height, Block block) {
+		List<Btc2BtcTransaction> transactions = ChipChapTransaction.findByStatus(Btc2BtcTransaction.class, TransactionStatus.PENDING, TransactionStatus.INFO, TransactionStatus.CREATED, TransactionStatus.OK);
+		Log.i(TAG, "Updating " + transactions.size() + " from block " + height);
+		for (Btc2BtcTransaction btc2BtcTransaction : transactions) {
+			if (block.contains(btc2BtcTransaction.getTxHash())) {
+				btc2BtcTransaction.setBlockHeight(height);
+				btc2BtcTransaction.setStatus(TransactionStatus.SUCCESS);
+				btc2BtcTransaction.save();
+			}
+		}
+	}
+
 	public class LocalBinder extends Binder {
 		public BlockchainService getService()
 		{
@@ -741,6 +746,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 				throw new Error("blockchain cannot be created", x);
 			}
 
+			setUpTxConfirmations();
 
 			final IntentFilter intentFilter = new IntentFilter();
 			intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -753,6 +759,18 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 			Log.e(TAG, "Incomplete conditions for start service");
 			stopSelf();
 		}
+	}
+
+	private void setUpTxConfirmations() {
+/*		StoredBlock sb = blockChain.getChainHead();
+		try {
+			do {
+				refreshConfirmations(sb.getHeight(), sb.getHeader());
+			} while ((sb = sb.getPrev(blockStore)) != null && sb.getHeight() != 0);
+
+		} catch (BlockStoreException e) {
+			e.printStackTrace();
+		}*/
 	}
 
 	@Override

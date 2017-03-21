@@ -27,7 +27,7 @@
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".ui.main.BitcoinTransactionActivity"
+            android:name=".ui.main.CoinTransactionActivity"
             android:label="@string/activity_bitcoin_transaction"
             android:theme="@style/AppTheme.TransactionTheme">
         </activity>

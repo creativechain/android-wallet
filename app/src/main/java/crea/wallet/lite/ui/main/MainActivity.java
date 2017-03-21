@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener<Btc2BtcTransaction>() {
             @Override
             public void OnItemClick(View v, int position, Btc2BtcTransaction tx) {
-                Intent txIntent = new Intent(MainActivity.this, BitcoinTransactionActivity.class);
+                Intent txIntent = new Intent(MainActivity.this, CoinTransactionActivity.class);
                 txIntent.putExtra("id", tx.getId());
                 startActivity(txIntent);
             }

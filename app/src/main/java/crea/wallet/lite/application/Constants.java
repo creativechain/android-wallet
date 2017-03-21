@@ -108,9 +108,9 @@ public final class Constants {
 		/** Base URL for blockchain API. */
 		public static final String BITEASY_API_URL = TEST ? BITEASY_API_URL_TEST : BITEASY_API_URL_PROD;
 
-		public static final String BLOCKEXPLORER_PROD_URL = "https://www.blockexplorer.com/";
+		public static final String BLOCKEXPLORER_PROD_URL = "https://search.creativechain.net/api/getrawtransaction?txid=";
 		public static final String BLOCKEXPLORER_TEST_URL = "https://testnet.blockexplorer.com/";
-		public static final String BLOCKEXPLORER_URL = TEST ? BLOCKEXPLORER_TEST_URL : BLOCKEXPLORER_PROD_URL;
+		public static final String BLOCKEXPLORER_URL = "https://search.creativechain.net/tx/";
 	}
 
 	public final static class FILES {
