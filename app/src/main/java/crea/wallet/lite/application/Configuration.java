@@ -158,7 +158,7 @@ public class Configuration {
 	}
 
 	public Coin getTransactionFee() {
-		long feeValue = Long.parseLong(prefs.getString(PREFS_KEY_TRANSACTION_FEE, "45000"));
+		long feeValue = Long.parseLong(prefs.getString(PREFS_KEY_TRANSACTION_FEE, "95000"));
 		return Coin.valueOf(feeValue);
 	}
 

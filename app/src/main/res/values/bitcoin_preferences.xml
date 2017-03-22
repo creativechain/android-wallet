@@ -7,9 +7,9 @@
     </string-array>
 
     <string-array name="fees_values">
-        <item>10000</item>
-        <item>45000</item>
-        <item>100000</item>
+        <item>30000</item>
+        <item>95000</item>
+        <item>150000</item>
     </string-array>
 
     <string-array name="currency_entries">

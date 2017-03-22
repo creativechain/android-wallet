@@ -38,7 +38,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         ListPreference feepreference = (ListPreference) findPreference("transaction_fee");
         if (feepreference.getValue() == null) {
-            feepreference.setValueIndex(0);
+            feepreference.setValueIndex(1);
         }
 
         final Preference seedPreference = findPreference("export_seed");
