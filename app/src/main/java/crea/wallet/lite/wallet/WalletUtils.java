@@ -472,7 +472,7 @@ public class WalletUtils {
 		System.arraycopy(checksum, 0, preAddress, mainHash.length, checksum.length);
 
 		String address = Base58.encode(preAddress);
-		return AddressUtil.fromBase58(wallet.getParams(), address);
+		return Address.fromBase58(wallet.getParams(), address);
 	}
 
 	public static Address generateAddress(Wallet wallet) {

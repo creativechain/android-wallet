@@ -231,11 +231,30 @@ public class WalletHelper {
     }
 
     public Coin getAddressBalance(File f, String address) {
-        return getMainAddressBalance(f, AddressUtil.fromBase58(Constants.WALLET.NETWORK_PARAMETERS, address));
+        return getMainAddressBalance(f, Address.fromBase58(Constants.WALLET.NETWORK_PARAMETERS, address));
     }
 
     public Coin getMainAddressBalance(String address) {
         return getAddressBalance(Configuration.getInstance().getMainWalletFile(), address);
+    }
+
+    public void singTransaction(final File f, final CharSequence tryKey, final CharSequence newKey, SendRequest sReq) {
+        try {
+            Context.propagate(CONTEXT);
+            Wallet w = wallets.get(f);
+            w.decrypt(tryKey);
+            w.signTransaction(sReq);
+            new Thread() {
+                @Override
+                public void run() {
+                    Context.propagate(CONTEXT);
+                    encrypt(f, newKey);
+                }
+            }.start();
+
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     public SendRequest prepareTransaction(final File f, final CharSequence tryKey, final CharSequence newKey, Coin coinsToSent, Address address, boolean emptyWallet) throws InsufficientMoneyException {

@@ -16,6 +16,8 @@ import org.creacoinj.uri.BitcoinURIParseException;
 import org.creacoinj.wallet.SendRequest;
 import org.creacoinj.wallet.Wallet;
 
+import static crea.wallet.lite.application.Constants.WALLET.DONATION_ADDRESS;
+
 /**
  * Created by ander on 16/09/15.
  */
@@ -46,17 +48,11 @@ public class FeeCalculation {
     }
 
     public FeeCalculation(Wallet wallet) {
-        this(wallet, Constants.WALLET.DONATION_ADDRESS);
+        this(wallet, DONATION_ADDRESS);
     }
 
     public FeeCalculation(Wallet wallet, Coin amountToSent) {
-        this(wallet, Constants.WALLET.DONATION_ADDRESS, amountToSent);
-    }
-
-    public FeeCalculation(Wallet wallet, Coin amountToSent, Address... inputs) {
-        Transaction tx = new Transaction(wallet.getParams());
-        TransactionOutput txO = new TransactionOutput(wallet.getParams(), tx, amountToSent, Constants.WALLET.DONATION_ADDRESS);
-        tx.addInput(txO);
+        this(wallet, DONATION_ADDRESS, amountToSent);
     }
 
     public FeeCalculation(Wallet wallet, Address address, Coin amountToSent) {
@@ -120,6 +116,18 @@ public class FeeCalculation {
 
     public boolean hasError() {
         return hasError;
+    }
+
+    public SendRequest getsReq() {
+        return sReq;
+    }
+
+    public boolean isToDonationAddress() {
+        return address.equals(DONATION_ADDRESS);
+    }
+
+    public Address getAddress() {
+        return address;
     }
 
     @Override

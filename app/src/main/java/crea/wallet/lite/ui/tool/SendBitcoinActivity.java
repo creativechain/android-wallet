@@ -27,7 +27,6 @@ import crea.wallet.lite.util.FormUtils;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.OnTextChangeListener;
 import crea.wallet.lite.wallet.AbstractPaymentProcessListener;
-import crea.wallet.lite.wallet.AddressUtil;
 import crea.wallet.lite.wallet.FeeCalculation;
 import crea.wallet.lite.wallet.PaymentProcess;
 import crea.wallet.lite.wallet.PaymentProcessListener;
@@ -45,8 +44,10 @@ import org.creacoinj.core.Transaction;
 import org.creacoinj.core.TransactionConfidence;
 import org.creacoinj.uri.BitcoinURI;
 import org.creacoinj.uri.BitcoinURIParseException;
+import org.creacoinj.wallet.SendRequest;
 import org.creacoinj.wallet.Wallet;
 
+import static crea.wallet.lite.application.Constants.WALLET.DONATION_ADDRESS;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_RECEIVED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_SENT;
@@ -135,6 +136,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
     };
 
     private Transaction tx;
+    private SendRequest sReq;
     private EditText addressEditText;
     private EditText amountEditText;
     private EditText toFiatAmount;
@@ -153,7 +155,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
     private Currency currency;
     private Task<Void> keyTask;
     private Configuration conf;
-    private Address btcAddress;
+    private Address address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +189,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
         wallet = WalletHelper.INSTANCE.getMainWallet();
 
 
-        amountEditText.setHint(getString(R.string.amount_in_currency, Currency.BTC.toString()));
+        amountEditText.setHint(getString(R.string.amount_in_currency, "CREA"));
         amountEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -254,6 +256,17 @@ public class SendBitcoinActivity extends AppCompatActivity {
 
     }
 
+    private Address getAddress() {
+
+        if (address != null) {
+            return address;
+        } else if (!FormUtils.isEmpty(addressEditText) && WalletUtils.isValidAddress(NETWORK_PARAMETERS, addressEditText.getText().toString())) {
+            return Address.fromBase58(NETWORK_PARAMETERS, addressEditText.getText().toString());
+        }
+
+        return DONATION_ADDRESS;
+    }
+
     private void handleBitcoinUri(Uri uri) {
         try {
             BitcoinURI btcUri = new BitcoinURI(uri.toString());
@@ -267,7 +280,6 @@ public class SendBitcoinActivity extends AppCompatActivity {
             if (amount != null) {
                 amountEditText.requestFocus();
                 amountEditText.setText(BitCoin.valueOf(amount.getValue()).toPlainString());
-                calculateBitcoinFee();
             }
         } catch (BitcoinURIParseException e) {
             try {
@@ -364,28 +376,36 @@ public class SendBitcoinActivity extends AppCompatActivity {
         amountEditText.setTextColor(normalColorBlue);
         toFiatAmount.setTextColor(normalColorBlue);
         boolean emptyWallet = sendAllMoney.isChecked();
-        double btcAmount = Double.parseDouble(amountEditText.getText().toString());
-        Coin amountToSent = Coin.valueOf(Math.round(btcAmount * 1e8d));
-        FeeCalculation feeCalculation;
 
-        if (emptyWallet) {
-            feeCalculation = new FeeCalculation(wallet);
-        } else {
-            feeCalculation = new FeeCalculation(wallet, amountToSent);
+        if (FormUtils.containsDecimal(amountEditText)) {
+            double btcAmount = Double.parseDouble(amountEditText.getText().toString());
+            Coin amountToSent = Coin.valueOf(Math.round(btcAmount * 1e8d));
+            FeeCalculation feeCalculation;
+
+            if (emptyWallet) {
+                feeCalculation = new FeeCalculation(wallet, getAddress());
+            } else {
+                feeCalculation = new FeeCalculation(wallet, getAddress(), amountToSent);
+            }
+
+            Log.e(TAG, "calculation error " + feeCalculation.hasError() + ", has money: " + feeCalculation.hasSufficientMoney());
+            if (!feeCalculation.hasError() && feeCalculation.hasSufficientMoney()) {
+                String formattedFeeString = String.format(getResources().getString(R.string.transaction_fee_of), feeCalculation.getTxFee().toFriendlyString());
+                feeTextView.setText(formattedFeeString);
+                Log.i(TAG, "To donation address: " + feeCalculation.isToDonationAddress() + ", " + feeCalculation.getAddress().toBase58());
+                if (!feeCalculation.isToDonationAddress()) {
+                    sReq = feeCalculation.getsReq();
+                }
+            } else {
+                feeTextView.setText(getResources().getString(R.string.no_sufficient_money, feeCalculation.getMissing().toFriendlyString()));
+                feeTextView.setTextColor(errorColor);
+                amountEditText.setTextColor(errorColor);
+                toFiatAmount.setTextColor(errorColor);
+            }
+
+            setState(State.PREPARED);
         }
 
-        Log.e(TAG, "calculation error " + feeCalculation.hasError() + ", has money: " + feeCalculation.hasSufficientMoney());
-        if (!feeCalculation.hasError() && feeCalculation.hasSufficientMoney()) {
-            String formattedFeeString = String.format(getResources().getString(R.string.transaction_fee_of), feeCalculation.getTxFee().toFriendlyString());
-            feeTextView.setText(formattedFeeString);
-        } else {
-            feeTextView.setText(getResources().getString(R.string.no_sufficient_money, feeCalculation.getMissing().toFriendlyString()));
-            feeTextView.setTextColor(errorColor);
-            amountEditText.setTextColor(errorColor);
-            toFiatAmount.setTextColor(errorColor);
-        }
-
-        setState(State.PREPARED);
     }
 
     public void validateFields() {
@@ -393,7 +413,6 @@ public class SendBitcoinActivity extends AppCompatActivity {
         boolean hasError = false;
         String error = getResources().getString(R.string.empty_error_field);
         String address = addressEditText.getText().toString();
-        String amount = amountEditText.getText().toString();
 
         if (FormUtils.isEmpty(addressEditText)) {
             addressEditText.setError(error);
@@ -409,26 +428,20 @@ public class SendBitcoinActivity extends AppCompatActivity {
         }
 
         if (!hasError) {
-            long satohis = BitCoin.valueOf(Double.valueOf(amount)).getLongValue();
-            processTransaction(address, satohis);
+            this.address = Address.fromBase58(NETWORK_PARAMETERS, addressEditText.getText().toString());
+            processTransaction();
         }
     }
 
-    public void processTransaction(final String address, final long amount) {
+    public void processTransaction() {
         broadcastStatus.setVisibility(View.VISIBLE);
         keyTask = new Task<Void>() {
             @Override
             public void doTask(Void s) {
-                btcAddress = AddressUtil.fromBase58(NETWORK_PARAMETERS, address);
-                PaymentProcess paymentProcess;
-                if (sendAllMoney.isChecked()) {
-                    paymentProcess = new PaymentProcess(SendBitcoinActivity.this, btcAddress, true, conf.getMainWalletFile());
-                } else {
-                    paymentProcess = new PaymentProcess(SendBitcoinActivity.this, btcAddress, Coin.valueOf(amount), conf.getMainWalletFile());
-                }
 
+                PaymentProcess paymentProcess = new PaymentProcess(SendBitcoinActivity.this, sReq, conf.getMainWalletFile());
                 paymentProcess.setProcessListener(CONFIDENCE_LISTENER)
-                        .start(conf.getPin());
+                        .start();
             }
         };
 
@@ -459,7 +472,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
                             .amount(BitCoin.valueOf(feeOutput.getValue()))
                             .price(conf.getBtcPrice(Currency.EUR)).getConversion();
 
-                    destinyAddress.setText(btcAddress.toString());
+                    destinyAddress.setText(getAddress().toString());
                     destinyAmount.setText(totalOutput.toFriendlyString());
                     feeAmountBtc.setText(feeOutput.toFriendlyString());
                     feeAmountFiat.setText(feeConversion.toFriendlyString());

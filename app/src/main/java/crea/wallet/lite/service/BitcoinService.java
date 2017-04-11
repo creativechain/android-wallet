@@ -57,12 +57,16 @@ import com.chip_chap.services.status.TransactionStatus;
 import com.chip_chap.services.task.Task;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
 import com.chip_chap.services.transaction.ChipChapTransaction;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import org.creacoinj.core.Address;
 import org.creacoinj.core.Block;
 import org.creacoinj.core.BlockChain;
 import org.creacoinj.core.Coin;
 import org.creacoinj.core.FilteredBlock;
+import org.creacoinj.core.Message;
 import org.creacoinj.core.Peer;
 import org.creacoinj.core.PeerAddress;
 import org.creacoinj.core.PeerGroup;
@@ -72,8 +76,12 @@ import org.creacoinj.core.Transaction;
 import org.creacoinj.core.TransactionBroadcast;
 import org.creacoinj.core.TransactionConfidence.ConfidenceType;
 import org.creacoinj.core.listeners.DownloadProgressTracker;
+import org.creacoinj.core.listeners.OnTransactionBroadcastListener;
 import org.creacoinj.core.listeners.PeerConnectedEventListener;
 import org.creacoinj.core.listeners.PeerDisconnectedEventListener;
+import org.creacoinj.net.discovery.DnsDiscovery;
+import org.creacoinj.net.discovery.PeerDiscovery;
+import org.creacoinj.net.discovery.PeerDiscoveryException;
 import org.creacoinj.store.BlockStore;
 import org.creacoinj.store.BlockStoreException;
 import org.creacoinj.store.SPVBlockStore;
@@ -82,14 +90,17 @@ import org.creacoinj.wallet.Wallet;
 
 import java.io.File;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -97,6 +108,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.Nullable;
 
 import static crea.wallet.lite.application.Constants.WALLET.CONTEXT;
+import static crea.wallet.lite.application.Constants.WALLET.DEFAULT_PEERS;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 
@@ -118,6 +130,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 	private static final String CASH_OUT_TITLE = "BTC Cash Out";
 
 	public static TextView progressBar;
+	public static Transaction tx;
 
 	private final AbstractWalletCoinListener WALLET_COIN_LISTENER = new AbstractWalletCoinListener() {
 		@Override
@@ -361,6 +374,14 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
                         Log.i(TAG, remainingTime + ", REMAINS=" + remain + ", " + blockSpeed + " blocks/s");
                         blockSpeed = 0;
+						if (progressBar != null) {
+							progressBar.post(new Runnable() {
+								@Override
+								public void run() {
+									progressBar.setText(getString(R.string.sync_time, remainingTime));
+								}
+							});
+						}
                         rateHandler.postDelayed(this, 1000);
                     }
                 });
@@ -377,6 +398,8 @@ public class BitcoinService extends PersistentService implements BlockchainServi
                 //WalletHelper.INSTANCE.cleanup();
 				sendBroadcast(new Intent(BlockchainBroadcastReceiver.LAST_BLOCK_RECEIVED));
                 rateHandler.removeCallbacksAndMessages(null);
+				delayHandler.removeCallbacksAndMessages(null);
+				config.maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
 				if (progressBar != null) {
 					progressBar.post(new Runnable() {
 						@Override
@@ -393,17 +416,6 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 			@Override
 			public void run() {
                 lastMessageTime.set(System.currentTimeMillis());
-				//WalletHelper.INSTANCE.setLastBlock(block, height);
-
-				if (progressBar != null) {
-					progressBar.post(new Runnable() {
-						@Override
-						public void run() {
-							progressBar.setText(getString(R.string.sync_time, remainingTime));
-						}
-					});
-				}
-
 				config.maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
 			}
 		};
@@ -466,30 +478,33 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
 				final int maxConnectedPeers = application.maxConnectedPeers();
 
-				final String trustedPeerHost = config.getTrustedPeerHost();
-				final boolean hasTrustedPeer = !trustedPeerHost.isEmpty();
-
-				final boolean connectTrustedPeerOnly = hasTrustedPeer && config.getTrustedPeerOnly();
-				peerGroup.setMaxConnections(connectTrustedPeerOnly ? 1 : maxConnectedPeers);
+				peerGroup.setMaxConnections(maxConnectedPeers);
 				peerGroup.setConnectTimeoutMillis(Constants.PEER_TIMEOUT_MS);
 				peerGroup.setPeerDiscoveryTimeoutMillis(Constants.PEER_DISCOVERY_TIMEOUT_MS);
 
-				new AsyncTask<Void, Void, Void>() {
+				peerGroup.addPeerDiscovery(new PeerDiscovery() {
+					private final PeerDiscovery normalPeerDiscovery = new DnsDiscovery(NETWORK_PARAMETERS);
 
 					@Override
-					protected Void doInBackground(Void... params) {
-						String[] peers = {"80.241.212.178", "217.182.129.22", "5.189.181.124", "5.189.152.67"};
+					public InetSocketAddress[] getPeers(long l, long l1, TimeUnit timeUnit) throws PeerDiscoveryException {
+						final List<InetSocketAddress> peers = new LinkedList<InetSocketAddress>();
 
-						for (String peer : peers) {
-							try {
-								peerGroup.addAddress(new PeerAddress(NETWORK_PARAMETERS, InetAddress.getByName(peer), NETWORK_PARAMETERS.getPort()));
-							} catch (UnknownHostException e) {
-								e.printStackTrace();
-							}
+
+						for (String p : DEFAULT_PEERS) {
+							InetSocketAddress isa = new InetSocketAddress(p, NETWORK_PARAMETERS.getPort());
+							peers.add(isa);
 						}
-						return null;
+
+						//peers.addAll(Arrays.asList(normalPeerDiscovery.getPeers(l, l1, timeUnit)));
+
+						return peers.toArray(new InetSocketAddress[]{});
 					}
-				}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+					@Override
+					public void shutdown() {
+						normalPeerDiscovery.shutdown();
+					}
+				});
 
 				new AsyncTask<Void, Void, Void>() {
 
@@ -615,18 +630,6 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 			}
 
 			Log.e(TAG,"Removed " + count + " wallets");
-		}
-	}
-
-	private void refreshConfirmations(long height, Block block) {
-		List<Btc2BtcTransaction> transactions = ChipChapTransaction.findByStatus(Btc2BtcTransaction.class, TransactionStatus.PENDING, TransactionStatus.INFO, TransactionStatus.CREATED, TransactionStatus.OK);
-		Log.i(TAG, "Updating " + transactions.size() + " from block " + height);
-		for (Btc2BtcTransaction btc2BtcTransaction : transactions) {
-			if (block.contains(btc2BtcTransaction.getTxHash())) {
-				btc2BtcTransaction.setBlockHeight(height);
-				btc2BtcTransaction.setStatus(TransactionStatus.SUCCESS);
-				btc2BtcTransaction.save();
-			}
 		}
 	}
 
@@ -760,34 +763,26 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
 			} else if (ACTION_BROADCAST_TRANSACTION.equals(action)) {
 
-				final Sha256Hash hash = new Sha256Hash(intent.getByteArrayExtra(ACTION_BROADCAST_TRANSACTION_HASH));
-				final Transaction tx = WalletHelper.INSTANCE.getTransaction(hash);
-
 				if (peerGroup != null) {
-					Log.i(TAG, "broadcasting transaction " + hash.toString());
-					onBroadcastTransaction = new Task<Transaction>() {
+					Log.i(TAG, "broadcasting transaction " + tx.getHash().toString());
+					TransactionBroadcast tb = peerGroup.broadcastTransaction(tx);
+					ListenableFuture<Transaction> txFuture = tb.future();
+/*					Futures.addCallback(txFuture, new FutureCallback<Transaction>() {
 						@Override
-						public void doTask(Transaction transaction) {
+						public void onSuccess(@Nullable Transaction transaction) {
 							long id = saveTransaction(transaction, CASH_OUT_TITLE);
 							broadcastTransactionSent(id);
+							tx = null;
 						}
-					};
 
-					TransactionBroadcast tb = peerGroup.broadcastTransaction(tx);
-					tb.future().addListener(new Runnable() {
 						@Override
-						public void run() {
-							onBroadcastTransaction.doTask(tx);
+						public void onFailure(@NonNull Throwable throwable) {
+							throwable.printStackTrace();
 						}
-					}, new Executor() {
-						@Override
-						public void execute(@NonNull Runnable command) {
-							command.run();
-						}
-					});
+					});*/
 
 				} else {
-					Log.i(TAG, "PeerGroup not available, not broadcasting transaction " + hash.toString());
+					Log.i(TAG, "PeerGroup not available, not broadcasting transaction " + tx.getHash().toString());
 				}
 			} else if (ACTION_RESET_BLOCKCHAIN.equals(action)) {
 				Log.i(TAG, "will remove blockchain on service shutdown");

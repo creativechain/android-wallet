@@ -21,7 +21,6 @@ import android.os.Environment;
 import android.text.format.DateUtils;
 
 import crea.wallet.lite.BuildConfig;
-import crea.wallet.lite.wallet.AddressUtil;
 import com.google.common.io.BaseEncoding;
 
 import org.creacoinj.core.Address;
@@ -73,6 +72,7 @@ public final class Constants {
 	public final static class WALLET {
 		public static final NetworkParameters NETWORK_PARAMETERS = TEST ? TestNet3Params.get() : MainNetParams.get();
 		public static final Context CONTEXT = new Context(NETWORK_PARAMETERS);
+		public static final long WALLET_TIMESTAMP = 1490036400;
 
 		public static final String WALLET_PATH = APP.CHIPCHAP_PATH + "Wallet/";
 		public static final String WALLET_FILES_NAME = WALLET_PATH + "wallet";
@@ -96,9 +96,11 @@ public final class Constants {
 		public static final String MAIN_ADDRESS = "CPw1tJF6wWcdXPKYwS4pg3wF37XVqJZ9JC";
 		public static final String TEST_ADDRESS = "mgvgQKuyUMyT1C5VT7iYDt1cFF1MPaHTNt";
 		public static final String ADDRESS = TEST ? TEST_ADDRESS : MAIN_ADDRESS;
-		public static final Address DONATION_ADDRESS = AddressUtil.fromBase58(WALLET.NETWORK_PARAMETERS, ADDRESS);
+		public static final Address DONATION_ADDRESS = Address.fromBase58(WALLET.NETWORK_PARAMETERS, ADDRESS);
 
 		public static final int MAX_HD_ACCOUNTS = 5;
+
+		public static final String[] DEFAULT_PEERS = {"80.241.212.178", "217.182.129.22", "5.189.181.124"};
 	}
 
 	public static final class WEB_EXPLORER {

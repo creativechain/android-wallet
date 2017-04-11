@@ -10,7 +10,7 @@
     <string name="notif_cash_in_title">You have received %1$s.</string>
     <string name="broadcasting_transaction">Broadcasting transaction</string>
     <string name="want_to_send_payment">You want to send a payment of %1$s to %2$s, with a fee %3$s?</string>
-    <string name="new_btc_payment">New BTC Payment</string>
+    <string name="new_btc_payment">New CREA Payment</string>
     <string name="new_transaction">New transaction</string>
     <string name="new_transaction_message">Preparing transaction…</string>
     <string name="wrong_pin">Wrong pin</string>

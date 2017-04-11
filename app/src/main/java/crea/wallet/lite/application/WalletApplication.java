@@ -16,11 +16,16 @@ import android.widget.Toast;
 
 import com.activeandroid.app.Application;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.android.LogcatAppender;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import crea.wallet.lite.R;
 import crea.wallet.lite.background.PriceUpdater;
 import crea.wallet.lite.service.BitcoinService;
 import crea.wallet.lite.service.BlockchainService;
 import crea.wallet.lite.ui.tool.PinActivity;
+import crea.wallet.lite.util.Hex;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 import com.chip_chap.services.calls.Settings;
@@ -45,6 +50,8 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 import javax.security.auth.x500.X500Principal;
+
+import static crea.wallet.lite.application.Constants.WALLET.DEFAULT_PEERS;
 
 /**
  * Created by ander on 10/11/16.
@@ -78,6 +85,8 @@ public class WalletApplication extends Application {
         lockManager.enableAppLock(this, PinActivity.class);
         lockManager.getAppLock().setLogoId(R.mipmap.ic_lock);
 
+        initLogging();
+
         org.creacoinj.core.Context.enableStrictMode();
         org.creacoinj.core.Context.propagate(Constants.WALLET.CONTEXT);
         Log.d(TAG, "App in debug mode: " + Constants.TEST);
@@ -95,6 +104,30 @@ public class WalletApplication extends Application {
             afterLoadWallet();
         }
 
+    }
+
+    private void initLogging() {
+        final LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        final ch.qos.logback.classic.Logger log = context.getLogger(Logger.ROOT_LOGGER_NAME);
+
+        final PatternLayoutEncoder logcatTagPattern = new PatternLayoutEncoder();
+        logcatTagPattern.setContext(context);
+        logcatTagPattern.setPattern("%logger{0}");
+        logcatTagPattern.start();
+
+        final PatternLayoutEncoder logcatPattern = new PatternLayoutEncoder();
+        logcatPattern.setContext(context);
+        logcatPattern.setPattern("[%thread] %msg%n");
+        logcatPattern.start();
+
+        final LogcatAppender logcatAppender = new LogcatAppender();
+        logcatAppender.setContext(context);
+        logcatAppender.setTagEncoder(logcatTagPattern);
+        logcatAppender.setEncoder(logcatPattern);
+        logcatAppender.start();
+
+        log.addAppender(logcatAppender);
+        log.setLevel(Level.INFO);
     }
 
     public boolean isDebuggable() {
@@ -225,24 +258,29 @@ public class WalletApplication extends Application {
 
     public void processDirectTransaction(final Transaction tx) throws VerificationException {
         if (WalletHelper.getInstance().isTransactionRelevant(tx)) {
-            WalletHelper.getInstance().receivePending(tx, null);
             broadcastTransaction(tx);
         }
     }
 
     public void broadcastTransaction(final Transaction tx)	{
+        BitcoinService.tx = tx;
         final Intent intent = new Intent(BlockchainService.ACTION_BROADCAST_TRANSACTION, null, this, BitcoinService.class);
         intent.putExtra(BlockchainService.ACTION_BROADCAST_TRANSACTION_HASH, tx.getHash().getBytes());
         startService(intent);
     }
 
     public int maxConnectedPeers() 	{
-        final int memoryClass = activityManager.getMemoryClass();
-        if (memoryClass <= Constants.MEMORY_CLASS_LOWEND) {
-            return 1;
-        } else {
-            return 2;
+
+        if (DEFAULT_PEERS.length > 6) {
+            final int memoryClass = activityManager.getMemoryClass();
+            if (memoryClass <= Constants.MEMORY_CLASS_LOWEND) {
+                return 4;
+            } else {
+                return 6;
+            }
         }
+
+        return DEFAULT_PEERS.length;
     }
 
     public static void scheduleStartBlockchainService(final Context context) {
