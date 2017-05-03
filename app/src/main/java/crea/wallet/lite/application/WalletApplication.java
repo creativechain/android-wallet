@@ -21,7 +21,6 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.android.LogcatAppender;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import crea.wallet.lite.R;
-import crea.wallet.lite.background.PriceUpdater;
 import crea.wallet.lite.service.BitcoinService;
 import crea.wallet.lite.service.BlockchainService;
 import crea.wallet.lite.ui.tool.PinActivity;
@@ -29,13 +28,13 @@ import crea.wallet.lite.util.Hex;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 import com.chip_chap.services.calls.Settings;
-import com.github.orangegangsters.lollipin.lib.managers.LockManager;
+import com.gotcreations.materialpin.managers.LockManager;
 
-import org.creacoinj.core.Transaction;
-import org.creacoinj.core.VerificationException;
-import org.creacoinj.crypto.MnemonicCode;
-import org.creacoinj.crypto.MnemonicException;
-import org.creacoinj.wallet.UnreadableWalletException;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.VerificationException;
+import org.creativecoinj.crypto.MnemonicCode;
+import org.creativecoinj.crypto.MnemonicException;
+import org.creativecoinj.wallet.UnreadableWalletException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +49,6 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 import javax.security.auth.x500.X500Principal;
-
-import static crea.wallet.lite.application.Constants.WALLET.DEFAULT_PEERS;
 
 /**
  * Created by ander on 10/11/16.
@@ -83,12 +80,13 @@ public class WalletApplication extends Application {
 
         LockManager<PinActivity> lockManager = LockManager.getInstance();
         lockManager.enableAppLock(this, PinActivity.class);
+        lockManager.getAppLock().setShouldShowForgot(false);
         lockManager.getAppLock().setLogoId(R.mipmap.ic_lock);
 
         initLogging();
 
-        org.creacoinj.core.Context.enableStrictMode();
-        org.creacoinj.core.Context.propagate(Constants.WALLET.CONTEXT);
+        org.creativecoinj.core.Context.enableStrictMode();
+        org.creativecoinj.core.Context.propagate(Constants.WALLET.CONTEXT);
         Log.d(TAG, "App in debug mode: " + Constants.TEST);
         Settings.setPreapiEnable(Constants.TEST);
         initMnemonicCode();
@@ -235,7 +233,7 @@ public class WalletApplication extends Application {
 
     private void afterLoadWallet() {
         WalletHelper.INSTANCE.cleanup();
-        WalletHelper.INSTANCE.autoSave(10);
+        //WalletHelper.INSTANCE.autoSave(10);
         migrateBackup();
     }
 
@@ -257,13 +255,13 @@ public class WalletApplication extends Application {
     }
 
     public void processDirectTransaction(final Transaction tx) throws VerificationException {
-        if (WalletHelper.getInstance().isTransactionRelevant(tx)) {
+        if (WalletHelper.INSTANCE.isTransactionRelevant(tx)) {
+            WalletHelper.INSTANCE.receivePending(tx, null);
             broadcastTransaction(tx);
         }
     }
 
     public void broadcastTransaction(final Transaction tx)	{
-        BitcoinService.tx = tx;
         final Intent intent = new Intent(BlockchainService.ACTION_BROADCAST_TRANSACTION, null, this, BitcoinService.class);
         intent.putExtra(BlockchainService.ACTION_BROADCAST_TRANSACTION_HASH, tx.getHash().getBytes());
         startService(intent);
@@ -271,16 +269,12 @@ public class WalletApplication extends Application {
 
     public int maxConnectedPeers() 	{
 
-        if (DEFAULT_PEERS.length > 6) {
-            final int memoryClass = activityManager.getMemoryClass();
-            if (memoryClass <= Constants.MEMORY_CLASS_LOWEND) {
-                return 4;
-            } else {
-                return 6;
-            }
+        final int memoryClass = activityManager.getMemoryClass();
+        if (memoryClass <= Constants.MEMORY_CLASS_LOWEND) {
+            return 4;
+        } else {
+            return 6;
         }
-
-        return DEFAULT_PEERS.length;
     }
 
     public static void scheduleStartBlockchainService(final Context context) {
@@ -310,10 +304,12 @@ public class WalletApplication extends Application {
     }
 
     public void startBlockchainService(final boolean cancelCoinsReceived) {
-        if (cancelCoinsReceived) {
-            startService(blockchainServiceCancelCoinsReceivedIntent);
-        } else {
-            startService(blockchainServiceIntent);
+        if (walletFile.exists()) {
+            if (cancelCoinsReceived) {
+                startService(blockchainServiceCancelCoinsReceivedIntent);
+            } else {
+                startService(blockchainServiceIntent);
+            }
         }
     }
 

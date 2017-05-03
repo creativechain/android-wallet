@@ -29,8 +29,8 @@ import android.util.Log;
 import com.chip_chap.services.cash.Currency;
 import com.chip_chap.services.status.TransactionStatus;
 
-import org.creacoinj.core.Coin;
-import org.creacoinj.utils.MonetaryFormat;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.utils.MonetaryFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,7 +158,7 @@ public class Configuration {
 	}
 
 	public Coin getTransactionFee() {
-		long feeValue = Long.parseLong(prefs.getString(PREFS_KEY_TRANSACTION_FEE, "95000"));
+		long feeValue = Long.parseLong(prefs.getString(PREFS_KEY_TRANSACTION_FEE, "135000"));
 		return Coin.valueOf(feeValue);
 	}
 
@@ -267,9 +267,7 @@ public class Configuration {
 	}
 
 	public long getLastUsedAgo() {
-		final long now = System.currentTimeMillis();
-
-		return now - prefs.getLong(PREFS_KEY_LAST_USED, 0);
+		return prefs.getLong(PREFS_KEY_LAST_USED, 0);
 	}
 
 	public void touchLastUsed()	{

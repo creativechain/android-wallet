@@ -3,9 +3,9 @@ package crea.wallet.lite.ui.tool;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.github.orangegangsters.lollipin.lib.enums.KeyboardButtonEnum;
-import com.github.orangegangsters.lollipin.lib.interfaces.KeyboardButtonClickedListener;
-import com.github.orangegangsters.lollipin.lib.managers.AppLockActivity;
+import com.gotcreations.materialpin.enums.KeyboardButtonEnum;
+import com.gotcreations.materialpin.interfaces.KeyboardButtonClickedListener;
+import com.gotcreations.materialpin.managers.AppLockActivity;
 
 /**
  * Created by ander on 10/11/16.
@@ -36,8 +36,6 @@ public class PinActivity extends AppLockActivity {
     @Override
     public void onPinSuccess(int attempts) {
         Log.d(TAG, "onPinSuccess");
-        setResult(RESULT_OK);
-        finish();
     }
 
     @Override

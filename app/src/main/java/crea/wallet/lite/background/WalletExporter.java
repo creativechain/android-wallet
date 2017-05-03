@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import crea.wallet.lite.application.Configuration;
+import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 import com.chip_chap.services.task.Task;
 
-import org.creacoinj.wallet.DeterministicSeed;
+import org.creativecoinj.wallet.DeterministicSeed;
+import org.creativecoinj.wallet.Wallet;
 
 import java.util.List;
 
@@ -58,30 +61,50 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
     @Override
     protected Bundle doInBackground(Void... voids) {
         long creationTime;
+
+        String k = null;
+        WalletCrypt walletCrypt = WalletCrypt.getInstance();
+
         try {
-            String k = Utils.encryptInSHA2(key, 3);
-            WalletHelper.INSTANCE.decrypt(k);
+            if (WalletHelper.INSTANCE.isWalletEncrypted()) {
+                Log.d(TAG, "pass: " + key);
+                Log.d(TAG, walletCrypt.toString());
+                k = walletCrypt.generate(key);
+                Log.d(TAG, "Decrypting with: " + org.creativecoinj.core.Utils.HEX.encode(k.getBytes()));
+
+
+                WalletHelper.INSTANCE.decrypt(k);
+            } else {
+                Log.d(TAG, "Wallet not encrypted");
+            }
+
+            String seed;
+            DeterministicSeed dSeed = WalletHelper.INSTANCE.getKeyChainSeed();
+            seed = getMnemonicCodeAsString(dSeed.getMnemonicCode());
+            creationTime = dSeed.getCreationTimeSeconds();
+
+            Log.i(TAG, "seed: " + seed + ", creation time: " + creationTime);
+
+            if (k == null) {
+                k = walletCrypt.generate(key);
+            }
+            WalletHelper.INSTANCE.encrypt(k);
+            WalletHelper.INSTANCE.save();
+
+            Bundle bundle = new Bundle();
+            bundle.putString("exported", seed);
+            bundle.putLong("creation_time", creationTime);
+            return bundle;
+
         } catch (Throwable e) {
             Log.e(TAG, "Failed to decrypt wallet", e);
         }
-        String seed;
-        switch (mode) {
-            default:
-                DeterministicSeed dSeed = WalletHelper.INSTANCE.getKeyChainSeed();
-                seed = getMnemonicCodeAsString(dSeed.getMnemonicCode());
-                creationTime = dSeed.getCreationTimeSeconds();
-                break;
-        }
 
-        Log.i(TAG, "seed: " + seed + ", creation time: " + creationTime);
-        WalletHelper.INSTANCE.encrypt(key);
-        Bundle bundle = new Bundle();
-        bundle.putString("exported", seed);
-        bundle.putLong("creation_time", creationTime);
-        return bundle;
+        return null;
     }
 
     private String getMnemonicCodeAsString(List<String> mnemonicCode) {
+        Log.d(TAG, "seed: " + mnemonicCode);
         return TextUtils.join(" ", mnemonicCode);
     }
 

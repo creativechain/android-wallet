@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import crea.wallet.lite.BookAddress;
+import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
@@ -28,9 +28,9 @@ import crea.wallet.lite.wallet.WalletHelper;
 import com.chip_chap.services.cash.coin.BitCoin;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
 
-import org.creacoinj.core.Address;
-import org.creacoinj.core.Coin;
-import org.creacoinj.wallet.Wallet;
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.wallet.Wallet;
 
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.BLOCKCHAIN_RESET;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.LAST_BLOCK_RECEIVED;

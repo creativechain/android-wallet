@@ -98,8 +98,12 @@ public class Utils {
         return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
-    private static int getRandom(final int MINOR, final int MAYOR) {
+    public static int getRandom(final int MINOR, final int MAYOR) {
         return (int) Math.floor(Math.random()*(MAYOR-MINOR+1)+MINOR);
+    }
+
+    public static long getRandom(final long MINOR, final long MAYOR) {
+        return Math.round(Math.floor(Math.random()*(MAYOR-MINOR+1)+MINOR));
     }
 
     public static String generateRandomString(int length) {
@@ -127,7 +131,7 @@ public class Utils {
         return id;
     }
 
-    public static String generateStringWithByteLenght(int length) {
+    public static String generateStringWithByteLength(int length) {
         String id = "";
 
         while (id.getBytes().length < length) {
@@ -148,7 +152,7 @@ public class Utils {
             id = id + String.valueOf(c);
         }
 
-        Log.i(TAG, "id bytes lenght: " + id.getBytes().length);
+        Log.i(TAG, "id bytes length: " + id.getBytes().length);
         Log.i(TAG, "id: " + id);
 
         return id;
@@ -250,7 +254,7 @@ public class Utils {
     }
 
     public static String generateSalt() {
-        String salt = generateStringWithByteLenght(SALT_ENCRYPTED_LENGHT);
+        String salt = generateStringWithByteLength(SALT_ENCRYPTED_LENGHT);
         Log.e(TAG, "SALT bytes lenght: " + salt.getBytes().length);
         return salt;
     }

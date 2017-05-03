@@ -35,11 +35,11 @@ public class Sha384Hash implements Serializable, Comparable<Sha384Hash> {
     }
 
     public static Sha384Hash wrap(String hexString) {
-        return wrap(org.creacoinj.core.Utils.HEX.decode(hexString));
+        return wrap(org.creativecoinj.core.Utils.HEX.decode(hexString));
     }
 
     public static Sha384Hash wrapReversed(byte[] rawHashBytes) {
-        return wrap(org.creacoinj.core.Utils.reverseBytes(rawHashBytes));
+        return wrap(org.creativecoinj.core.Utils.reverseBytes(rawHashBytes));
     }
 
     public static Sha384Hash create(byte[] contents) {
@@ -110,12 +110,12 @@ public class Sha384Hash implements Serializable, Comparable<Sha384Hash> {
     }
 
     public byte[] getReversedBytes() {
-        return org.creacoinj.core.Utils.reverseBytes(this.bytes);
+        return org.creativecoinj.core.Utils.reverseBytes(this.bytes);
     }
 
     @Override
     public String toString() {
-        return org.creacoinj.core.Utils.HEX.encode(this.bytes);
+        return org.creativecoinj.core.Utils.HEX.encode(this.bytes);
     }
 
     @Override

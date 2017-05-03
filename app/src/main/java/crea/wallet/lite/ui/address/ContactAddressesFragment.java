@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import crea.wallet.lite.BookAddress;
+import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;

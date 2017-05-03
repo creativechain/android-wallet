@@ -38,14 +38,14 @@ import com.chip_chap.services.task.Task;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
 import com.chip_chap.services.util.Tags;
 
-import org.creacoinj.core.Address;
-import org.creacoinj.core.Coin;
-import org.creacoinj.core.Transaction;
-import org.creacoinj.core.TransactionConfidence;
-import org.creacoinj.uri.BitcoinURI;
-import org.creacoinj.uri.BitcoinURIParseException;
-import org.creacoinj.wallet.SendRequest;
-import org.creacoinj.wallet.Wallet;
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.TransactionConfidence;
+import org.creativecoinj.uri.BitcoinURI;
+import org.creativecoinj.uri.BitcoinURIParseException;
+import org.creativecoinj.wallet.SendRequest;
+import org.creativecoinj.wallet.Wallet;
 
 import static crea.wallet.lite.application.Constants.WALLET.DONATION_ADDRESS;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
@@ -281,11 +281,15 @@ public class SendBitcoinActivity extends AppCompatActivity {
                 amountEditText.requestFocus();
                 amountEditText.setText(BitCoin.valueOf(amount.getValue()).toPlainString());
             }
+
+            calculateBitcoinFee();
         } catch (BitcoinURIParseException e) {
             try {
                 String data = uri.toString();
                 Address a = Address.fromBase58(Constants.WALLET.NETWORK_PARAMETERS, data);
+                addressEditText.requestFocus();
                 addressEditText.setText(a.toString());
+                calculateBitcoinFee();
             } catch (Exception e1) {
                 Toast.makeText(this, R.string.not_found_valid_data, Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -453,6 +457,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+
                 broadcastStatus.setVisibility(View.VISIBLE);
                 CharSequence explRes = state.getExplRes() != null ? state.getExplRes() : "";
 

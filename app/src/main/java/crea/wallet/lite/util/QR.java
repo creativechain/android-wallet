@@ -25,9 +25,12 @@ import com.chip_chap.services.cash.coin.BitCoin;
 
 import net.glxn.qrgen.android.QRCode;
 
-import org.creacoinj.core.Address;
+import org.creativecoinj.core.Address;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+
+import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 
 /**
  * Created by ander on 29/01/16.
@@ -37,11 +40,12 @@ public class QR {
     private static final String TAG = "QR";
 
     public static Bitmap fromString(String string) {
-        int px = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 60, WalletApplication.INSTANCE.getResources().getDisplayMetrics()));
-        File qrFile = QRCode.from(string).withSize(px, px).file();
-        Bitmap b = BitmapFactory.decodeFile(qrFile.getAbsolutePath());
-        qrFile.delete();
-        return b;
+        int px = (int) INSTANCE.getResources().getDimension(R.dimen.qr_code_size);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.outHeight = px;
+        options.outWidth = px;
+        ByteArrayOutputStream baos = QRCode.from(string).withSize(px, px).stream();
+        return BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.size(), options);
     }
 
     public static Bitmap fromUri(Uri uri) {
@@ -49,7 +53,7 @@ public class QR {
     }
 
     public static Bitmap fromBitcoinUri(String address, BitCoin amount) {
-        return fromUri(Uri.parse("creacoin:" + address + (amount != null ? "?amount=" + amount.toPlainString() : "")));
+        return fromUri(Uri.parse("creativecoin:" + address + (amount != null ? "?amount=" + amount.toPlainString() : "")));
     }
 
     public static Bitmap fromBitcoinUri(String address) {
@@ -63,20 +67,19 @@ public class QR {
     public static AlertDialog bitcoinQrDialog(final Activity activity, Bitmap qr, final String text) {
         boolean hasText = text == null || !text.isEmpty();
         LinearLayout dialogView = new LinearLayout(activity);
-        dialogView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+        dialogView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
         dialogView.setOrientation(LinearLayout.VERTICAL);
 
         ImageView qrView = new ImageView(activity);
-        qrView.setImageDrawable(new BitmapDrawable(qr));
-        qrView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        qrView.setImageBitmap(qr);
+        qrView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         dialogView.addView(qrView);
 
         if (hasText) {
             TextView addressView = new TextView(activity);
-            addressView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            addressView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             addressView.setText(text);
             addressView.setGravity(Gravity.CENTER);
-            addressView.setBackgroundColor(activity.getResources().getColor(android.R.color.transparent));
             addressView.setPadding(0, Utils.convertDpToPixel(5, activity), 0, Utils.convertDpToPixel(5, activity));
             dialogView.addView(addressView);
         }
@@ -94,16 +97,10 @@ public class QR {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
-                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
-                        android.text.ClipboardManager clipboard = (android.text.ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
-                        clipboard.setText(text);
-                        Log.wtf(TAG, "Clipboard copy: " + clipboard.getText().toString());
-                    } else {
-                        ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText(text, text);
-                        clipboard.setPrimaryClip(clip);
-                        Log.wtf(TAG, "Clipboard copy: " + clipboard.getPrimaryClip().toString());
-                    }
+                    ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(text, text);
+                    clipboard.setPrimaryClip(clip);
+                    Log.wtf(TAG, "Clipboard copy: " + clipboard.getPrimaryClip().toString());
 
                     Toast.makeText(activity, android.R.string.copy, Toast.LENGTH_SHORT).show();
                 }
@@ -114,8 +111,8 @@ public class QR {
     }
 
     public static AlertDialog bitcoinQrDialog(Activity activity, String data) {
-        if (!data.startsWith("creacoin:")) {
-            data = "creacoin:" + data;
+        if (!data.startsWith("creativecoin:")) {
+            data = "creativecoin:" + data;
         }
         return bitcoinQrDialog(activity, fromString(data), null);
     }

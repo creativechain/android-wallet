@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
@@ -36,7 +37,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,52 +54,40 @@ import crea.wallet.lite.wallet.WalletHelper;
 import crea.wallet.lite.wallet.WalletUtils;
 import com.chip_chap.services.cash.coin.BitCoin;
 import com.chip_chap.services.status.TransactionStatus;
-import com.chip_chap.services.task.Task;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
-import com.chip_chap.services.transaction.ChipChapTransaction;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 
-import org.creacoinj.core.Address;
-import org.creacoinj.core.Block;
-import org.creacoinj.core.BlockChain;
-import org.creacoinj.core.Coin;
-import org.creacoinj.core.FilteredBlock;
-import org.creacoinj.core.Message;
-import org.creacoinj.core.Peer;
-import org.creacoinj.core.PeerAddress;
-import org.creacoinj.core.PeerGroup;
-import org.creacoinj.core.Sha256Hash;
-import org.creacoinj.core.StoredBlock;
-import org.creacoinj.core.Transaction;
-import org.creacoinj.core.TransactionBroadcast;
-import org.creacoinj.core.TransactionConfidence.ConfidenceType;
-import org.creacoinj.core.listeners.DownloadProgressTracker;
-import org.creacoinj.core.listeners.OnTransactionBroadcastListener;
-import org.creacoinj.core.listeners.PeerConnectedEventListener;
-import org.creacoinj.core.listeners.PeerDisconnectedEventListener;
-import org.creacoinj.net.discovery.DnsDiscovery;
-import org.creacoinj.net.discovery.PeerDiscovery;
-import org.creacoinj.net.discovery.PeerDiscoveryException;
-import org.creacoinj.store.BlockStore;
-import org.creacoinj.store.BlockStoreException;
-import org.creacoinj.store.SPVBlockStore;
-import org.creacoinj.utils.Threading;
-import org.creacoinj.wallet.Wallet;
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Block;
+import org.creativecoinj.core.BlockChain;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.FilteredBlock;
+import org.creativecoinj.core.Peer;
+import org.creativecoinj.core.PeerGroup;
+import org.creativecoinj.core.Sha256Hash;
+import org.creativecoinj.core.StoredBlock;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.TransactionConfidence.ConfidenceType;
+import org.creativecoinj.core.listeners.DownloadProgressTracker;
+import org.creativecoinj.core.listeners.PeerConnectedEventListener;
+import org.creativecoinj.core.listeners.PeerDisconnectedEventListener;
+import org.creativecoinj.net.discovery.DnsDiscovery;
+import org.creativecoinj.net.discovery.PeerDiscovery;
+import org.creativecoinj.net.discovery.PeerDiscoveryException;
+import org.creativecoinj.net.discovery.SeedPeers;
+import org.creativecoinj.store.BlockStore;
+import org.creativecoinj.store.BlockStoreException;
+import org.creativecoinj.store.SPVBlockStore;
+import org.creativecoinj.utils.Threading;
+import org.creativecoinj.wallet.Wallet;
 
 import java.io.File;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -108,14 +96,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.Nullable;
 
 import static crea.wallet.lite.application.Constants.WALLET.CONTEXT;
-import static crea.wallet.lite.application.Constants.WALLET.DEFAULT_PEERS;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 
 /**
  * @author Andreas Schildbach
  */
-public class BitcoinService extends PersistentService implements BlockchainService {
+public class BitcoinService extends Service implements BlockchainService {
 
 	private static final String TAG = "BitcoinService";
 	private static final int NOTIFICATION_ID_CONNECTED = 0;
@@ -130,12 +117,12 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 	private static final String CASH_OUT_TITLE = "BTC Cash Out";
 
 	public static TextView progressBar;
-	public static Transaction tx;
 
 	private final AbstractWalletCoinListener WALLET_COIN_LISTENER = new AbstractWalletCoinListener() {
 		@Override
 		public void onCoinsReceived(Wallet wallet, final Transaction tx, Coin coin, Coin coin1) {
-            org.creacoinj.core.Context.propagate(CONTEXT);
+            org.creativecoinj.core.Context.propagate(CONTEXT);
+
 			Log.e(TAG,"Coins received!");
 			transactionsReceived.incrementAndGet();
 
@@ -178,9 +165,9 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 	private final Set<BlockchainState.Impediment> impediments = EnumSet.noneOf(BlockchainState.Impediment.class);
 	private final Handler handler = new Handler();
 	private final Handler delayHandler = new Handler();
-	private final List<Address> notificationAddresses = new LinkedList<Address>();
+	private final Handler rateHandler = new Handler();
+	private final List<Address> notificationAddresses = new LinkedList<>();
 
-	private static Task<Transaction> onBroadcastTransaction;
 	private WalletApplication application;
 	private Configuration config;
 
@@ -198,12 +185,8 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 	private int notificationCount = 0;
 	private long serviceCreatedAt;
 	private boolean resetBlockchainOnShutdown = false;
-	private boolean isIdle = false;
-	private boolean startService = false;
 
-	public BitcoinService() {
-		super("BitcoinService");
-	}
+
 
 	private long saveTransaction(Transaction tx, String title) {
 		boolean cashIn = title.equals(CASH_IN_TITLE);
@@ -323,15 +306,12 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 		public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
 		}
 
-
 	}
 
 	private final DownloadProgressTracker blockchainDownloadListener = new DownloadProgressTracker() {
 		private final long CALLBACK_TIME = 1000L;
 		private final AtomicLong lastMessageTime = new AtomicLong(0);
 
-		private long bestHeight;
-		private int height;
 		private int remain;
 		private String remainingTime = "";
 
@@ -339,26 +319,11 @@ public class BitcoinService extends PersistentService implements BlockchainServi
         private int time = 0;
 		private int blockSpeed = 0;
         private boolean rateStarted = false;
-        private Handler rateHandler = new Handler();
 
-		@Override
-		public void onBlocksDownloaded(final Peer peer, final Block block, final FilteredBlock filteredBlock, final int blocksLeft) {
-            this.bestHeight = peer.getBestHeight();
-			this.height = (int) bestHeight - blocksLeft;
-			this.remain = blocksLeft;
-			blockSpeed++;
-
-			delayHandler.removeCallbacksAndMessages(null);
-//			refreshConfirmations(height, block);
-
-			final long now = System.currentTimeMillis();
-
-			if (now - lastMessageTime.get() > CALLBACK_TIME) {
-				delayHandler.post(RUNNER);
-			} else {
-				delayHandler.postDelayed(RUNNER, CALLBACK_TIME);
-			}
-
+        @Override
+        public void onChainDownloadStarted(Peer peer, int blocksLeft) {
+            peerGroup.setMinBroadcastConnections(1);
+            broadcastPendingTx();
             if (!rateStarted) {
                 rateStarted = true;
                 rateHandler.post(new Runnable() {
@@ -374,42 +339,63 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
                         Log.i(TAG, remainingTime + ", REMAINS=" + remain + ", " + blockSpeed + " blocks/s");
                         blockSpeed = 0;
-						if (progressBar != null) {
-							progressBar.post(new Runnable() {
-								@Override
-								public void run() {
-									progressBar.setText(getString(R.string.sync_time, remainingTime));
-								}
-							});
-						}
+                        if (progressBar != null) {
+                            progressBar.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setText(getString(R.string.sync_time, remainingTime));
+                                }
+                            });
+                        }
                         rateHandler.postDelayed(this, 1000);
                     }
                 });
             }
+            super.onChainDownloadStarted(peer, blocksLeft);
+        }
 
-			if (blocksLeft == 0) {
-                Coin estimated = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.ESTIMATED);
-                Coin available = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.AVAILABLE);
-                Coin pending = estimated.minus(available);
+        @Override
+        protected void doneDownload() {
+            Log.d(TAG, "doneDownload");
+            Coin estimated = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.ESTIMATED);
+            Coin available = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.AVAILABLE);
+            Coin pending = estimated.minus(available);
 
-                Log.d(TAG, "ESTIMATED = " + estimated.toFriendlyString());
-                Log.d(TAG, "AVAILABLE = " + available.toFriendlyString());
-                Log.d(TAG, "PENDING = " + pending.toFriendlyString());
-                //WalletHelper.INSTANCE.cleanup();
-				sendBroadcast(new Intent(BlockchainBroadcastReceiver.LAST_BLOCK_RECEIVED));
-                rateHandler.removeCallbacksAndMessages(null);
-				delayHandler.removeCallbacksAndMessages(null);
-				config.maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
-				if (progressBar != null) {
-					progressBar.post(new Runnable() {
-						@Override
-						public void run() {
-							progressBar.setText(getString(R.string.amount_in_currency, config.getMainCurrency().getName()));
-						}
-					});
-				}
+            Log.d(TAG, "ESTIMATED = " + estimated.toFriendlyString());
+            Log.d(TAG, "AVAILABLE = " + available.toFriendlyString());
+            Log.d(TAG, "PENDING = " + pending.toFriendlyString());
+            //WalletHelper.INSTANCE.cleanup();
+            sendBroadcast(new Intent(BlockchainBroadcastReceiver.LAST_BLOCK_RECEIVED));
+            rateHandler.removeCallbacksAndMessages(null);
+            delayHandler.removeCallbacksAndMessages(null);
+            config.maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
+
+            if (progressBar != null) {
+                progressBar.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setText(getString(R.string.amount_in_currency, config.getMainCurrency().getName()));
+                    }
+                });
+            }
+        }
+
+        @Override
+		public void onBlocksDownloaded(final Peer peer, final Block block, final FilteredBlock filteredBlock, final int blocksLeft) {
+
+			this.remain = blocksLeft;
+			blockSpeed++;
+
+			delayHandler.removeCallbacksAndMessages(null);
+//			refreshConfirmations(height, block);
+
+			final long now = System.currentTimeMillis();
+
+			if (now - lastMessageTime.get() > CALLBACK_TIME) {
+				delayHandler.post(RUNNER);
+			} else {
+				delayHandler.postDelayed(RUNNER, CALLBACK_TIME);
 			}
-
 		}
 
 		private final Runnable RUNNER = new Runnable() {
@@ -464,7 +450,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 					Log.e(TAG,message);
 				}
 
-                org.creacoinj.core.Context.propagate(CONTEXT);
+                org.creativecoinj.core.Context.propagate(CONTEXT);
 
 				Log.i(TAG, "starting peergroup");
 				peerGroup = new PeerGroup(NETWORK_PARAMETERS, blockChain);
@@ -482,29 +468,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 				peerGroup.setConnectTimeoutMillis(Constants.PEER_TIMEOUT_MS);
 				peerGroup.setPeerDiscoveryTimeoutMillis(Constants.PEER_DISCOVERY_TIMEOUT_MS);
 
-				peerGroup.addPeerDiscovery(new PeerDiscovery() {
-					private final PeerDiscovery normalPeerDiscovery = new DnsDiscovery(NETWORK_PARAMETERS);
-
-					@Override
-					public InetSocketAddress[] getPeers(long l, long l1, TimeUnit timeUnit) throws PeerDiscoveryException {
-						final List<InetSocketAddress> peers = new LinkedList<InetSocketAddress>();
-
-
-						for (String p : DEFAULT_PEERS) {
-							InetSocketAddress isa = new InetSocketAddress(p, NETWORK_PARAMETERS.getPort());
-							peers.add(isa);
-						}
-
-						//peers.addAll(Arrays.asList(normalPeerDiscovery.getPeers(l, l1, timeUnit)));
-
-						return peers.toArray(new InetSocketAddress[]{});
-					}
-
-					@Override
-					public void shutdown() {
-						normalPeerDiscovery.shutdown();
-					}
-				});
+				peerGroup.addPeerDiscovery(new SeedPeers(NETWORK_PARAMETERS));
 
 				new AsyncTask<Void, Void, Void>() {
 
@@ -579,7 +543,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 				Log.i(TAG, "History of transactions/blocks: " + builder);
 
 				// determine if block and transaction activity is idling
-				isIdle = false;
+				boolean isIdle = false;
 				if (activityHistory.size() >= MIN_COLLECT_HISTORY) {
 					isIdle = true;
 					for (int i = 0; i < activityHistory.size(); i++) {
@@ -596,8 +560,8 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 
 				// if idling, shutdown service
 				if (isIdle)	{
-					Log.i(TAG, "idling detected");
-					/*stopSelf();*/
+					Log.i(TAG, "idling detected, stopping service");
+					stopSelf();
 				}
 			}
 
@@ -653,7 +617,7 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 		serviceCreatedAt = System.currentTimeMillis();
 		super.onCreate();
 
-		startService = WalletHelper.INSTANCE != null;
+		boolean startService = WalletHelper.INSTANCE != null;
 
 		Log.e(TAG,"START_SERVICE=" + startService);
 		if (startService) {
@@ -708,7 +672,6 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 				throw new Error("blockchain cannot be created", x);
 			}
 
-			setUpTxConfirmations();
 
 			final IntentFilter intentFilter = new IntentFilter();
 			intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -723,127 +686,87 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 		}
 	}
 
-	private void setUpTxConfirmations() {
-/*		StoredBlock sb = blockChain.getChainHead();
-		try {
-			do {
-				refreshConfirmations(sb.getHeight(), sb.getHeader());
-			} while ((sb = sb.getPrev(blockStore)) != null && sb.getHeight() != 0);
-
-		} catch (BlockStoreException e) {
-			e.printStackTrace();
-		}*/
-	}
-
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		super.onStartCommand(intent, flags, startId);
-		return START_STICKY;
+        Log.e(TAG, "onHandleIntent");
+
+        org.creativecoinj.core.Context.propagate(CONTEXT);
+        if (intent != null)	{
+            Log.i(TAG, "service start command: " + intent
+                    + (intent.hasExtra(Intent.EXTRA_ALARM_COUNT) ? " (alarm count: " + intent.getIntExtra(Intent.EXTRA_ALARM_COUNT, 0) + ")" : ""));
+
+            final String action = intent.getAction();
+
+            if (ACTION_CANCEL_COINS_RECEIVED.equals(action)) {
+                notificationCount = 0;
+                notificationAccumulatedAmount = Coin.ZERO;
+                notificationAddresses.clear();
+
+                if (nm != null) {
+                    nm.cancel(NOTIFICATION_ID_COINS_RECEIVED);
+                }
+
+            } else if (ACTION_BROADCAST_TRANSACTION.equals(action)) {
+                broadcastTransactionPendingTx(intent);
+            } else if (ACTION_RESET_BLOCKCHAIN.equals(action)) {
+                Log.i(TAG, "will remove blockchain on service shutdown");
+
+                resetBlockchainOnShutdown = true;
+                stopSelf();
+            }
+        } else {
+            Log.e(TAG,"service restart, although it was started as non-sticky");
+        }
+		return START_NOT_STICKY;
 	}
 
-	@Override
-	protected void onHandleIntent(Intent intent) {
-		Log.e(TAG, "onHandleIntent");
-
-        org.creacoinj.core.Context.propagate(CONTEXT);
-		if (intent != null)	{
-			Log.i(TAG, "service start command: " + intent
-					+ (intent.hasExtra(Intent.EXTRA_ALARM_COUNT) ? " (alarm count: " + intent.getIntExtra(Intent.EXTRA_ALARM_COUNT, 0) + ")" : ""));
-
-			final String action = intent.getAction();
-
-			if (ACTION_CANCEL_COINS_RECEIVED.equals(action)) {
-				notificationCount = 0;
-				notificationAccumulatedAmount = Coin.ZERO;
-				notificationAddresses.clear();
-
-				if (nm != null) {
-					nm.cancel(NOTIFICATION_ID_COINS_RECEIVED);
-				}
-
-			} else if (ACTION_BROADCAST_TRANSACTION.equals(action)) {
-
-				if (peerGroup != null) {
-					Log.i(TAG, "broadcasting transaction " + tx.getHash().toString());
-					TransactionBroadcast tb = peerGroup.broadcastTransaction(tx);
-					ListenableFuture<Transaction> txFuture = tb.future();
-/*					Futures.addCallback(txFuture, new FutureCallback<Transaction>() {
-						@Override
-						public void onSuccess(@Nullable Transaction transaction) {
-							long id = saveTransaction(transaction, CASH_OUT_TITLE);
-							broadcastTransactionSent(id);
-							tx = null;
-						}
-
-						@Override
-						public void onFailure(@NonNull Throwable throwable) {
-							throwable.printStackTrace();
-						}
-					});*/
-
-				} else {
-					Log.i(TAG, "PeerGroup not available, not broadcasting transaction " + tx.getHash().toString());
-				}
-			} else if (ACTION_RESET_BLOCKCHAIN.equals(action)) {
-				Log.i(TAG, "will remove blockchain on service shutdown");
-
-				resetBlockchainOnShutdown = true;
-				stopSelf();
-			}
-		} else {
-			Log.e(TAG,"service restart, although it was started as non-sticky");
-		}
-	}
 
 	@Override
 	public void onDestroy()	{
 		Log.d(TAG, ".onDestroy()");
 
-		if(startService) {
-			WalletApplication.scheduleStartBlockchainService(this);
-			unregisterReceiver(tickReceiver);
+		WalletApplication.scheduleStartBlockchainService(this);
+		unregisterReceiver(tickReceiver);
 
-			WalletHelper.INSTANCE.removeEventListener(WALLET_COIN_LISTENER);
-			unregisterReceiver(connectivityReceiver);
+		WalletHelper.INSTANCE.removeEventListener(WALLET_COIN_LISTENER);
+		unregisterReceiver(connectivityReceiver);
 
-			if (peerGroup != null)	{
-				peerGroup.removeDisconnectedEventListener(peerConnectivityListener);
-				peerGroup.removeConnectedEventListener(peerConnectivityListener);
-				peerGroup.removeWallet(WalletHelper.INSTANCE.getMainWallet());
-				peerGroup.stop();
+		if (peerGroup != null)	{
+			peerGroup.removeDisconnectedEventListener(peerConnectivityListener);
+			peerGroup.removeConnectedEventListener(peerConnectivityListener);
+			peerGroup.removeWallet(WalletHelper.INSTANCE.getMainWallet());
+			peerGroup.stop();
 
-				Log.i(TAG, "peergroup stopped");
-			}
-
-			peerConnectivityListener.stop();
-			delayHandler.removeCallbacksAndMessages(null);
-
-			try	{
-				blockStore.close();
-			} catch (final BlockStoreException x) {
-				throw new RuntimeException(x);
-			}
-
-			removeWalletListener();
-			WalletHelper.INSTANCE.save();
-
-			if (wakeLock.isHeld())	{
-				Log.d(TAG, "wakelock still held, releasing");
-				wakeLock.release();
-			}
-
-			if (resetBlockchainOnShutdown) {
-				Log.i(TAG, "removing blockchain");
-				blockChainFile.delete();
-                WalletHelper.INSTANCE.reset();
-                broadCastBlockChainReset();
-			}
-
-			if (isIdle) {
-				WalletApplication.INSTANCE.stopBlockchainService();
-			}
-			super.onDestroy();
+			Log.i(TAG, "peergroup stopped");
 		}
+
+		peerConnectivityListener.stop();
+		delayHandler.removeCallbacksAndMessages(null);
+		handler.removeCallbacksAndMessages(null);
+		rateHandler.removeCallbacksAndMessages(null);
+
+		try	{
+			blockStore.close();
+		} catch (final BlockStoreException x) {
+			throw new RuntimeException(x);
+		}
+
+		removeWalletListener();
+		WalletHelper.INSTANCE.save();
+
+		if (wakeLock.isHeld())	{
+			Log.d(TAG, "wakelock still held, releasing");
+			wakeLock.release();
+		}
+
+		if (resetBlockchainOnShutdown) {
+			Log.i(TAG, "removing blockchain");
+			blockChainFile.delete();
+			WalletHelper.INSTANCE.reset();
+			broadCastBlockChainReset();
+		}
+
+		super.onDestroy();
 
 
 		Log.i(TAG, "service was up for " + ((System.currentTimeMillis() - serviceCreatedAt) / 1000 / 60) + " minutes");
@@ -901,10 +824,16 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 		return blocks;
 	}
 
-	public void broadcastTransactionSent(long txId) {
-		Intent i = new Intent(BlockchainBroadcastReceiver.TRANSACTION_SENT);
-        i.putExtra("txId", txId);
-		sendBroadcast(i);
+	public void broadcastTransactionPendingTx(Intent data) {
+		if (peerGroup != null) {
+			final Sha256Hash hash = Sha256Hash.wrap(data.getByteArrayExtra(ACTION_BROADCAST_TRANSACTION_HASH));
+			final Transaction tx = WalletHelper.INSTANCE.getTransaction(hash);
+			Log.i(TAG, "broadcasting transaction " + tx.getHash().toString());
+			peerGroup.broadcastTransaction(tx);
+
+		} else {
+			Log.i(TAG, "Tx not available");
+		}
 	}
 
     public void broadCastBlockChainReset() {
@@ -919,4 +848,12 @@ public class BitcoinService extends PersistentService implements BlockchainServi
 	private void removeWalletListener() {
 		WalletHelper.INSTANCE.removeEventListener(WALLET_COIN_LISTENER);
 	}
+
+	private void broadcastPendingTx() {
+        List<Transaction> pendings = WalletHelper.INSTANCE.getPendingTransactions();
+        Log.d(TAG, "broadcasting " + pendings.size() + " transactions");
+        for (Transaction tx : pendings) {
+            peerGroup.broadcastTransaction(tx);
+        }
+    }
 }

@@ -1,0 +1,12 @@
+<resources>
+    <string name="pin_code_forgot_text">¿Lo olvidaste?</string>
+    <string name="pin_code_step_disable">Deshabilitar código PIN de %d dígitos</string>
+    <string name="pin_code_step_create">Crear un código PIN de %d dígitos</string>
+    <string name="pin_code_step_change">Introduce tu PIN de %d dígitos</string>
+    <string name="pin_code_step_unlock">Introduce tu PIN de %d dígitos</string>
+    <string name="pin_code_step_enable_confirm">Confirma tu PIN de %d dígitos</string>
+
+    <string name="pin_code_fingerprint_text">Huella dactilar</string>
+    <string name="pin_code_fingerprint_success">Huella dactilar reconocida</string>
+    <string name="pin_code_fingerprint_not_recognized">Huella dactilar no reconocida. Inténtalo de nuevo.</string>
+</resources>

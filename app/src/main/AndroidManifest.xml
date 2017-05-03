@@ -20,7 +20,7 @@
             android:value="btcwallet.db"/>
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1"/>
+            android:value="2"/>
 
         <activity
             android:name=".ui.main.MainActivity"
@@ -58,7 +58,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="creacoin"/>
+                <data android:scheme="creativecoin"/>
             </intent-filter>
         </activity>
         <activity
@@ -72,7 +72,7 @@
         </activity>
         <activity
             android:name=".ui.main.SplashActivity"
-            android:theme="@style/AppTheme.Fullscreen">
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

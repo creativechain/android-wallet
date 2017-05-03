@@ -6,10 +6,10 @@ import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.util.Sha384Hash;
 import com.chip_chap.services.user.User;
 
-import org.creacoinj.crypto.MnemonicCode;
-import org.creacoinj.crypto.MnemonicException;
-import org.creacoinj.wallet.DeterministicSeed;
-import org.creacoinj.wallet.Wallet;
+import org.creativecoinj.crypto.MnemonicCode;
+import org.creativecoinj.crypto.MnemonicException;
+import org.creativecoinj.wallet.DeterministicSeed;
+import org.creativecoinj.wallet.Wallet;
 
 import java.io.File;
 import java.io.IOException;

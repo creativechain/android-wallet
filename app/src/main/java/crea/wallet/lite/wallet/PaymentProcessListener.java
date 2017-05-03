@@ -1,8 +1,8 @@
 package crea.wallet.lite.wallet;
 
-import org.creacoinj.core.Coin;
-import org.creacoinj.core.Transaction;
-import org.creacoinj.core.TransactionConfidence;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.TransactionConfidence;
 
 /**
  * Created by ander on 16/11/16.

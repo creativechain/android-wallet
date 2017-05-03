@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import crea.wallet.lite.BookAddress;
+import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.ui.adapter.BookAddressAdapter;
 import crea.wallet.lite.util.DialogFactory;

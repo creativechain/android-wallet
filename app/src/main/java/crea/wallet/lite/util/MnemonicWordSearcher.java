@@ -1,6 +1,6 @@
 package crea.wallet.lite.util;
 
-import org.creacoinj.crypto.MnemonicCode;
+import org.creativecoinj.crypto.MnemonicCode;
 
 import java.util.ArrayList;
 import java.util.List;

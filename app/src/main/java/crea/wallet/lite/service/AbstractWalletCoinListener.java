@@ -1,10 +1,10 @@
 package crea.wallet.lite.service;
 
-import org.creacoinj.core.ECKey;
-import org.creacoinj.core.Transaction;
-import org.creacoinj.script.Script;
-import org.creacoinj.wallet.Wallet;
-import org.creacoinj.wallet.listeners.WalletEventListener;
+import org.creativecoinj.core.ECKey;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.script.Script;
+import org.creativecoinj.wallet.Wallet;
+import org.creativecoinj.wallet.listeners.WalletEventListener;
 
 import java.util.List;
 

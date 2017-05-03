@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Creativechain Wallet</string>
     <string name="available_amount">Cantidad disponible</string>
-    <string name="bitcoin_address">Dirección creacoin</string>
+    <string name="bitcoin_address">Dirección creativecoin</string>
     <string name="blockchain_download">Descarga de la cadena de bloques</string>
     <string name="synchronization_in_progress">Sincronización en progreso</string>
     <string name="synchronization_completed">¡Sincronización completada!</string>
@@ -10,7 +10,7 @@
     <string name="notif_cash_in_title">Has reicibido %1$s.</string>
     <string name="broadcasting_transaction">Publicando transacción</string>
     <string name="want_to_send_payment">Estas seguro de enviar un pago de %1$s a %2$s, con una comisión de %3$s?</string>
-    <string name="new_btc_payment">Nuevo pago creacoin</string>
+    <string name="new_btc_payment">Nuevo pago creativecoin</string>
     <string name="new_transaction">Nueva transacción</string>
     <string name="new_transaction_message">Preparando transacción…</string>
     <string name="wrong_pin">PIN incorrecto</string>
@@ -26,15 +26,15 @@
     <string name="mnemonic_code">Código Mnemotécnico</string>
     <string name="mnemonic_code_list">Copia esta lista de palabras y guárdala en un lugar seguro. El orden de las palabras es importante. Esta lista sirve para que puedas generar tu cartera si pierdes o cambias tu dispositivo. Está en tus manos la seguridad de tu dinero.\n\n %1$s</string>
     <string name="create_pin">Crea un PIN</string>
-    <string name="create_pin_message">¡Genial! Sólo se necesita cifrar la cartera. Vamos a cifrar tu carter con un PIN de 4 dígitos. Una vez cifrada tu cartera, nadie excepto quien sepa el PIN podrá enviar dinero. No hay manera de recuperar el PIN si se pierde, así que asegúrate de recordadrlo o perderás tu dinero.</string>
+    <string name="create_pin_message">¡Genial! Sólo se necesita cifrar la cartera. Vamos a cifrar tu cartera con un PIN de 4 dígitos. Una vez cifrada tu cartera, nadie excepto quien conozca el PIN podrá enviar dinero. No hay manera de recuperar el PIN si se pierde, así que asegúrate de recordarlo o perderás tu dinero.</string>
     <string name="encrypting_wallet">Cifrando cartera…</string>
     <string name="encrypt_wallet_success">¡Tu cartera se ha cifrado sin problemas!</string>
-    <string name="enter_btc_address">Introduce la dirección creacoin de destino</string>
+    <string name="enter_btc_address">Introduce la dirección creativecoin de destino</string>
     <string name="addressee">Destinatario</string>
     <string name="amount">Cantidad</string>
     <string name="amount_in_currency">Cantidad en %1$s</string>
     <string name="send_all">Enviar todo mi dinero</string>
-    <string name="transaction_fee_of">Esta transacción tiene una comisiín de %1$s</string>
+    <string name="transaction_fee_of">Esta transacción tiene una comisión de %1$s</string>
     <string name="amount_too_small">La cantidad es demasiado pequeña para ser enviada</string>
     <string name="enter_valid_amount">Introduce una cantidad válida en %1$s</string>
     <string name="empty_error_field">Este campo no puede estar vacío</string>
@@ -58,7 +58,7 @@
     <string name="copy_address">Copiar dirección</string>
     <string name="edit_address">Editar dirección</string>
     <string name="show_qr">Mostrar QR</string>
-    <string name="send_bitcoin">Enviar creacoins</string>
+    <string name="send_bitcoin">Enviar monedas</string>
     <string name="address_copied_to_clipboard">¡Dirección copiada al portapapeles!</string>
     <string name="address_label">Etiqueta</string>
     <string name="contacts_addresses">Contactos</string>
@@ -74,12 +74,12 @@
     <string name="settings">Ajustes</string>
     <string name="blockchain_restarting">Reiniciando cadena de bloques…</string>
     <string name="restart_blockchain">Reiniciar cadena de bloques</string>
-    <string name="delete_blockchain_warning">Si activas esta opción eliminarás todos los datos descargados en tu cartera, incluyendo las transacciones de creacoin recibidas. Una vez activado, tu cartera se volverá a sincronizar con la red creacoin y descará todos los bloques existentes en la red. Este proceso costará un tiempo, dependiendo de tu conexión a Internet. Te recomendamos descargar solo por Wifi. ¿Deseas activar esta opción de todos modos?</string>
+    <string name="delete_blockchain_warning">Si activas esta opción eliminarás todos los datos descargados en tu cartera, incluyendo las transacciones de creativecoin recibidas. Una vez activado, tu cartera se volverá a sincronizar con la red creativecoin y descará todos los bloques existentes en la red. Este proceso costará un tiempo, dependiendo de tu conexión a Internet. Te recomendamos descargar solo por Wifi. ¿Deseas activar esta opción de todos modos?</string>
     <string name="export_seed">Exportar semilla</string>
     <string name="getting_mnemonic_code">Obteniendo código mnemotécnico…</string>
     <string name="to_qr_code">En código QR</string>
     <string name="create_new_wallet">Nueva cartera</string>
-    <string name="create_new_wallet_explain">Crear una nueva cartera con nuevas ddirecciones</string>
+    <string name="create_new_wallet_explain">Crear una nueva cartera con nuevas direcciones</string>
     <string name="generate_existing_wallet">Cartera existente</string>
     <string name="generate_existing_wallet_explain">Crea una cartera a partir de una lista de palabras</string>
     <string name="network_fee">Comisión de red</string>
@@ -88,8 +88,8 @@
     <string name="what_is_bitcoin">
         \tCreativechain es una plataforma descentralizada para el registro y distribución de contenidos que certifica la autoría y licencia de cualquier obra o creación que los haga indelebles. Una herramienta para el empoderamiento de artistas y todo tipo de personas creativas que producen, comparten y distribuyen contenidos digitales. La plataforma aplica el poder de la revolucionaria tecnología Blockchain en el proceso de registrar el contenido para crear sellos de tiempo incorruptibles que certifican la propiedad intelectual de cualquier obra digital.</string>
     <string name="without_name">Sin nombre</string>
-    <string name="broadcasting_transaction_in_nodes">Publicando transacción en %1$d nodos creacoin.</string>
-    <string name="invalid_bitcoin_address">Dirección creacoin no válida</string>
+    <string name="broadcasting_transaction_in_nodes">Publicando transacción en %1$d nodos creativecoin.</string>
+    <string name="invalid_bitcoin_address">Dirección creativecoin no válida</string>
     <string name="address_not_found">No se han encontrado direcciones</string>
     <string name="address_not_found_explain">Haz click en el botón de abajo para añadir una dirección a la lista.</string>
     <string name="delete">Eliminar</string>
@@ -99,7 +99,7 @@
     <string name="export_seed_explain">Extrae el código mnemotécnico de la cartera (lista de palabras).</string>
     <string name="sync_time">Actualizando… %1$s</string>
     <string name="exchange_currency">Moneda de intercambio</string>
-    <string name="exchange_currency_explain">Moneda de intercambio usada para mostrar el valor de tus creacoins.</string>
+    <string name="exchange_currency_explain">Moneda de intercambio usada para mostrar el valor de tus creativecoins.</string>
     <string name="unconfirmed">Sin confirmar</string>
     <string name="transaction_fee">Comisión de red</string>
 </resources>

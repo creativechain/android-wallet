@@ -17,8 +17,8 @@
 
 package crea.wallet.lite.service;
 
-import org.creacoinj.core.Peer;
-import org.creacoinj.core.StoredBlock;
+import org.creativecoinj.core.Peer;
+import org.creativecoinj.core.StoredBlock;
 
 import java.util.List;
 

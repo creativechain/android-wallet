@@ -6,15 +6,15 @@ import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import com.chip_chap.services.cash.coin.BitCoin;
 
-import org.creacoinj.core.Address;
-import org.creacoinj.core.Coin;
-import org.creacoinj.core.InsufficientMoneyException;
-import org.creacoinj.core.Transaction;
-import org.creacoinj.core.TransactionOutput;
-import org.creacoinj.uri.BitcoinURI;
-import org.creacoinj.uri.BitcoinURIParseException;
-import org.creacoinj.wallet.SendRequest;
-import org.creacoinj.wallet.Wallet;
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.InsufficientMoneyException;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.TransactionOutput;
+import org.creativecoinj.uri.BitcoinURI;
+import org.creativecoinj.uri.BitcoinURIParseException;
+import org.creativecoinj.wallet.SendRequest;
+import org.creativecoinj.wallet.Wallet;
 
 import static crea.wallet.lite.application.Constants.WALLET.DONATION_ADDRESS;
 
@@ -71,7 +71,7 @@ public class FeeCalculation {
         if (emptyWallet) {
             sReq = SendRequest.emptyWallet(address);
         } else {
-            PaymentIntent pi = PaymentIntent.fromBitcoinUri(new BitcoinURI("creacoin:" + address.toString() + "?amount=" + BitCoin.valueOf(amountToSent.longValue()).getDoubleValue()));
+            PaymentIntent pi = PaymentIntent.fromBitcoinUri(new BitcoinURI("creativecoin:" + address.toString() + "?amount=" + BitCoin.valueOf(amountToSent.longValue()).getDoubleValue()));
             sReq = pi.toSendRequest();
         }
 

@@ -7,15 +7,15 @@
     </string-array>
 
     <string-array name="fees_values">
-        <item>30000</item>
-        <item>95000</item>
-        <item>150000</item>
+        <item>25000</item>
+        <item>135000</item>
+        <item>225000</item>
     </string-array>
 
     <string-array name="currency_entries">
         <item>Euros</item>
         <item>Dollars</item>
-        <item>Pesos</item>
+        <item>Mexican Pesos</item>
         <item>Zlotys</item>
     </string-array>
 

@@ -49,8 +49,8 @@ public class TransactionAdapter extends RecyclerAdapter<TransactionAdapter.ViewH
             holder.txStatusIcon.setTextColor(activity.getResources().getColor(transaction.isConfirmed() ? R.color.red : R.color.unconfirmed_output));
         }
 
-        org.creacoinj.core.Coin fee = org.creacoinj.core.Coin.valueOf(transaction.getFee());
-        org.creacoinj.core.Coin coin = org.creacoinj.core.Coin.valueOf(transaction.amountToCoin().getLongValue());
+        org.creativecoinj.core.Coin fee = org.creativecoinj.core.Coin.valueOf(transaction.getFee());
+        org.creativecoinj.core.Coin coin = org.creativecoinj.core.Coin.valueOf(transaction.amountToCoin().getLongValue());
         holder.txDate.setText(TimeUtils.getTimeString(transaction.getDateInLong()));
         holder.destinies.setText(transaction.getBeneficiary());
         holder.destinyAmount.setText(coin.toFriendlyString());

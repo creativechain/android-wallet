@@ -10,19 +10,20 @@ import android.util.Log;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.WalletApplication;
+import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.Utils;
 import com.chip_chap.services.task.Task;
 import com.chip_chap.services.task.TaskExceptionHandler;
 
-import org.creacoinj.core.Address;
-import org.creacoinj.core.Coin;
-import org.creacoinj.core.InsufficientMoneyException;
-import org.creacoinj.core.Transaction;
-import org.creacoinj.core.TransactionOutput;
-import org.creacoinj.crypto.KeyCrypterException;
-import org.creacoinj.wallet.SendRequest;
-import org.creacoinj.wallet.Wallet;
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.InsufficientMoneyException;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.TransactionOutput;
+import org.creativecoinj.crypto.KeyCrypterException;
+import org.creativecoinj.wallet.SendRequest;
+import org.creativecoinj.wallet.Wallet;
 
 import java.io.File;
 import java.security.InvalidKeyException;
@@ -155,9 +156,9 @@ public class PaymentProcess {
             protected Void doInBackground(Void... params) {
                 String k = Configuration.getInstance().getPin();
                 try {
-                    k = Utils.encryptInSHA2(k, 3);
+                    k = WalletCrypt.getInstance().generate(k);
 
-                    WalletHelper.INSTANCE.singTransaction(walletFile, k, k, sendRequest);
+                    WalletHelper.INSTANCE.singTransaction(walletFile, k, sendRequest);
                     tx = sendRequest.tx;
                     if (processListener != null) {
                         processListener.onSending();
@@ -166,7 +167,7 @@ public class PaymentProcess {
                     Log.i(TAG, "Broadcasting transaction: " + tx.getHashAsString());
                     WalletApplication.INSTANCE.processDirectTransaction(tx);
                     publishProgress();
-                } catch (KeyCrypterException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | InvalidKeyException | BadPaddingException e)  {
+                } catch (Exception e)  {
                     publishProgress(e);
                 }
                 return null;

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Creativechain Wallet</string>
     <string name="available_amount">Available amount</string>
-    <string name="bitcoin_address">Creacoin address</string>
+    <string name="bitcoin_address">Creativecoin address</string>
     <string name="blockchain_download">Blockchain download</string>
     <string name="synchronization_in_progress">Synchronization in progress</string>
     <string name="synchronization_completed">Synchronization completed!</string>
@@ -29,7 +29,7 @@
     <string name="create_pin_message">Great! Only need to encrypt your wallet. We\'re going to encrypt your wallet with a 4-digit PIN. Once encrypted your wallet, no one except one who knows this PIN can send money. There is No way to retrieve the PIN if you lose, so make sure to being to remember or you will lose your money.</string>
     <string name="encrypting_wallet">Encrypting wallet…</string>
     <string name="encrypt_wallet_success">Your wallet has been encrypted without problems!</string>
-    <string name="enter_btc_address">Please enter the Creacoin address of destination</string>
+    <string name="enter_btc_address">Please enter the Creativecoin address of destination</string>
     <string name="addressee">Addressee</string>
     <string name="amount">Amount</string>
     <string name="amount_in_currency">Amount in %1$s</string>
@@ -58,7 +58,7 @@
     <string name="copy_address">Copy address</string>
     <string name="edit_address">Edit address</string>
     <string name="show_qr">Show QR</string>
-    <string name="send_bitcoin">Send Creacoins</string>
+    <string name="send_bitcoin">Send coins</string>
     <string name="address_copied_to_clipboard">Address copied to clipboard!</string>
     <string name="address_label">Address label</string>
     <string name="contacts_addresses">Contacts</string>
@@ -74,7 +74,7 @@
     <string name="settings">Settings</string>
     <string name="blockchain_restarting">Restarting blockchain…</string>
     <string name="restart_blockchain">Restart blockchain</string>
-    <string name="delete_blockchain_warning">If you activate this option you will delete all downloaded data in your wallet, including the transactions of the Creacoin received. Once enabled, your wallet will synchronize with the network Creacoin download all blocks that exist in the Creacoin network. This process will cost several minutes, depending on your network connection. We recommend you to download only by wifi. Do you want to enable this option anyway?</string>
+    <string name="delete_blockchain_warning">If you activate this option you will delete all downloaded data in your wallet, including the transactions of the Creativecoin received. Once enabled, your wallet will synchronize with the network Creativecoin download all blocks that exist in the Creativecoin network. This process will cost several minutes, depending on your network connection. We recommend you to download only by wifi. Do you want to enable this option anyway?</string>
     <string name="export_seed">Export seed</string>
     <string name="getting_mnemonic_code">Getting mnemonic code…</string>
     <string name="to_qr_code">To QR code</string>
@@ -88,18 +88,18 @@
     <string name="create_new_wallet_explain">Create a new wallet with new addresses</string>
     <string name="generate_existing_wallet">Existing wallet</string>
     <string name="generate_existing_wallet_explain">Creates a wallet from list of words.</string>
-    <string name="invalid_bitcoin_address">Invalid Creacoin address</string>
-    <string name="broadcasting_transaction_in_nodes">Broadcasting transaction in %1$d Creacoin nodes.</string>
+    <string name="invalid_bitcoin_address">Invalid Creativecoin address</string>
+    <string name="broadcasting_transaction_in_nodes">Broadcasting transaction in %1$d Creativecoin nodes.</string>
     <string name="transactions_not_found">We have not found any transactions</string>
     <string name="transactions_not_found_explain">Up to now we have not found any incoming transactions or outgoing of this wallet.</string>
     <string name="address_not_found">No addresses were found</string>
-    <string name="address_not_found_explain">Click on the button below to add a Creacoin address to the list.</string>
+    <string name="address_not_found_explain">Click on the button below to add a Creativecoin address to the list.</string>
     <string name="delete">Delete</string>
     <string name="transaction_fees_explain">Commission of transactions per KB. Transactions with commissions low and takes longer to be confirmed.</string>
     <string name="export_seed_explain">Extract the code mnemonic of the wallet (list of words).</string>
     <string name="sync_time">Sync… %1$s </string>
     <string name="exchange_currency">Exchange currency</string>
-    <string name="exchange_currency_explain">Currency exchange used to show the value of your Creacoins.</string>
+    <string name="exchange_currency_explain">Currency exchange used to show the value of your Creativecoins.</string>
     <string name="unconfirmed">Unconfirmed</string>
     <string name="transaction_fee">Transaction fee</string>
 </resources>

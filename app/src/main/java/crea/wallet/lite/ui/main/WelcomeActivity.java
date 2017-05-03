@@ -17,13 +17,15 @@ import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
+import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.ui.tool.SeedActivity;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 
-import org.creacoinj.crypto.MnemonicException;
+import org.creativecoinj.core.CheckpointManager;
+import org.creativecoinj.crypto.MnemonicException;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -171,10 +173,17 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    String pass = Utils.encryptInSHA2(pin, 3);
+                    WalletCrypt walletCrypt = WalletCrypt.random();
+                    walletCrypt.save();
+
+                    Log.d(TAG, walletCrypt.toString());
+                    Log.d(TAG, "Pass: " + pin);
+                    String pass = walletCrypt.generate(pin);
+                    Log.d(TAG, "Ecrypting with: " + org.creativecoinj.core.Utils.HEX.encode(pass.getBytes()));
                     WalletHelper.INSTANCE.encrypt(pass);
+                    WalletHelper.INSTANCE.save();
                     publishProgress(true);
-                } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     publishProgress(false);
                 }
@@ -231,7 +240,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             if (requestCode == IntentUtils.IMPORT_SEED) {
                 seed = data.getStringArrayListExtra(SeedActivity.EXTRA_SEED);
                 Log.d(TAG, "IMPORTED SEED: " + seed.toString());
-                creationTime = NETWORK_PARAMETERS.getGenesisBlock().getTimeSeconds() * 1000;
                 generateWallet();
             } else if (requestCode == IntentUtils.PIN) {
                 String pin = Configuration.getInstance().getPin();

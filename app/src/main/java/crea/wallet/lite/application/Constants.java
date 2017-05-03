@@ -23,11 +23,11 @@ import android.text.format.DateUtils;
 import crea.wallet.lite.BuildConfig;
 import com.google.common.io.BaseEncoding;
 
-import org.creacoinj.core.Address;
-import org.creacoinj.core.Context;
-import org.creacoinj.core.NetworkParameters;
-import org.creacoinj.params.MainNetParams;
-import org.creacoinj.params.TestNet3Params;
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Context;
+import org.creativecoinj.core.NetworkParameters;
+import org.creativecoinj.params.MainNetParams;
+import org.creativecoinj.params.TestNet3Params;
 
 import java.io.File;
 
@@ -99,8 +99,6 @@ public final class Constants {
 		public static final Address DONATION_ADDRESS = Address.fromBase58(WALLET.NETWORK_PARAMETERS, ADDRESS);
 
 		public static final int MAX_HD_ACCOUNTS = 5;
-
-		public static final String[] DEFAULT_PEERS = {"80.241.212.178", "217.182.129.22", "5.189.181.124"};
 	}
 
 	public static final class WEB_EXPLORER {

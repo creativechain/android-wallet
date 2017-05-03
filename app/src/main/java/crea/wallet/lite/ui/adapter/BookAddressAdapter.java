@@ -7,14 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import crea.wallet.lite.BookAddress;
+import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.util.CoinConverter;
 import crea.wallet.lite.wallet.WalletHelper;
 import com.chip_chap.services.cash.coin.BitCoin;
 
-import org.creacoinj.core.Coin;
+import org.creativecoinj.core.Coin;
 
 import java.util.List;
 

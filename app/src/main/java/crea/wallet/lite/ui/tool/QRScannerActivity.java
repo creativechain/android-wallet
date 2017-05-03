@@ -53,6 +53,7 @@ public class QRScannerActivity extends Activity implements ScannerView.ResultHan
     }
 
     private void setCamera() {
+        Log.d(TAG, "Starting camera");
         Camera camera = Camera.open();
         camera.startPreview();
         mScannerView.startCamera(camera);

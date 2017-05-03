@@ -6,7 +6,7 @@ import android.content.Intent;
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.QRScannerActivity;
 import crea.wallet.lite.ui.tool.SeedActivity;
-import com.github.orangegangsters.lollipin.lib.managers.AppLock;
+import com.gotcreations.materialpin.managers.AppLock;
 
 /**
  * Created by ander on 10/11/16.
@@ -29,14 +29,14 @@ public class IntentUtils {
     }
 
     public static void createPin(Activity activity) {
-        Intent pinIntetn = new Intent(activity, PinActivity.class);
-        pinIntetn.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
-        activity.startActivityForResult(pinIntetn, PIN);
+        Intent pinIntent = new Intent(activity, PinActivity.class);
+        pinIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.ENABLE_PINLOCK);
+        activity.startActivityForResult(pinIntent, PIN);
     }
 
     public static void checkPin(Activity activity) {
-        Intent pinIntetn = new Intent(activity, PinActivity.class);
-        pinIntetn.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
-        activity.startActivityForResult(pinIntetn, PIN);
+        Intent pinIntent = new Intent(activity, PinActivity.class);
+        pinIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
+        activity.startActivityForResult(pinIntent, PIN);
     }
 }

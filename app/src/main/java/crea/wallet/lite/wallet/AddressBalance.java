@@ -1,13 +1,13 @@
 package crea.wallet.lite.wallet;
 
-import org.creacoinj.core.Address;
-import org.creacoinj.core.Coin;
-import org.creacoinj.core.NetworkParameters;
-import org.creacoinj.core.Transaction;
-import org.creacoinj.core.TransactionConfidence;
-import org.creacoinj.core.TransactionOutput;
-import org.creacoinj.wallet.CoinSelection;
-import org.creacoinj.wallet.CoinSelector;
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.NetworkParameters;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.TransactionConfidence;
+import org.creativecoinj.core.TransactionOutput;
+import org.creativecoinj.wallet.CoinSelection;
+import org.creativecoinj.wallet.CoinSelector;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * This class implements a {@link org.creacoinj.wallet.CoinSelector} which attempts to select all outputs
+ * This class implements a {@link org.creativecoinj.wallet.CoinSelector} which attempts to select all outputs
  * from a designated address. Outputs are selected in order of highest priority.  Note that this means we may 
  * end up "spending" more priority than would be required to get the transaction we are creating confirmed.
  */

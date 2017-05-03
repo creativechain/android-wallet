@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="activity_bitcoin_transaction">Transacción creacoin</string>
+    <string name="activity_bitcoin_transaction">Transacción creativecoin</string>
     <string name="activity_seed">Importar semilla</string>
-    <string name="activity_send_bitcoin">Enviar creacoins</string>
+    <string name="activity_send_bitcoin">Enviar creativecoins</string>
     <string name="activity_address_book">Libreta de direcciones</string>
     <string name="activity_settings">Ajustes</string>
 </resources>

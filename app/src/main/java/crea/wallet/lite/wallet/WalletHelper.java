@@ -11,29 +11,30 @@ import com.chip_chap.services.cash.Currency;
 import com.chip_chap.services.cash.coin.BitCoin;
 import com.chip_chap.services.user.WalletBalance;
 
-import org.creacoinj.core.Address;
-import org.creacoinj.core.Block;
-import org.creacoinj.core.Coin;
-import org.creacoinj.core.Context;
-import org.creacoinj.core.InsufficientMoneyException;
-import org.creacoinj.core.NetworkParameters;
-import org.creacoinj.core.Sha256Hash;
-import org.creacoinj.core.Transaction;
-import org.creacoinj.crypto.MnemonicException;
-import org.creacoinj.wallet.CoinSelector;
-import org.creacoinj.wallet.DeterministicSeed;
-import org.creacoinj.wallet.Protos;
-import org.creacoinj.wallet.SendRequest;
-import org.creacoinj.wallet.UnreadableWalletException;
-import org.creacoinj.wallet.Wallet;
-import org.creacoinj.wallet.WalletFiles;
-import org.creacoinj.wallet.WalletProtobufSerializer;
-import org.creacoinj.wallet.listeners.WalletEventListener;
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Block;
+import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.Context;
+import org.creativecoinj.core.InsufficientMoneyException;
+import org.creativecoinj.core.NetworkParameters;
+import org.creativecoinj.core.Sha256Hash;
+import org.creativecoinj.core.Transaction;
+import org.creativecoinj.crypto.MnemonicException;
+import org.creativecoinj.wallet.CoinSelector;
+import org.creativecoinj.wallet.DeterministicSeed;
+import org.creativecoinj.wallet.Protos;
+import org.creativecoinj.wallet.SendRequest;
+import org.creativecoinj.wallet.UnreadableWalletException;
+import org.creativecoinj.wallet.Wallet;
+import org.creativecoinj.wallet.WalletFiles;
+import org.creativecoinj.wallet.WalletProtobufSerializer;
+import org.creativecoinj.wallet.listeners.WalletEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -60,7 +61,7 @@ public class WalletHelper {
         @Override
         public void onAfterAutoSave(File file) {
             Log.e(TAG, "Auto saving wallet " + file.getAbsolutePath());
-            Io.chmod(file, 0777);
+            //Io.chmod(file, 0777);
         }
     };
 
@@ -238,7 +239,7 @@ public class WalletHelper {
         return getAddressBalance(Configuration.getInstance().getMainWalletFile(), address);
     }
 
-    public void singTransaction(final File f, final CharSequence tryKey, final CharSequence newKey, SendRequest sReq) {
+    public void singTransaction(final File f, final CharSequence tryKey, SendRequest sReq) {
         try {
             Context.propagate(CONTEXT);
             Wallet w = wallets.get(f);
@@ -248,7 +249,7 @@ public class WalletHelper {
                 @Override
                 public void run() {
                     Context.propagate(CONTEXT);
-                    encrypt(f, newKey);
+                    encrypt(f, tryKey);
                 }
             }.start();
 
@@ -653,5 +654,14 @@ public class WalletHelper {
         }
 
         return new WalletHelper(wallets);
+    }
+
+    public List<Transaction> getPendingTransactions() {
+        List<Transaction> transactions = new ArrayList<>();
+        for (Wallet w : wallets.values()) {
+            transactions.addAll(w.getPendingTransactions());
+        }
+
+        return transactions;
     }
 }

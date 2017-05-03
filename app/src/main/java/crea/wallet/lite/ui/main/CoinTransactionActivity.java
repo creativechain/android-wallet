@@ -8,11 +8,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import crea.wallet.lite.BookAddress;
+import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
@@ -20,10 +19,9 @@ import crea.wallet.lite.ui.base.TransactionActivity;
 import crea.wallet.lite.util.ConfirmationUpdater;
 
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
-import com.chip_chap.services.updater.TransactionUpdaterExecutor;
 import com.chip_chap.services.util.ViewUpdater;
 
-import org.creacoinj.core.Coin;
+import org.creativecoinj.core.Coin;
 
 import java.util.ArrayList;
 

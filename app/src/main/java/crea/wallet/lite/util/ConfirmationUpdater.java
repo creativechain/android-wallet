@@ -86,6 +86,7 @@ public class ConfirmationUpdater implements Runnable {
 
                         tx.setConfirmations(conf);
                         tx.save();
+                        viewHolder.updateView(tx);
                     }
                 }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
