@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="activity_bitcoin_transaction">Creacoin transaction</string>
+    <string name="activity_bitcoin_transaction">Creativecoin transaction</string>
     <string name="activity_seed">Import seed</string>
     <string name="activity_send_bitcoin">Send creativecoins</string>
     <string name="activity_address_book">Address book</string>

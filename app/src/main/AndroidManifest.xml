@@ -24,20 +24,25 @@
 
         <activity
             android:name=".ui.main.MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.main.CoinTransactionActivity"
             android:label="@string/activity_bitcoin_transaction"
-            android:theme="@style/AppTheme.TransactionTheme">
+            android:theme="@style/AppTheme.TransactionTheme"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.tool.QRScannerActivity"
             android:label="@string/qr_scanner"
             android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ui.tool.SeedActivity"
-            android:label="@string/activity_seed"/>
+            android:label="@string/activity_seed"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".ui.tool.PinActivity"/>
 
         <service
@@ -47,11 +52,13 @@
         <activity
             android:name=".ui.main.WelcomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Fullscreen">
+            android:theme="@style/AppTheme.Fullscreen"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.tool.SendBitcoinActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -64,15 +71,18 @@
         <activity
             android:name=".ui.address.AddressBookActivity"
             android:label="@string/address_book"
-            android:theme="@style/AppTheme.NoShadowActionBar">
+            android:theme="@style/AppTheme.NoShadowActionBar"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.main.SettingsActivity"
-            android:label="@string/activity_settings">
+            android:label="@string/activity_settings"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.main.SplashActivity"
-            android:theme="@style/AppTheme.Splash">
+            android:theme="@style/AppTheme.Splash"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -7,6 +7,9 @@
     <item android:state_focused="true"
             android:drawable="@color/colorPrimaryDark" /> <!-- focused -->
 
+    <item android:state_enabled="false"
+          android:drawable="@color/colorPrimaryBlurred" />
+
     <item android:drawable="@color/colorPrimary"/> <!-- default -->
 
 </selector>

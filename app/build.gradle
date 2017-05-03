@@ -53,7 +53,7 @@ dependencies {
     compile('com.github.tony19:logback-android-classic:1.1.1-5') {
         exclude(group: 'com.google.android', module: 'android')
     }
-    compile 'com.google.protobuf:protobuf-java:2.6.1'
+
     compile 'com.android.support:multidex:1.0.1'
 
     compile 'com.android.support:appcompat-v7:25.3.1'

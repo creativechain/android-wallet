@@ -6,7 +6,7 @@
         <item>High</item>
     </string-array>
 
-    <string-array name="fees_values">
+    <string-array name="fees_values" translatable="false">
         <item>25000</item>
         <item>135000</item>
         <item>225000</item>

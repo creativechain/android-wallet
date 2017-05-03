@@ -7,10 +7,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.VerificationException;
 
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
@@ -18,6 +23,10 @@ import crea.wallet.lite.ui.adapter.BookAddressAdapter;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.FormUtils;
 import crea.wallet.lite.util.QR;
+import crea.wallet.lite.util.Utils;
+
+import static crea.wallet.lite.application.Constants.WALLET.ADDRESS;
+import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 /**
  * Created by ander on 17/11/16.
@@ -54,43 +63,52 @@ public abstract class AddressBookFragment extends FragmentContext {
             editAddress.setText(address.getAddress());
         }
 
-        if (!canEditAddress) {
-            editAddress.setEnabled(false);
-        }
-
-        AlertDialog aDialog = DialogFactory.alert(getActivity(), R.string.edit_address, v);
+        final AlertDialog aDialog = DialogFactory.alert(getActivity(), R.string.edit_address, v);
         aDialog.setCancelable(false);
-        aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+        aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), (DialogInterface.OnClickListener)null);
+        aDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), (DialogInterface.OnClickListener)null);
+        aDialog.show();
+
+        Button positive = aDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        Button negative = aDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+
+        positive.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(View v) {
+                Log.d(TAG, "onClick, Button positive");
                 boolean error = false;
 
                 if (FormUtils.isEmpty(editAddress)) {
                     editAddress.setError(getString(R.string.empty_error_field));
                     error = true;
+                } else {
+                    try {
+                        Address.fromBase58(NETWORK_PARAMETERS, editAddress.getText().toString());
+                    } catch (Exception e) {
+                        error = true;
+                        editAddress.setError(getString(R.string.invalid_bitcoin_address));
+                    }
                 }
 
+                Log.d(TAG, "hasError: " + error);
                 if (!error) {
                     String addressString = editAddress.getText().toString().trim();
                     String label = editLabel.getText().toString().trim();
                     address.setAddress(addressString)
                             .setLabel(label)
                             .save();
-                    dialogInterface.dismiss();
-                    adapter.notifyDataChanged();
+                    aDialog.dismiss();
+                    notifyDataChanged();
                 }
-
             }
         });
 
-        aDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+        negative.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
+            public void onClick(View v) {
+                aDialog.dismiss();
             }
         });
-
-        aDialog.show();
     }
 
     protected void notifyDataChanged() {

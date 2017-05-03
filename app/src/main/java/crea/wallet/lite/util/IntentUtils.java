@@ -2,6 +2,7 @@ package crea.wallet.lite.util;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.QRScannerActivity;
@@ -17,6 +18,11 @@ public class IntentUtils {
     public static final int QR_SCAN = 1;
     public static final int IMPORT_SEED = 2;
     public static final int PIN = 3;
+
+    public static void startQRScanner(Fragment fragment) {
+        Intent intent = new Intent(fragment.getActivity(), QRScannerActivity.class);
+        fragment.startActivityForResult(intent, QR_SCAN);
+    }
 
     public static void startQRScanner(Activity activity) {
         Intent intent = new Intent(activity, QRScannerActivity.class);

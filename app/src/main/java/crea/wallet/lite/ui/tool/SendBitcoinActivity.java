@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -151,6 +152,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
     private TextView feeAmountFiat;
     private CheckBox sendAllMoney;
     private View broadcastStatus;
+    private View acceptBtn;
     private Wallet wallet;
     private Currency currency;
     private Task<Void> keyTask;
@@ -232,7 +234,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
             }
         };
 
-        Button acceptBtn = (Button) findViewById(R.id.wallet_accept_btn);
+        acceptBtn = findViewById(R.id.wallet_accept_btn);
         acceptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -481,6 +483,14 @@ public class SendBitcoinActivity extends AppCompatActivity {
                     destinyAmount.setText(totalOutput.toFriendlyString());
                     feeAmountBtc.setText(feeOutput.toFriendlyString());
                     feeAmountFiat.setText(feeConversion.toFriendlyString());
+                    acceptBtn.setEnabled(false);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 3000);
                 }
             }
         });
