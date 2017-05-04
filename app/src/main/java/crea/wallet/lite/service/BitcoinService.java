@@ -97,6 +97,7 @@ import javax.annotation.Nullable;
 
 import static crea.wallet.lite.application.Constants.WALLET.CONTEXT;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
+import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC_STARTED;
 
 
 /**
@@ -138,7 +139,7 @@ public class BitcoinService extends Service implements BlockchainService {
 				@Override
 				public void run() {
 					final boolean isReceived = amount.signum() > 0;
-					final boolean replaying = bestChainHeight < config.getBestChainHeightEver();
+					final boolean replaying = bestChainHeight < Configuration.getInstance().getBestChainHeightEver();
 					final boolean isReplayedTx = confidenceType == ConfidenceType.BUILDING && replaying;
 
 					if (isReceived && !isReplayedTx) {
@@ -169,7 +170,6 @@ public class BitcoinService extends Service implements BlockchainService {
 	private final List<Address> notificationAddresses = new LinkedList<>();
 
 	private WalletApplication application;
-	private Configuration config;
 
 	private BlockStore blockStore;
 	private File blockChainFile;
@@ -233,7 +233,7 @@ public class BitcoinService extends Service implements BlockchainService {
 	}
 
 	private void notifyCoinsReceived(final Coin amount, long id, @Nullable final Address... addresses) {
-		if (!config.isNotificationsEnabled()) {
+		if (!Configuration.getInstance().isNotificationsEnabled()) {
 			return;
 		}
 
@@ -281,12 +281,12 @@ public class BitcoinService extends Service implements BlockchainService {
 		private AtomicBoolean stopped = new AtomicBoolean(false);
 
 		public PeerConnectivityListener(){
-			config.registerOnSharedPreferenceChangeListener(this);
+			Configuration.getInstance().registerOnSharedPreferenceChangeListener(this);
 		}
 
 		public void stop() {
 			stopped.set(true);
-			config.unregisterOnSharedPreferenceChangeListener(this);
+			Configuration.getInstance().unregisterOnSharedPreferenceChangeListener(this);
 
 			//REMOVE NOTIFICATIONS?
 			nm.cancel(NOTIFICATION_ID_CONNECTED);
@@ -368,13 +368,13 @@ public class BitcoinService extends Service implements BlockchainService {
             sendBroadcast(new Intent(BlockchainBroadcastReceiver.LAST_BLOCK_RECEIVED));
             rateHandler.removeCallbacksAndMessages(null);
             delayHandler.removeCallbacksAndMessages(null);
-            config.maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
+            Configuration.getInstance().maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
 
             if (progressBar != null) {
                 progressBar.post(new Runnable() {
                     @Override
                     public void run() {
-                        progressBar.setText(getString(R.string.amount_in_currency, config.getMainCurrency().getName()));
+                        progressBar.setText(getString(R.string.amount_in_currency, Configuration.getInstance().getMainCurrency().getName()));
                     }
                 });
             }
@@ -402,7 +402,7 @@ public class BitcoinService extends Service implements BlockchainService {
 			@Override
 			public void run() {
                 lastMessageTime.set(System.currentTimeMillis());
-				config.maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
+				Configuration.getInstance().maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
 			}
 		};
 	};
@@ -479,6 +479,12 @@ public class BitcoinService extends Service implements BlockchainService {
 						peerGroup.startAsync();
 						peerGroup.startBlockChainDownload(blockchainDownloadListener);
 						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void aVoid) {
+						super.onPostExecute(aVoid);
+						broadcastSyncStarted();
 					}
 				}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -559,7 +565,7 @@ public class BitcoinService extends Service implements BlockchainService {
 				}
 
 				// if idling, shutdown service
-				if (isIdle)	{
+				if (Configuration.getInstance().isIdleDetectionEnabled() && isIdle)	{
 					Log.i(TAG, "idling detected, stopping service");
 					stopSelf();
 				}
@@ -629,7 +635,6 @@ public class BitcoinService extends Service implements BlockchainService {
 			final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, lockName);
 			application = WalletApplication.INSTANCE;
-			config = Configuration.getInstance();
 
 			setWalletListener();
 
@@ -650,7 +655,7 @@ public class BitcoinService extends Service implements BlockchainService {
 				Log.e(TAG,"CREATION_TIME=" + earliestKeyCreationTime +  " BLOCKCHAIN_FILE=" + blockChainFileExists);
 /*				if (!blockChainFileExists && earliestKeyCreationTime > 0){
 					try	{
-						config.setDeletingBlockchain(true);
+						Configuration.getInstance().setDeletingBlockchain(true);
 						final long start = System.currentTimeMillis();
 						final InputStream checkpointsInputStream = getAssets().open("bitcoin/" + Constants.WALLET.CHECKPOINTS_FILENAME);
 						CheckpointManager.checkpoint(NETWORK_PARAMETERS, checkpointsInputStream, blockStore, earliestKeyCreationTime);
@@ -688,7 +693,7 @@ public class BitcoinService extends Service implements BlockchainService {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onHandleIntent");
+        Log.e(TAG, "onStartCommand");
 
         org.creativecoinj.core.Context.propagate(CONTEXT);
         if (intent != null)	{
@@ -713,6 +718,8 @@ public class BitcoinService extends Service implements BlockchainService {
 
                 resetBlockchainOnShutdown = true;
                 stopSelf();
+            } else if (peerGroup != null && peerGroup.isRunning()) {
+                broadcastSyncStarted();
             }
         } else {
             Log.e(TAG,"service restart, although it was started as non-sticky");
@@ -787,7 +794,7 @@ public class BitcoinService extends Service implements BlockchainService {
 		final StoredBlock chainHead = blockChain.getChainHead();
 		final Date bestChainDate = chainHead.getHeader().getTime();
 		final int bestChainHeight = chainHead.getHeight();
-		final boolean replaying = chainHead.getHeight() < config.getBestChainHeightEver();
+		final boolean replaying = chainHead.getHeight() < Configuration.getInstance().getBestChainHeightEver();
 
 		return new BlockchainState(bestChainDate, bestChainHeight, replaying, impediments);
 	}
@@ -856,4 +863,8 @@ public class BitcoinService extends Service implements BlockchainService {
             peerGroup.broadcastTransaction(tx);
         }
     }
+
+    private void broadcastSyncStarted() {
+		sendBroadcast(new Intent(ACTION_SYNC_STARTED));
+	}
 }

@@ -102,4 +102,6 @@
     <string name="exchange_currency_explain">Currency exchange used to show the value of your Creativecoins.</string>
     <string name="unconfirmed">Unconfirmed</string>
     <string name="transaction_fee">Transaction fee</string>
+    <string name="disconnect_idle_detected">Disconnect when idle is detected</string>
+    <string name="disconnect_idle_detected_summary">It disconnects from the network when it detects inactivity. It reconnects automatically after 15 minutes.</string>
 </resources>

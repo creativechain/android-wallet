@@ -7,6 +7,8 @@ import android.content.Intent;
 import com.activeandroid.query.Select;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
 
+import crea.wallet.lite.service.BlockchainService;
+
 /**
  * Created by ander on 15/11/16.
  */
@@ -20,6 +22,7 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
     public static final String TRANSACTION_RECEIVED = BASE_ACTION + ".trasaction_received";
     public static final String LAST_BLOCK_RECEIVED = BASE_ACTION + ".last_block_received";
     public static final String BLOCKCHAIN_RESET = BASE_ACTION + ".blockchain_reset";
+    public static final String ACTION_SYNC_STARTED = BASE_ACTION + ".sync_started";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -37,6 +40,8 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
             onLastDownloadedBlock();
         } else if (action.equals(BLOCKCHAIN_RESET)) {
             onBlockChainReset();
+        } else if (action.equals(ACTION_SYNC_STARTED)) {
+            onSyncStarted();
         }
     }
 
@@ -57,6 +62,10 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
     }
 
     public void onLastDownloadedBlock() {
+
+    }
+
+    public void onSyncStarted() {
 
     }
 }

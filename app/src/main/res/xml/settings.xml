@@ -25,6 +25,12 @@
     <android.support.v7.preference.PreferenceCategory
         android:title="@string/advanced_options">
 
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:title="@string/disconnect_idle_detected"
+            android:key="idle_detection"
+            android:summary="@string/disconnect_idle_detected_summary"
+            android:defaultValue="true" />
+
         <android.support.v7.preference.ListPreference
             android:title="@string/transaction_fees"
             android:summary="@string/transaction_fees_explain"

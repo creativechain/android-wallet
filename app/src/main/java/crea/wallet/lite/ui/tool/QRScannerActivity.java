@@ -3,7 +3,6 @@ package crea.wallet.lite.ui.tool;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,24 +10,22 @@ import android.util.Log;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.util.Permissions;
-import crea.wallet.lite.widget.qrscanner.ScannerView;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
 import com.google.zxing.Result;
 
 /**
  * Created by ander on 22/04/15.
  */
-public class QRScannerActivity extends Activity implements ScannerView.ResultHandler {
+public class QRScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
 
     private static final String TAG = "QRScannerActivity";
-    private ScannerView mScannerView;
+    private ZXingScannerView mScannerView;
 
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.activity_qrscanner);
-        /*requestCode = getIntent().getExtras().getInt("requestCode");*/
-        mScannerView = (ScannerView) findViewById(R.id.scannerView);
-        mScannerView.setResultHandler(this);
 
         if (Permissions.checkCameraPermission(this)) {
             setCamera();
@@ -38,7 +35,9 @@ public class QRScannerActivity extends Activity implements ScannerView.ResultHan
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();           // Stop camera on pause
+        if (mScannerView != null) {
+            mScannerView.stopCamera();           // Stop camera on pause
+        }
     }
 
     @Override
@@ -53,10 +52,13 @@ public class QRScannerActivity extends Activity implements ScannerView.ResultHan
     }
 
     private void setCamera() {
+        mScannerView = (ZXingScannerView) findViewById(R.id.scanner_view);
+        mScannerView.setResultHandler(this);
+
         Log.d(TAG, "Starting camera");
-        Camera camera = Camera.open();
-        camera.startPreview();
-        mScannerView.startCamera(camera);
+/*        Camera camera = Camera.open();
+        camera.startPreview();*/
+        mScannerView.startCamera();
     }
 
     @Override
@@ -72,6 +74,7 @@ public class QRScannerActivity extends Activity implements ScannerView.ResultHan
             Log.i(TAG, "String detected: " + stringResult);
         }
 
+        mScannerView.stopCamera();
         setResult(RESULT_OK, returnIntent);
         finish();
     }

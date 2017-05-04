@@ -8,207 +8,215 @@
     android:orientation="vertical"
     android:id="@+id/root_parent">
 
-    <RelativeLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="false">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="20dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="15dp"
-                android:background="@color/gray_333"
-                android:layout_weight="0.3"
-                android:id="@+id/main_panel">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="false">
 
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="0dp"
-                    android:background="@drawable/border_white"
-                    android:paddingTop="3dp"
-                    android:paddingRight="3dp"
-                    android:paddingLeft="3dp"
-                    android:layout_weight="0.75">
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/gray_474"
-                        android:gravity="center_vertical"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/available_amount"
-                            android:layout_weight="0.5"
-                            android:textColor="@android:color/white"
-                            android:paddingLeft="15dp"
-                            android:textSize="10dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/value_in_fiat"
-                            android:layout_weight="0.5"
-                            android:gravity="right"
-                            android:textColor="@android:color/white"
-                            android:paddingRight="15dp"
-                            android:textSize="10dp"
-                            tools:text="Sync... 00:10:56 remaining"/>
-
-                    </LinearLayout>
+                    android:paddingLeft="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="15dp"
+                    android:background="@color/gray_333"
+                    android:layout_weight="0.3"
+                    android:id="@+id/main_panel">
 
                     <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
+                        android:background="@drawable/border_white"
+                        android:paddingTop="3dp"
+                        android:paddingRight="3dp"
+                        android:paddingLeft="3dp"
+                        android:layout_weight="0.75">
 
                         <LinearLayout
                             android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:paddingTop="10dp"
-                            android:paddingBottom="10dp"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/gray_474"
                             android:gravity="center_vertical"
-                            android:layout_weight="0.6">
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="0.00 btc"
-                                android:id="@+id/total_btc"
+                                android:text="@string/available_amount"
                                 android:layout_weight="0.5"
                                 android:textColor="@android:color/white"
-                                android:textSize="20dp"
-                                android:textStyle="bold"
                                 android:paddingLeft="15dp"
-                                android:singleLine="true"
-                                android:maxLines="2" />
+                                android:textSize="10dp" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="0.00 btc"
-                                android:id="@+id/total_fiat"
+                                android:id="@+id/value_in_fiat"
                                 android:layout_weight="0.5"
-                                android:textColor="@android:color/white"
                                 android:gravity="right"
-                                android:textSize="20dp"
-                                android:textStyle="bold"
+                                android:textColor="@android:color/white"
                                 android:paddingRight="15dp"
-                                android:singleLine="true"
-                                android:maxLines="2" />
+                                android:textSize="10dp"
+                                tools:text="Sync... 00:10:56 remaining"/>
+
                         </LinearLayout>
 
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0.4">
-
-                            <crea.wallet.lite.widget.FontTextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/unconfirmed"
-                                android:textColor="@android:color/white"
-                                android:layout_marginLeft="15dp"
-                                android:textSize="12sp"/>
+                            android:layout_height="match_parent">
 
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="15dp"
-                                android:paddingRight="15dp"
-                                >
+                                android:layout_height="0dp"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:gravity="center_vertical"
+                                android:layout_weight="0.6">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/pending_btc"
+                                    android:text="0.00 btc"
+                                    android:id="@+id/total_btc"
                                     android:layout_weight="0.5"
                                     android:textColor="@android:color/white"
-                                    android:textSize="10dp"
-                                    android:text="0.00 €"
-                                    android:visibility="visible" />
+                                    android:textSize="20dp"
+                                    android:textStyle="bold"
+                                    android:paddingLeft="15dp"
+                                    android:singleLine="true"
+                                    android:maxLines="2" />
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:text="0.00 €"
-                                    android:id="@+id/pending_fiat"
+                                    android:text="0.00 btc"
+                                    android:id="@+id/total_fiat"
+                                    android:layout_weight="0.5"
                                     android:textColor="@android:color/white"
-                                    android:textSize="10dp"
                                     android:gravity="right"
-                                    android:visibility="visible"
-                                    android:layout_weight="0.5" />
-
+                                    android:textSize="20dp"
+                                    android:textStyle="bold"
+                                    android:paddingRight="15dp"
+                                    android:singleLine="true"
+                                    android:maxLines="2" />
                             </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.4">
+
+                                <crea.wallet.lite.widget.FontTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/unconfirmed"
+                                    android:textColor="@android:color/white"
+                                    android:layout_marginLeft="15dp"
+                                    android:textSize="12sp"/>
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="15dp"
+                                    android:paddingRight="15dp"
+                                    >
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/pending_btc"
+                                        android:layout_weight="0.5"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="10dp"
+                                        android:text="0.00 €"
+                                        android:visibility="visible" />
+
+                                    <TextView
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="0.00 €"
+                                        android:id="@+id/pending_fiat"
+                                        android:textColor="@android:color/white"
+                                        android:textSize="10dp"
+                                        android:gravity="right"
+                                        android:visibility="visible"
+                                        android:layout_weight="0.5" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+
                         </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.7"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/transaction_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/transaction_row"
-                    android:visibility="gone"/>
-
                 <LinearLayout
-                    android:id="@+id/no_transactions"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:gravity="center">
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.7"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
-                    <crea.wallet.lite.widget.FontTextView
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/transaction_list"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/transactions_not_found"
-                        app:font="roboto_bold"
-                        android:gravity="center"
-                        android:textSize="30dp"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:layout_height="match_parent"
+                        tools:listitem="@layout/transaction_row"
+                        android:visibility="gone"/>
 
-                    <crea.wallet.lite.widget.FontTextView
+                    <LinearLayout
+                        android:id="@+id/no_transactions"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/transactions_not_found_explain"
-                        app:font="roboto_light"
-                        android:gravity="center"
-                        android:textSize="16dp"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
 
+                        <crea.wallet.lite.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/transactions_not_found"
+                            app:font="roboto_bold"
+                            android:gravity="center"
+                            android:textSize="30dp"
+                            android:textColor="@color/colorPrimaryDark" />
+
+                        <crea.wallet.lite.widget.FontTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/transactions_not_found_explain"
+                            app:font="roboto_light"
+                            android:gravity="center"
+                            android:textSize="16dp"
+                            android:textColor="@color/colorPrimaryDark" />
+
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </FrameLayout>

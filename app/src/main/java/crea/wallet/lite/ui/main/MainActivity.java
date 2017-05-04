@@ -2,6 +2,7 @@ package crea.wallet.lite.ui.main;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,12 +33,14 @@ import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.wallet.Wallet;
 
+import static crea.wallet.lite.application.WalletApplication.INSTANCE;
+import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC_STARTED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.BLOCKCHAIN_RESET;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.LAST_BLOCK_RECEIVED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_RECEIVED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_SENT;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "MainActivity";
 
@@ -61,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
         public void onBlockChainReset() {
             invalidateData();
         }
+
+        @Override
+        public void onSyncStarted() {
+            refreshLayout.setRefreshing(false);
+        }
     };
 
     private TextView totalBtcView;
@@ -71,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView txList;
     private View noTransactions;
     private TransactionAdapter adapter;
+    private SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +92,12 @@ public class MainActivity extends AppCompatActivity {
         pendingFiatView = (TextView) findViewById(R.id.pending_fiat);
         valueInFiatView = (TextView) findViewById(R.id.value_in_fiat);
         noTransactions = findViewById(R.id.no_transactions);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
 
         WalletHelper.INSTANCE.addIssuedAddressesToWatch();
+
+        refreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent, R.color.red);
+        refreshLayout.setOnRefreshListener(this);
 
         txList = (RecyclerView) findViewById(R.id.transaction_list);
         txList.setLayoutManager(new LinearLayoutManager(this));
@@ -204,12 +217,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRefresh() {
+        refreshLayout.setRefreshing(true);
+        INSTANCE.startBlockchainService(false);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         IntentFilter iFilter = new IntentFilter(TRANSACTION_RECEIVED);
         iFilter.addAction(TRANSACTION_SENT);
         iFilter.addAction(LAST_BLOCK_RECEIVED);
         iFilter.addAction(BLOCKCHAIN_RESET);
+        iFilter.addAction(ACTION_SYNC_STARTED);
         registerReceiver(TRANSACTION_RECEIVER, iFilter);
         BitcoinService.progressBar = valueInFiatView;
         invalidateData();
@@ -221,5 +241,4 @@ public class MainActivity extends AppCompatActivity {
         BitcoinService.progressBar = null;
         super.onPause();
     }
-
 }

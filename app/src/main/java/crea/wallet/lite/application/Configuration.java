@@ -43,8 +43,8 @@ import java.util.Set;
 public class Configuration {
 
 	private static final String TAG = "Configuration";
+
 	private final SharedPreferences prefs;
-	private final Resources res;
 
 	public static final String PREFS_KEY_BTC_PRECISION = "btc_precision";
 	public static final String PREFS_KEY_CONNECTIVITY_NOTIFICATION = "connectivity_notification";
@@ -54,13 +54,8 @@ public class Configuration {
 	public static final String PREFS_KEY_REMIND_BACKUP = "remind_backup";
 	public static final String PREFS_KEY_LAST_PRICE = "last_price";
 	public static final String PREFS_KEY_TRANSACTION_FEE = "transaction_fee";
-	public static final String PREFS_KEY_NOTIF_TRANSACTIONS = "notif_transactions";
-	public static final String PREFS_KEY_STATUS_LIST = "list_status";
-	public static final String PREFS_KEY_FAVOURITE_CASH_METHODS = "favourite_cash_methods";
-	public static final String PREFS_KEY_FIRST_USE_HISTORY = "isFirstUse";
-	public static final String PREFS_KEY_FIRST_USE_MAIN = "first_use_main";
-	public static final String PREFS_KEY_RESTART_TIPS = "restart_tips";
-	public static final String PREFS_KEY_AUTOCLEAR_LIST = "autoClearList";
+	public static final String PREFS_KEY_IDLE_DETECTION = "idle_detection";
+	private static final String PREFS_KEY_NOTIF_TRANSACTIONS = "notif_transactions";
 	public static final String PREFS_KEY_DELETE_BLOCKCHAIN = "delete_blockchain";
 	public static final String PREFS_KEY_MAIN_WALLET_FILE = "main_wallet_file";
 	public static final String PREFS_KEY_HD_ACCOUNTS = "hd_accounts";
@@ -74,20 +69,16 @@ public class Configuration {
 	private static final int PREFS_DEFAULT_BTC_PRECISION = 8;
 	private static final String PREFS_KEY_LAST_USED = "last_used";
 	private static final String PREFS_KEY_BEST_CHAIN_HEIGHT_EVER = "best_chain_height_ever";
-	private static final String PREFS_KEY_CACHED_EXCHANGE_CURRENCY = "cached_exchange_currency";
-	private static final String PREFS_KEY_CACHED_EXCHANGE_RATE_COIN = "cached_exchange_rate_coin";
-	private static final String PREFS_KEY_CACHED_EXCHANGE_RATE_FIAT = "cached_exchange_rate_fiat";
 	private static final String PREFS_KEY_PASSCODE = "PASSCODE";
 
 	private static final Logger log = LoggerFactory.getLogger(Configuration.class);
 
 	public Configuration(Context context) {
-		this(PreferenceManager.getDefaultSharedPreferences(context), context.getResources());
+		this(PreferenceManager.getDefaultSharedPreferences(context));
 	}
 
-	public Configuration(final SharedPreferences prefs, final Resources res) {
+	public Configuration(final SharedPreferences prefs) {
 		this.prefs = prefs;
-		this.res = res;
 	}
 
 	public com.chip_chap.services.cash.coin.base.Coin getBtcPrice(Currency c) {
@@ -188,51 +179,6 @@ public class Configuration {
 		return prefs.getBoolean(PREFS_KEY_NOTIF_TRANSACTIONS, false);
 	}
 
-	public boolean isFirstUseHistory() {
-		return prefs.getBoolean(PREFS_KEY_FIRST_USE_HISTORY, true);
-	}
-
-	public boolean isAutoclearListEnabled() {
-		return prefs.getBoolean(PREFS_KEY_AUTOCLEAR_LIST, false);
-	}
-
-	public boolean isRestartTips() {
-		return prefs.getBoolean(PREFS_KEY_RESTART_TIPS, false);
-	}
-
-	public void setRestartTips(boolean restartTips) {
-		Editor editor = prefs.edit();
-		editor.putBoolean(PREFS_KEY_RESTART_TIPS, restartTips);
-		editor.apply();
-	}
-
-	public void setFirstUseHistory(boolean firstUse) {
-		Editor editor = prefs.edit();
-		editor.putBoolean(PREFS_KEY_FIRST_USE_HISTORY, firstUse);
-		editor.apply();
-	}
-
-	public boolean isFirstUseMain() {
-		return prefs.getBoolean(PREFS_KEY_FIRST_USE_MAIN, true);
-	}
-
-	public void setFirstUseMain(boolean firstUse) {
-		Editor editor = prefs.edit();
-		editor.putBoolean(PREFS_KEY_FIRST_USE_MAIN, firstUse);
-		editor.apply();
-	}
-
-	public TransactionStatus[] getStatusToNotify() {
-		Set<String> statusSet = prefs.getStringSet(PREFS_KEY_STATUS_LIST, null);
-		TransactionStatus[] statuses = new TransactionStatus[0];
-		if (statusSet != null) {
-			String[] all = statusSet.toArray(new String[statusSet.size()]);
-			statuses = TransactionStatus.toArray(all);
-		}
-
-		return statuses;
-	}
-
 	public int getBtcShift() {
 		final String precision = prefs.getString(PREFS_KEY_BTC_PRECISION, null);
 		if (precision != null)
@@ -321,6 +267,14 @@ public class Configuration {
 		Editor editor = prefs.edit();
 		editor.putInt(PREFS_KEY_HD_ACCOUNTS, accounts);
 		editor.apply();
+	}
+
+	public void setIdleDetectionEnabled(boolean detect) {
+		prefs.edit().putBoolean(PREFS_KEY_IDLE_DETECTION, detect).apply();
+	}
+
+	public boolean isIdleDetectionEnabled() {
+		return prefs.getBoolean(PREFS_KEY_IDLE_DETECTION, true);
 	}
 
 	public static Configuration getInstance() {

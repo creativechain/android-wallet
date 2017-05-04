@@ -278,19 +278,11 @@ public class WalletApplication extends Application {
     }
 
     public static void scheduleStartBlockchainService(final Context context) {
-        final Configuration config = new Configuration(PreferenceManager.getDefaultSharedPreferences(context), context.getResources());
+        final Configuration config = Configuration.getInstance();
         final long lastUsedAgo = config.getLastUsedAgo();
 
         // apply some backoff
-        final long alarmInterval;
-        if (lastUsedAgo < Constants.LAST_USAGE_THRESHOLD_JUST_MS) {
-            alarmInterval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-        } else if (lastUsedAgo < Constants.LAST_USAGE_THRESHOLD_RECENTLY_MS) {
-            alarmInterval = AlarmManager.INTERVAL_HALF_DAY;
-        } else {
-            alarmInterval = AlarmManager.INTERVAL_DAY;
-        }
-
+        final long alarmInterval = 60 * 15 * 1000;
 
         Log.i(TAG, "last used " + (lastUsedAgo / DateUtils.MINUTE_IN_MILLIS) + " minutes ago, rescheduling blockchain sync in roughly " + (alarmInterval / DateUtils.MINUTE_IN_MILLIS) + " minutes");
 
