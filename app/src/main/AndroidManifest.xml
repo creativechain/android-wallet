@@ -20,7 +20,13 @@
             android:value="btcwallet.db"/>
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="2"/>
+            android:value="3"/>
+
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="crea.wallet.lite.db.BookAddress,
+            crea.wallet.lite.db.WalletCrypt,
+            com.chip_chap.services.transaction.Btc2BtcTransaction"/>
 
         <activity
             android:name=".ui.main.MainActivity"

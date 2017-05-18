@@ -97,10 +97,9 @@
                                     android:id="@+id/total_btc"
                                     android:layout_weight="0.5"
                                     android:textColor="@android:color/white"
-                                    android:textSize="20dp"
+                                    android:textSize="18dp"
                                     android:textStyle="bold"
                                     android:paddingLeft="15dp"
-                                    android:singleLine="true"
                                     android:maxLines="2" />
 
                                 <TextView
@@ -111,10 +110,9 @@
                                     android:layout_weight="0.5"
                                     android:textColor="@android:color/white"
                                     android:gravity="right"
-                                    android:textSize="20dp"
+                                    android:textSize="18dp"
                                     android:textStyle="bold"
                                     android:paddingRight="15dp"
-                                    android:singleLine="true"
                                     android:maxLines="2" />
                             </LinearLayout>
 

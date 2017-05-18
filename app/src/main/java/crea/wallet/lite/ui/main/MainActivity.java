@@ -24,9 +24,11 @@ import crea.wallet.lite.ui.address.AddressBookActivity;
 import crea.wallet.lite.ui.tool.SendBitcoinActivity;
 import crea.wallet.lite.ui.adapter.TransactionAdapter;
 import crea.wallet.lite.util.CoinConverter;
+import crea.wallet.lite.util.CreaCoin;
 import crea.wallet.lite.util.QR;
 import crea.wallet.lite.wallet.WalletHelper;
-import com.chip_chap.services.cash.coin.BitCoin;
+
+import com.chip_chap.services.cash.Currency;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
 
 import org.creativecoinj.core.Address;
@@ -125,8 +127,19 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         final Configuration conf = Configuration.getInstance();
         final Coin total = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.ESTIMATED);
         final Coin pending = total.minus(WalletHelper.INSTANCE.getTotalBalance());
-        final String totalFiat = new CoinConverter().amount(BitCoin.valueOf(total.getValue())).price(conf.getBtcPrice(conf.getMainCurrency())).getConversion().toFriendlyString();
-        final String pendingFiat = new CoinConverter().amount(BitCoin.valueOf(pending.getValue())).price(conf.getBtcPrice(conf.getMainCurrency())).getConversion().toFriendlyString();
+
+        Currency main = conf.getMainCurrency();
+        com.chip_chap.services.cash.coin.base.Coin price = conf.getCreaPrice(main);
+
+        final String totalFiat = new CoinConverter()
+                .amount(CreaCoin.valueOf(total.getValue()))
+                .price(price)
+                .getConversion().toFriendlyString();
+
+        final String pendingFiat = new CoinConverter()
+                .amount(CreaCoin.valueOf(pending.getValue()))
+                .price(price)
+                .getConversion().toFriendlyString();
 
         totalBtcView.post(new Runnable() {
             @Override

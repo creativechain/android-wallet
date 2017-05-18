@@ -15,28 +15,19 @@ import android.widget.TextView;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
-import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.ui.tool.SeedActivity;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
-import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 
-import org.creativecoinj.core.CheckpointManager;
+import org.creativecoinj.core.Utils;
 import org.creativecoinj.crypto.MnemonicException;
 
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -179,7 +170,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                     Log.d(TAG, walletCrypt.toString());
                     Log.d(TAG, "Pass: " + pin);
                     String pass = walletCrypt.generate(pin);
-                    Log.d(TAG, "Ecrypting with: " + org.creativecoinj.core.Utils.HEX.encode(pass.getBytes()));
+                    Log.d(TAG, "Ecrypting with: " + Utils.HEX.encode(pass.getBytes()));
                     WalletHelper.INSTANCE.encrypt(pass);
                     WalletHelper.INSTANCE.save();
                     publishProgress(true);

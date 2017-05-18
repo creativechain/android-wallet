@@ -21,6 +21,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.android.LogcatAppender;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import crea.wallet.lite.R;
+import crea.wallet.lite.background.PriceUpdater;
 import crea.wallet.lite.service.BitcoinService;
 import crea.wallet.lite.service.BlockchainService;
 import crea.wallet.lite.ui.tool.PinActivity;
@@ -96,7 +97,7 @@ public class WalletApplication extends Application {
         blockchainServiceResetBlockchainIntent = new Intent(
                 BlockchainService.ACTION_RESET_BLOCKCHAIN, null, this, BitcoinService.class);
 
-        //new PriceUpdater().start();
+        new PriceUpdater().start();
         walletFile = Constants.WALLET.FIRST_WALLET_FILE;
         if (loadWalletHelper()) {
             afterLoadWallet();

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.util.CoinConverter;
+import crea.wallet.lite.util.CreaCoin;
 import crea.wallet.lite.util.TimeUtils;
 import com.chip_chap.services.cash.Currency;
 import com.chip_chap.services.cash.Method;
@@ -56,11 +57,11 @@ public class TransactionAdapter extends RecyclerAdapter<TransactionAdapter.ViewH
         holder.destinyAmount.setText(coin.toFriendlyString());
         holder.feeAmountBtc.setText(fee.toFriendlyString());
 
+        Configuration conf = Configuration.getInstance();
+        Coin price = conf.getCreaPrice(conf.getMainCurrency());
         Coin feeConversion = new CoinConverter()
-                .amount(BitCoin.valueOf(transaction.getFee()))
-                .price(Configuration.getInstance().getBtcPrice(Currency.EUR)).getConversion();
-
-
+                .amount(CreaCoin.valueOf(transaction.getFee()))
+                .price(price).getConversion();
 
         holder.feeAmountFiat.setText(feeConversion.toFriendlyString());
     }

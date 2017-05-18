@@ -21,13 +21,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.chip_chap.services.cash.Currency;
-import com.chip_chap.services.status.TransactionStatus;
 
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.utils.MonetaryFormat;
@@ -35,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Set;
 
 /**
  * @author Andreas Schildbach
@@ -60,10 +57,11 @@ public class Configuration {
 	public static final String PREFS_KEY_MAIN_WALLET_FILE = "main_wallet_file";
 	public static final String PREFS_KEY_HD_ACCOUNTS = "hd_accounts";
 	public static final String PREFS_KEY_MAIN_CURRENCY = "main_currency";
-	public static final String PREFS_KEY_BTC_PRICE_EUR = "btc_price_eur";
-	public static final String PREFS_KEY_BTC_PRICE_PLN = "btc_price_pln";
-	public static final String PREFS_KEY_BTC_PRICE_MXN = "btc_price_mxn";
-	public static final String PREFS_KEY_BTC_PRICE_USD = "btc_price_usd";
+	public static final String PREFS_KEY_CREA_PRICE_BTC = "crea_price_btc";
+	public static final String PREFS_KEY_CREA_PRICE_EUR = "crea_price_eur";
+	public static final String PREFS_KEY_CREA_PRICE_GBP = "crea_price_pln";
+	public static final String PREFS_KEY_CREA_PRICE_MXN = "crea_price_mxn";
+	public static final String PREFS_KEY_CREA_PRICE_USD = "crea_price_usd";
 
 	private static final int PREFS_DEFAULT_BTC_SHIFT = 8;
 	private static final int PREFS_DEFAULT_BTC_PRECISION = 8;
@@ -81,52 +79,54 @@ public class Configuration {
 		this.prefs = prefs;
 	}
 
-	public com.chip_chap.services.cash.coin.base.Coin getBtcPrice(Currency c) {
+	public com.chip_chap.services.cash.coin.base.Coin getCreaPrice(Currency c) {
 		String key;
 		Currency curr = c;
 		switch (c) {
 			case USD:
-				key = PREFS_KEY_BTC_PRICE_USD;
+				key = PREFS_KEY_CREA_PRICE_USD;
 				break;
-			case PLN:
-				key = PREFS_KEY_BTC_PRICE_PLN;
+			case GBP:
+				key = PREFS_KEY_CREA_PRICE_GBP;
 				break;
 			case MXN:
-				key = PREFS_KEY_BTC_PRICE_MXN;
+				key = PREFS_KEY_CREA_PRICE_MXN;
+				break;
+			case BTC:
+				key = PREFS_KEY_CREA_PRICE_BTC;
 				break;
 			default:
-				key = PREFS_KEY_BTC_PRICE_EUR;
+				key = PREFS_KEY_CREA_PRICE_EUR;
 				curr = Currency.EUR;
 				break;
 		}
 		long val = prefs.getLong(key, 0);
 
-		if (val >= 1) {
-			return com.chip_chap.services.cash.coin.base.Coin.fromCurrency(curr, 1 / (val / 1e8d));
-		} else {
-			return com.chip_chap.services.cash.coin.base.Coin.fromCurrency(curr, 0);
-		}
+		return com.chip_chap.services.cash.coin.base.Coin.fromCurrency(curr, val);
 
 	}
 
 	public com.chip_chap.services.cash.coin.base.Coin getPriceForMainCurrency() {
-		return getBtcPrice(getMainCurrency());
+		return getCreaPrice(getMainCurrency());
 	}
 
-	public void setBtcPrice(Currency c, long value) {
+	public void setCreaPrice(Currency c, long value) {
 		String key = null;
 		switch (c) {
 			case USD:
-				key = PREFS_KEY_BTC_PRICE_USD;
+				key = PREFS_KEY_CREA_PRICE_USD;
 				break;
-			case PLN:
-				key = PREFS_KEY_BTC_PRICE_PLN;
+			case GBP:
+				key = PREFS_KEY_CREA_PRICE_GBP;
 				break;
 			case MXN:
-				key = PREFS_KEY_BTC_PRICE_MXN;
+				key = PREFS_KEY_CREA_PRICE_MXN;
 				break;
 			case EUR:
-				key = PREFS_KEY_BTC_PRICE_EUR;
+				key = PREFS_KEY_CREA_PRICE_EUR;
+				break;
+			case BTC:
+				key = PREFS_KEY_CREA_PRICE_BTC;
 				break;
 		}
 

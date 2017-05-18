@@ -54,7 +54,7 @@ public class BookAddressAdapter extends RecyclerAdapter<BookAddressAdapter.ViewH
             com.chip_chap.services.cash.coin.base.Coin fiat =
                     new CoinConverter()
                             .amount(BitCoin.valueOf(balance.getValue()))
-                            .price(conf.getBtcPrice(conf.getMainCurrency()))
+                            .price(conf.getCreaPrice(conf.getMainCurrency()))
                             .getConversion();
             holder.amountBtc.setText(balance.toFriendlyString().toLowerCase());
             holder.amountFiat.setText(fiat.getDoubleValue() + " " + fiat.getCurrency().getCode().toLowerCase());

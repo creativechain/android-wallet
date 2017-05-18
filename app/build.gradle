@@ -74,6 +74,7 @@ dependencies {
     compile 'com.github.kaedea:Android-Cloud-TagView-Plus:5a49f4fbb6'
 
     compile 'me.zhanghai.android.materialprogressbar:library:1.3.0'
+   /* compile 'com.github.ander7agar:android-http-client:0.4.0'*/
 
     //SETTINGS
     compile 'com.takisoft.fix:preference-v7:24.2.1.0'

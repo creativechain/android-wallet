@@ -1,5 +1,7 @@
 package crea.wallet.lite.util;
 
+import android.util.Log;
+
 import com.chip_chap.services.cash.Currency;
 import com.chip_chap.services.cash.coin.base.Coin;
 
@@ -52,11 +54,12 @@ public class CoinConverter {
 
     private void calculate() {
 
-        // €       BTC
-        // 100 ----- X
+        // CREA      FIAT
         // 1 ------- PRICE
+        // A ------- ?
 
         if (price != null  && amountToConvert != null) {
+            Log.d(TAG, amountToConvert.toFriendlyString() + " * " + price.toFriendlyString());
             double converted = amountToConvert.getDoubleValue() * price.getDoubleValue();
             amountConverted = Coin.fromCurrency(price.getCurrency(), converted);
         }

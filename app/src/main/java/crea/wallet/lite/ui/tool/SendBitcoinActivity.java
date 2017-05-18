@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -477,7 +476,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
                     com.chip_chap.services.cash.coin.base.Coin feeConversion
                             = new CoinConverter()
                             .amount(BitCoin.valueOf(feeOutput.getValue()))
-                            .price(conf.getBtcPrice(Currency.EUR)).getConversion();
+                            .price(conf.getCreaPrice(Currency.EUR)).getConversion();
 
                     destinyAddress.setText(getAddress().toString());
                     destinyAmount.setText(totalOutput.toFriendlyString());

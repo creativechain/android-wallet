@@ -10,13 +10,15 @@
         <item>Euros</item>
         <item>Dólares</item>
         <item>Pesos Mexicanos</item>
-        <item>Eslotis</item>
+        <item>Libra Esterlina</item>
+        <item>Bitcoin</item>
     </string-array>
 
     <string-array name="currency_values">
         <item>EUR</item>
         <item>USD</item>
         <item>MXN</item>
-        <item>PLN</item>
+        <item>GBP</item>
+        <item>BTC</item>
     </string-array>
 </resources>
