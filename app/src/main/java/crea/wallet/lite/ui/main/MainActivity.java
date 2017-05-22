@@ -18,7 +18,7 @@ import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
-import crea.wallet.lite.service.BitcoinService;
+import crea.wallet.lite.service.CreativeCoinService;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;
 import crea.wallet.lite.ui.address.AddressBookActivity;
 import crea.wallet.lite.ui.tool.SendBitcoinActivity;
@@ -119,17 +119,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 return false;
             }
         });
-
-        invalidateData();
     }
 
     private void invalidateData() {
         final Configuration conf = Configuration.getInstance();
         final Coin total = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.ESTIMATED);
         final Coin pending = total.minus(WalletHelper.INSTANCE.getTotalBalance());
+        TextView priceView = (TextView) findViewById(R.id.price);
 
         Currency main = conf.getMainCurrency();
         com.chip_chap.services.cash.coin.base.Coin price = conf.getCreaPrice(main);
+
+        if (conf.isExchangeValueEnabled()) {
+            priceView.setVisibility(View.VISIBLE);
+            priceView.setText(getString(R.string.price, price.toFriendlyString()));
+        } else {
+            priceView.setVisibility(View.GONE);
+        }
 
         final String totalFiat = new CoinConverter()
                 .amount(CreaCoin.valueOf(total.getValue()))
@@ -244,14 +250,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         iFilter.addAction(BLOCKCHAIN_RESET);
         iFilter.addAction(ACTION_SYNC_STARTED);
         registerReceiver(TRANSACTION_RECEIVER, iFilter);
-        BitcoinService.progressBar = valueInFiatView;
+        CreativeCoinService.progressBar = valueInFiatView;
         invalidateData();
     }
 
     @Override
     protected void onPause() {
         unregisterReceiver(TRANSACTION_RECEIVER);
-        BitcoinService.progressBar = null;
+        CreativeCoinService.progressBar = null;
         super.onPause();
     }
 }

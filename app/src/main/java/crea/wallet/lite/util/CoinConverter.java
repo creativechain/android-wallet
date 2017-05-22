@@ -59,7 +59,7 @@ public class CoinConverter {
         // A ------- ?
 
         if (price != null  && amountToConvert != null) {
-            Log.d(TAG, amountToConvert.toFriendlyString() + " * " + price.toFriendlyString());
+            //Log.d(TAG, amountToConvert.toFriendlyString() + " * " + price.toFriendlyString());
             double converted = amountToConvert.getDoubleValue() * price.getDoubleValue();
             amountConverted = Coin.fromCurrency(price.getCurrency(), converted);
         }

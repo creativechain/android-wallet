@@ -62,6 +62,7 @@ public class Configuration {
 	public static final String PREFS_KEY_CREA_PRICE_GBP = "crea_price_pln";
 	public static final String PREFS_KEY_CREA_PRICE_MXN = "crea_price_mxn";
 	public static final String PREFS_KEY_CREA_PRICE_USD = "crea_price_usd";
+	public static final String PREFS_KEY_SHOW_EXCHANGE_VALUE = "show_exchange_value";
 
 	private static final int PREFS_DEFAULT_BTC_SHIFT = 8;
 	private static final int PREFS_DEFAULT_BTC_PRECISION = 8;
@@ -275,6 +276,10 @@ public class Configuration {
 
 	public boolean isIdleDetectionEnabled() {
 		return prefs.getBoolean(PREFS_KEY_IDLE_DETECTION, true);
+	}
+
+	public boolean isExchangeValueEnabled() {
+		return prefs.getBoolean(PREFS_KEY_SHOW_EXCHANGE_VALUE, false);
 	}
 
 	public static Configuration getInstance() {

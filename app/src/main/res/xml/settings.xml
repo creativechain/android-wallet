@@ -12,6 +12,16 @@
             android:summary="@string/enable_notifications_globally"
             android:key="notif_transactions"
             android:defaultValue="true" />
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/coin_settings">
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:title="@string/show_exchange_value"
+            android:key="show_exchange_value"
+            android:summary="@string/show_exchange_value_summary"
+            android:defaultValue="false" />
 
         <android.support.v7.preference.ListPreference
             android:title="@string/exchange_currency"
@@ -19,6 +29,13 @@
             android:key="main_currency"
             android:entries="@array/currency_entries"
             android:entryValues="@array/currency_values"/>
+
+        <android.support.v7.preference.ListPreference
+            android:title="@string/transaction_fees"
+            android:summary="@string/transaction_fees_explain"
+            android:key="transaction_fee"
+            android:entries="@array/fees_entries"
+            android:entryValues="@array/fees_values"/>
 
     </android.support.v7.preference.PreferenceCategory>
 
@@ -30,13 +47,6 @@
             android:key="idle_detection"
             android:summary="@string/disconnect_idle_detected_summary"
             android:defaultValue="true" />
-
-        <android.support.v7.preference.ListPreference
-            android:title="@string/transaction_fees"
-            android:summary="@string/transaction_fees_explain"
-            android:key="transaction_fee"
-            android:entries="@array/fees_entries"
-            android:entryValues="@array/fees_values"/>
 
         <android.support.v7.preference.Preference
             android:title="@string/export_seed"

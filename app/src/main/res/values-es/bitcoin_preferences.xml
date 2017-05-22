@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="fees_entries">
-        <item>Baja</item>
-        <item>Normal</item>
-        <item>Alta</item>
+        <item>25000 s/Kb (Baja)</item>
+        <item>135000 s/Kb (Normal)</item>
+        <item>225000 s/Kb (Alta)</item>
     </string-array>
 
     <string-array name="currency_entries">

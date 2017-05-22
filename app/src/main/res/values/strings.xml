@@ -104,4 +104,9 @@
     <string name="transaction_fee">Transaction fee</string>
     <string name="disconnect_idle_detected">Disconnect when idle is detected</string>
     <string name="disconnect_idle_detected_summary">It disconnects from the network when it detects inactivity. It reconnects automatically after 15 minutes.</string>
+    <string name="price" translatable="false">1 CREA =  %1$s</string>
+    <string name="show_exchange_value">Show exchange value</string>
+    <string name="show_exchange_value_summary">Displays the exchange value on the main screen.</string>
+    <string name="ui_interface">Interface</string>
+    <string name="coin_settings">Coin settings</string>
 </resources>

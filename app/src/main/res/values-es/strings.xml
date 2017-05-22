@@ -104,4 +104,8 @@
     <string name="transaction_fee">Comisión de red</string>
     <string name="disconnect_idle_detected_summary">Se desconecta de la red cuando detecta inactividad. Se vuelve a conectar automáticamente después de 15 minutos.</string>
     <string name="disconnect_idle_detected">Desconectar al detectar inactividad</string>
+    <string name="show_exchange_value">Mostrar valor de intercambio</string>
+    <string name="show_exchange_value_summary">Muestra el valor de intercambio en la pantalla principal</string>
+    <string name="ui_interface">Interfaz</string>
+    <string name="coin_settings">Ajustes de moneda</string>
 </resources>

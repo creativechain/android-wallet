@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
@@ -70,9 +71,6 @@ import org.creativecoinj.core.TransactionConfidence.ConfidenceType;
 import org.creativecoinj.core.listeners.DownloadProgressTracker;
 import org.creativecoinj.core.listeners.PeerConnectedEventListener;
 import org.creativecoinj.core.listeners.PeerDisconnectedEventListener;
-import org.creativecoinj.net.discovery.DnsDiscovery;
-import org.creativecoinj.net.discovery.PeerDiscovery;
-import org.creativecoinj.net.discovery.PeerDiscoveryException;
 import org.creativecoinj.net.discovery.SeedPeers;
 import org.creativecoinj.store.BlockStore;
 import org.creativecoinj.store.BlockStoreException;
@@ -81,14 +79,12 @@ import org.creativecoinj.utils.Threading;
 import org.creativecoinj.wallet.Wallet;
 
 import java.io.File;
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -103,7 +99,7 @@ import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC
 /**
  * @author Andreas Schildbach
  */
-public class BitcoinService extends Service implements BlockchainService {
+public class CreativeCoinService extends Service implements BlockchainService {
 
 	private static final String TAG = "BitcoinService";
 	private static final int NOTIFICATION_ID_CONNECTED = 0;
@@ -246,15 +242,15 @@ public class BitcoinService extends Service implements BlockchainService {
 
 		String person = TextUtils.join(",", WalletUtils.getAddressStrings(addresses));
 
-		BitCoin bitCoin = BitCoin.valueOf(notificationAccumulatedAmount.getValue());
+		Coin coin = Coin.valueOf(notificationAccumulatedAmount.getValue());
 		String msg;
 		Intent intent;
 
 		if (notificationCount < 2) {
-			msg = getString(R.string.notif_cash_in, bitCoin.toFriendlyString(), person);
+			msg = getString(R.string.notif_cash_in, coin.toFriendlyString(), person);
 			intent = new Intent(this, CoinTransactionActivity.class);
 		} else {
-			msg = getString(R.string.notif_accumulated_amount, bitCoin.toFriendlyString(), notificationCount);
+			msg = getString(R.string.notif_accumulated_amount, coin.toFriendlyString(), notificationCount);
 			intent = new Intent(this, MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		}
@@ -263,9 +259,10 @@ public class BitcoinService extends Service implements BlockchainService {
 
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-		String title = getString(R.string.notif_cash_in_title, bitCoin.toFriendlyString());
+		String title = getString(R.string.notif_cash_in_title, coin.toFriendlyString());
 		final NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
-		notification.setSmallIcon(R.mipmap.ic_launcher);
+		notification.setSmallIcon(R.mipmap.ic_notif);
+		notification.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
 		notification.setContentText(msg);
 		notification.setContentTitle(title);
 		notification.setWhen(System.currentTimeMillis());
@@ -606,7 +603,7 @@ public class BitcoinService extends Service implements BlockchainService {
 	public class LocalBinder extends Binder {
 		public BlockchainService getService()
 		{
-			return BitcoinService.this;
+			return CreativeCoinService.this;
 		}
 	}
 

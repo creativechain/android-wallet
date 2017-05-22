@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -22,10 +21,9 @@ import ch.qos.logback.classic.android.LogcatAppender;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import crea.wallet.lite.R;
 import crea.wallet.lite.background.PriceUpdater;
-import crea.wallet.lite.service.BitcoinService;
+import crea.wallet.lite.service.CreativeCoinService;
 import crea.wallet.lite.service.BlockchainService;
 import crea.wallet.lite.ui.tool.PinActivity;
-import crea.wallet.lite.util.Hex;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 import com.chip_chap.services.calls.Settings;
@@ -91,11 +89,11 @@ public class WalletApplication extends Application {
         Log.d(TAG, "App in debug mode: " + Constants.TEST);
         Settings.setPreapiEnable(Constants.TEST);
         initMnemonicCode();
-        blockchainServiceIntent = new Intent(this, BitcoinService.class);
+        blockchainServiceIntent = new Intent(this, CreativeCoinService.class);
         blockchainServiceCancelCoinsReceivedIntent = new Intent(
-                BlockchainService.ACTION_CANCEL_COINS_RECEIVED, null, this, BitcoinService.class);
+                BlockchainService.ACTION_CANCEL_COINS_RECEIVED, null, this, CreativeCoinService.class);
         blockchainServiceResetBlockchainIntent = new Intent(
-                BlockchainService.ACTION_RESET_BLOCKCHAIN, null, this, BitcoinService.class);
+                BlockchainService.ACTION_RESET_BLOCKCHAIN, null, this, CreativeCoinService.class);
 
         new PriceUpdater().start();
         walletFile = Constants.WALLET.FIRST_WALLET_FILE;
@@ -263,7 +261,7 @@ public class WalletApplication extends Application {
     }
 
     public void broadcastTransaction(final Transaction tx)	{
-        final Intent intent = new Intent(BlockchainService.ACTION_BROADCAST_TRANSACTION, null, this, BitcoinService.class);
+        final Intent intent = new Intent(BlockchainService.ACTION_BROADCAST_TRANSACTION, null, this, CreativeCoinService.class);
         intent.putExtra(BlockchainService.ACTION_BROADCAST_TRANSACTION_HASH, tx.getHash().getBytes());
         startService(intent);
     }
@@ -288,7 +286,7 @@ public class WalletApplication extends Application {
         Log.i(TAG, "last used " + (lastUsedAgo / DateUtils.MINUTE_IN_MILLIS) + " minutes ago, rescheduling blockchain sync in roughly " + (alarmInterval / DateUtils.MINUTE_IN_MILLIS) + " minutes");
 
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        final PendingIntent alarmIntent = PendingIntent.getService(context, 0, new Intent(context, BitcoinService.class), 0);
+        final PendingIntent alarmIntent = PendingIntent.getService(context, 0, new Intent(context, CreativeCoinService.class), 0);
         alarmManager.cancel(alarmIntent);
 
         // workaround for no inexact set() before KitKat

@@ -81,36 +81,46 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
+                            <TextView
+                                android:id="@+id/price"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/price"
+                                android:textColor="@android:color/white"
+                                android:textSize="9dp"
+                                android:gravity="end"
+                                android:paddingRight="15dp"/>
+
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp"
+
                                 android:gravity="center_vertical"
                                 android:layout_weight="0.6">
 
                                 <TextView
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="0.00 btc"
+                                    android:layout_height="match_parent"
+                                    android:text="12693.89898989 CREA"
                                     android:id="@+id/total_btc"
                                     android:layout_weight="0.5"
                                     android:textColor="@android:color/white"
-                                    android:textSize="18dp"
+                                    android:textSize="18sp"
                                     android:textStyle="bold"
                                     android:paddingLeft="15dp"
+                                    android:gravity="center_vertical"
                                     android:maxLines="2" />
 
                                 <TextView
                                     android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="0.00 btc"
+                                    android:layout_height="match_parent"
+                                    android:text="0.00 CREA"
                                     android:id="@+id/total_fiat"
                                     android:layout_weight="0.5"
                                     android:textColor="@android:color/white"
-                                    android:gravity="right"
-                                    android:textSize="18dp"
+                                    android:gravity="center_vertical|end"
+                                    android:textSize="18sp"
                                     android:textStyle="bold"
                                     android:paddingRight="15dp"
                                     android:maxLines="2" />
