@@ -7,11 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import crea.wallet.lite.R;
-import crea.wallet.lite.application.WalletApplication;
+
 import com.chip_chap.services.cash.coin.BitCoin;
 
 import net.glxn.qrgen.android.QRCode;
@@ -28,7 +26,6 @@ import net.glxn.qrgen.android.QRCode;
 import org.creativecoinj.core.Address;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
 import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 
@@ -52,19 +49,19 @@ public class QR {
         return fromString(uri.toString());
     }
 
-    public static Bitmap fromBitcoinUri(String address, BitCoin amount) {
+    public static Bitmap fromCoinUri(String address, BitCoin amount) {
         return fromUri(Uri.parse("creativecoin:" + address + (amount != null ? "?amount=" + amount.toPlainString() : "")));
     }
 
-    public static Bitmap fromBitcoinUri(String address) {
-        return fromBitcoinUri(address, null);
+    public static Bitmap fromCoinUri(String address) {
+        return fromCoinUri(address, null);
     }
 
-    public static Bitmap fromBitcoinUri(Address address) {
-        return fromBitcoinUri(address.toString(), null);
+    public static Bitmap fromCoinUri(Address address) {
+        return fromCoinUri(address.toString(), null);
     }
 
-    public static AlertDialog bitcoinQrDialog(final Activity activity, Bitmap qr, final String text) {
+    public static AlertDialog getCoinQrDialog(final Activity activity, Bitmap qr, final String text) {
         boolean hasText = text == null || !text.isEmpty();
         LinearLayout dialogView = new LinearLayout(activity);
         dialogView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
@@ -110,15 +107,15 @@ public class QR {
         return alertDialog;
     }
 
-    public static AlertDialog bitcoinQrDialog(Activity activity, String data) {
+    public static AlertDialog getCoinQrDialog(Activity activity, String data) {
         if (!data.startsWith("creativecoin:")) {
             data = "creativecoin:" + data;
         }
-        return bitcoinQrDialog(activity, fromString(data), null);
+        return getCoinQrDialog(activity, fromString(data), null);
     }
 
-    public static AlertDialog bitcoinQrDialog(final Activity activity, final Address address) {
-        return bitcoinQrDialog(activity, fromBitcoinUri(address), address.toString());
+    public static AlertDialog getCoinQrDialog(final Activity activity, final Address address) {
+        return getCoinQrDialog(activity, fromCoinUri(address), address.toString());
     }
 
 }

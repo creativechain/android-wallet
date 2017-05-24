@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void showQRCode(final Address ea) {
         Log.e(TAG, "Address: " + ea.toString());
-        AlertDialog a = QR.bitcoinQrDialog(this, ea);
+        AlertDialog a = QR.getCoinQrDialog(this, ea);
         a.setCancelable(true);
         a.show();
     }

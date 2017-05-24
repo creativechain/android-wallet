@@ -142,7 +142,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
                 Bitmap qr = QR.fromString(seed);
-                QR.bitcoinQrDialog(getActivity(), qr, null).show();
+                QR.getCoinQrDialog(getActivity(), qr, null).show();
             }
         });
         aDialog.show();

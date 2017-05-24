@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import org.creativecoinj.core.Address;
-import org.creativecoinj.core.VerificationException;
 
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
@@ -23,9 +22,7 @@ import crea.wallet.lite.ui.adapter.BookAddressAdapter;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.FormUtils;
 import crea.wallet.lite.util.QR;
-import crea.wallet.lite.util.Utils;
 
-import static crea.wallet.lite.application.Constants.WALLET.ADDRESS;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 /**
@@ -124,7 +121,7 @@ public abstract class AddressBookFragment extends FragmentContext {
     }
 
     protected void showQR(BookAddress address) {
-        QR.bitcoinQrDialog(getActivity(), address.getAddress()).show();
+        QR.getCoinQrDialog(getActivity(), address.getAddress()).show();
     }
 
     public abstract CharSequence getTitle();
