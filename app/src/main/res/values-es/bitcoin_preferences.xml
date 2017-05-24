@@ -21,4 +21,12 @@
         <item>GBP</item>
         <item>BTC</item>
     </string-array>
+
+    <string-array name="price_interval_entries">
+        <item>Cada minuto</item>
+        <item>Cada 5 minutos</item>
+        <item>Cada 30 minutos</item>
+        <item>Cada hora</item>
+        <item>Cada 3 horas</item>
+    </string-array>
 </resources>

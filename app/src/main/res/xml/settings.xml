@@ -31,6 +31,13 @@
             android:entryValues="@array/currency_values"/>
 
         <android.support.v7.preference.ListPreference
+            android:title="@string/price_update_interval"
+            android:key="price_update_interval"
+            android:entries="@array/price_interval_entries"
+            android:entryValues="@array/price_interval_values"
+            android:defaultValue="300000"/>
+
+        <android.support.v7.preference.ListPreference
             android:title="@string/transaction_fees"
             android:summary="@string/transaction_fees_explain"
             android:key="transaction_fee"

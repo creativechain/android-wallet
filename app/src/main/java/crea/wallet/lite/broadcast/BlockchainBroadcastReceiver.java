@@ -18,6 +18,7 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
 
     private static final String BASE_ACTION = BlockchainBroadcastReceiver.class.getPackage().getName();
 
+    public static final String PRICE_UPDATE = BASE_ACTION + ".price_update";
     public static final String TRANSACTION_SENT = BASE_ACTION + ".trasaction_sent";
     public static final String TRANSACTION_RECEIVED = BASE_ACTION + ".trasaction_received";
     public static final String LAST_BLOCK_RECEIVED = BASE_ACTION + ".last_block_received";
@@ -28,7 +29,9 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
 
-        if (action.equals(TRANSACTION_SENT)) {
+        if (action.equals(PRICE_UPDATE)) {
+            onPriceUpdated();
+        } else if (action.equals(TRANSACTION_SENT)) {
             long id = intent.getExtras().getLong("txId");
             Btc2BtcTransaction t = findBtcTransaction(id);
             onTransactionSend(t);
@@ -43,6 +46,10 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
         } else if (action.equals(ACTION_SYNC_STARTED)) {
             onSyncStarted();
         }
+    }
+
+    public void onPriceUpdated() {
+
     }
 
     public void onBlockChainReset() {

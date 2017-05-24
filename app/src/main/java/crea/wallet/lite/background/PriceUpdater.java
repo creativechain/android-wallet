@@ -1,9 +1,11 @@
 package crea.wallet.lite.background;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import crea.wallet.lite.application.Configuration;
+import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
 
 import com.chip_chap.services.asynchttp.net.ApiRequester;
 import com.chip_chap.services.asynchttp.net.handler.SilentApiHandler;
@@ -18,6 +20,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 
 /**
  * Created by ander on 16/02/16.
@@ -50,9 +54,11 @@ public class PriceUpdater extends Updater {
 
                 }
 
+                INSTANCE.sendBroadcast(new Intent(BlockchainBroadcastReceiver.PRICE_UPDATE));
 
                 if (!stopped) {
-                    handler.postDelayed(this, 300000); //Each 5 min
+                    Configuration conf = Configuration.getInstance();
+                    handler.postDelayed(this, conf.getPriceUpdateInterval());
                 }
             }
         };

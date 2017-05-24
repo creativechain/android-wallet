@@ -39,6 +39,7 @@ import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC_STARTED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.BLOCKCHAIN_RESET;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.LAST_BLOCK_RECEIVED;
+import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.PRICE_UPDATE;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_RECEIVED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_SENT;
 
@@ -47,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private static final String TAG = "MainActivity";
 
     private final BlockchainBroadcastReceiver TRANSACTION_RECEIVER = new BlockchainBroadcastReceiver() {
+        @Override
+        public void onPriceUpdated() {
+            invalidateData();
+        }
+
         @Override
         public void onTransactionSend(Btc2BtcTransaction transaction) {
             invalidateData();
@@ -78,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private TextView pendingBtcView;
     private TextView pendingFiatView;
     private TextView valueInFiatView;
+    private View pendingLayout;
     private RecyclerView txList;
     private View noTransactions;
     private TransactionAdapter adapter;
@@ -93,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         pendingBtcView = (TextView) findViewById(R.id.pending_btc);
         pendingFiatView = (TextView) findViewById(R.id.pending_fiat);
         valueInFiatView = (TextView) findViewById(R.id.value_in_fiat);
+        pendingLayout =  findViewById(R.id.pending_layout);
         noTransactions = findViewById(R.id.no_transactions);
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
 
@@ -125,16 +133,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         final Configuration conf = Configuration.getInstance();
         final Coin total = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.ESTIMATED);
         final Coin pending = total.minus(WalletHelper.INSTANCE.getTotalBalance());
-        TextView priceView = (TextView) findViewById(R.id.price);
 
         Currency main = conf.getMainCurrency();
         com.chip_chap.services.cash.coin.base.Coin price = conf.getCreaPrice(main);
 
         if (conf.isExchangeValueEnabled()) {
-            priceView.setVisibility(View.VISIBLE);
-            priceView.setText(getString(R.string.price, price.toFriendlyString()));
+            valueInFiatView.setVisibility(View.VISIBLE);
+            valueInFiatView.setText(getString(R.string.price, price.toFriendlyString()));
         } else {
-            priceView.setVisibility(View.GONE);
+            valueInFiatView.setVisibility(View.GONE);
         }
 
         final String totalFiat = new CoinConverter()
@@ -142,23 +149,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 .price(price)
                 .getConversion().toFriendlyString();
 
-        final String pendingFiat = new CoinConverter()
-                .amount(CreaCoin.valueOf(pending.getValue()))
-                .price(price)
-                .getConversion().toFriendlyString();
+
 
         totalBtcView.post(new Runnable() {
             @Override
             public void run() {
                 totalBtcView.setText(total.toFriendlyString());
-            }
-        });
-
-        pendingBtcView.post(new Runnable() {
-            @Override
-            public void run() {
-                pendingBtcView.setText(pending.toFriendlyString());
-                pendingBtcView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -169,20 +165,32 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
 
-        pendingFiatView.post(new Runnable() {
-            @Override
-            public void run() {
-                pendingFiatView.setText(pendingFiat);
-                pendingFiatView.setVisibility(View.VISIBLE);
-            }
-        });
+        if (pending.getValue() > 0) {
+            pendingLayout.setVisibility(View.VISIBLE);
+            pendingBtcView.post(new Runnable() {
+                @Override
+                public void run() {
+                    pendingBtcView.setText(pending.toFriendlyString());
+                    pendingBtcView.setVisibility(View.VISIBLE);
+                }
+            });
 
-        valueInFiatView.post(new Runnable() {
-            @Override
-            public void run() {
-                valueInFiatView.setText(getString(R.string.amount_in_currency, conf.getMainCurrency().getName()));
-            }
-        });
+            final String pendingFiat = new CoinConverter()
+                    .amount(CreaCoin.valueOf(pending.getValue()))
+                    .price(price)
+                    .getConversion().toFriendlyString();
+
+            pendingFiatView.post(new Runnable() {
+                @Override
+                public void run() {
+                    pendingFiatView.setText(pendingFiat);
+                    pendingFiatView.setVisibility(View.VISIBLE);
+                }
+            });
+        } else {
+            pendingLayout.setVisibility(View.GONE);
+        }
+
 
         adapter.notifyDataChanged();
         invalidateAdapter();
@@ -245,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     protected void onResume() {
         super.onResume();
         IntentFilter iFilter = new IntentFilter(TRANSACTION_RECEIVED);
+        iFilter.addAction(PRICE_UPDATE);
         iFilter.addAction(TRANSACTION_SENT);
         iFilter.addAction(LAST_BLOCK_RECEIVED);
         iFilter.addAction(BLOCKCHAIN_RESET);

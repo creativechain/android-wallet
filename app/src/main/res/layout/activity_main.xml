@@ -43,7 +43,8 @@
                         android:paddingTop="3dp"
                         android:paddingRight="3dp"
                         android:paddingLeft="3dp"
-                        android:layout_weight="0.75">
+                        android:layout_weight="0.75"
+                        android:animateLayoutChanges="true">
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -51,6 +52,8 @@
                             android:layout_height="wrap_content"
                             android:background="@color/gray_474"
                             android:gravity="center_vertical"
+                            android:paddingRight="10dp"
+                            android:paddingLeft="10dp"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp">
 
@@ -60,7 +63,6 @@
                                 android:text="@string/available_amount"
                                 android:layout_weight="0.5"
                                 android:textColor="@android:color/white"
-                                android:paddingLeft="15dp"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -70,7 +72,6 @@
                                 android:layout_weight="0.5"
                                 android:gravity="right"
                                 android:textColor="@android:color/white"
-                                android:paddingRight="15dp"
                                 android:textSize="10dp"
                                 tools:text="Sync... 00:10:56 remaining"/>
 
@@ -79,76 +80,52 @@
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:layout_margin="10dp">
 
-                            <TextView
-                                android:id="@+id/price"
+                            <crea.wallet.lite.widget.FontTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/price"
+                                android:text="12500.89898989 CREA"
+                                android:id="@+id/total_btc"
                                 android:textColor="@android:color/white"
-                                android:textSize="9dp"
-                                android:gravity="end"
-                                android:paddingRight="15dp"/>
+                                android:textSize="22sp"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                app:font="roboto_bold"
+                                android:ellipsize="end"/>
 
-                            <LinearLayout
-                                android:orientation="horizontal"
+                            <crea.wallet.lite.widget.FontTextView
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-
-                                android:gravity="center_vertical"
-                                android:layout_weight="0.6">
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:text="12693.89898989 CREA"
-                                    android:id="@+id/total_btc"
-                                    android:layout_weight="0.5"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:paddingLeft="15dp"
-                                    android:gravity="center_vertical"
-                                    android:maxLines="2" />
-
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:text="0.00 CREA"
-                                    android:id="@+id/total_fiat"
-                                    android:layout_weight="0.5"
-                                    android:textColor="@android:color/white"
-                                    android:gravity="center_vertical|end"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:paddingRight="15dp"
-                                    android:maxLines="2" />
-                            </LinearLayout>
+                                android:layout_height="wrap_content"
+                                android:text="0.00 €"
+                                android:id="@+id/total_fiat"
+                                android:textColor="@android:color/white"
+                                android:textSize="14sp"
+                                app:font="roboto_light"
+                                android:gravity="end"
+                                android:maxLines="2" />
 
                             <LinearLayout
+                                android:id="@+id/pending_layout"
                                 android:orientation="vertical"
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.4">
+                                android:layout_height="wrap_content">
 
                                 <crea.wallet.lite.widget.FontTextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/unconfirmed"
                                     android:textColor="@android:color/white"
-                                    android:layout_marginLeft="15dp"
-                                    android:textSize="12sp"/>
+                                    android:textSize="10sp"/>
 
                                 <LinearLayout
                                     android:orientation="horizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:paddingLeft="15dp"
-                                    android:paddingRight="15dp"
-                                    >
+                                    android:layout_height="wrap_content">
 
-                                    <TextView
+                                    <crea.wallet.lite.widget.FontTextView
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:id="@+id/pending_btc"
@@ -156,9 +133,10 @@
                                         android:textColor="@android:color/white"
                                         android:textSize="10dp"
                                         android:text="0.00 €"
+                                        app:font="roboto_bold"
                                         android:visibility="visible" />
 
-                                    <TextView
+                                    <crea.wallet.lite.widget.FontTextView
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:text="0.00 €"
@@ -166,7 +144,7 @@
                                         android:textColor="@android:color/white"
                                         android:textSize="10dp"
                                         android:gravity="right"
-                                        android:visibility="visible"
+                                        app:font="roboto_light"
                                         android:layout_weight="0.5" />
 
                                 </LinearLayout>

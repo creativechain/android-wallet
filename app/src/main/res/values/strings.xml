@@ -108,5 +108,8 @@
     <string name="show_exchange_value">Show exchange value</string>
     <string name="show_exchange_value_summary">Displays the exchange value on the main screen.</string>
     <string name="ui_interface">Interface</string>
-    <string name="coin_settings">Coin settings</string>
+    <string name="coin_settings">Wallet settings</string>
+    <string name="price_update_interval">Update exchange price…</string>
+    <string name="crea_address">Creativecoin address</string>
+    <string name="send">Send</string>
 </resources>

@@ -107,5 +107,8 @@
     <string name="show_exchange_value">Mostrar valor de intercambio</string>
     <string name="show_exchange_value_summary">Muestra el valor de intercambio en la pantalla principal</string>
     <string name="ui_interface">Interfaz</string>
-    <string name="coin_settings">Ajustes de moneda</string>
+    <string name="coin_settings">Ajustes de la cartera</string>
+    <string name="price_update_interval">Actualizar precio de intercambio…</string>
+    <string name="crea_address">Dirección creativecoin</string>
+    <string name="send">Enviar</string>
 </resources>

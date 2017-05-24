@@ -164,8 +164,6 @@ public class SendBitcoinActivity extends AppCompatActivity {
         setContentView(R.layout.activity_send_bitcoin);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle(R.string.send_bitcoin);
-
         conf = new Configuration(this);
 
         feeTextView = (TextView) findViewById(R.id.transaction_fee);
@@ -180,7 +178,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
         destinyAddress = (TextView) findViewById(R.id.destination_address);
         destinyAmount = (TextView) findViewById(R.id.destination_amount);
 
-        String formattedFeeString = String.format(getResources().getString(R.string.transaction_fee_of), BitCoin.valueOf(0).toFriendlyString());
+        String formattedFeeString = String.format(getResources().getString(R.string.transaction_fee_of), Coin.valueOf(0).toFriendlyString());
         feeTextView.setText(formattedFeeString);
 
         if (WalletHelper.isInstanceNull()) {

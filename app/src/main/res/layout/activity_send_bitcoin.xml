@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/wallet_user_name_edit_text"
-                android:hint="@string/addressee"
+                android:hint="@string/crea_address"
                 android:textColorHint="@color/colorPrimaryHint"
                 android:paddingLeft="10dp"
                 android:textColor="@color/colorPrimary"
@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:text="@string/amount"
             android:textColor="@color/gray_2e2"
+            android:layout_marginTop="10dp"
             android:textStyle="bold"/>
 
         <LinearLayout
@@ -61,6 +62,7 @@
                 android:id="@+id/amount"
                 android:hint="@string/amount_in_currency"
                 android:textColorHint="@color/colorPrimaryHint"
+                android:textSize="13dp"
                 android:paddingLeft="10dp"
                 android:inputType="numberDecimal"
                 android:textColor="@color/colorPrimary"
@@ -70,7 +72,7 @@
 
             <crea.wallet.lite.widget.MaterialTextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="\ue86f"
                 android:layout_weight="0.1"
                 android:textColor="@color/colorPrimary"
@@ -79,17 +81,18 @@
                 />
 
             <EditText
+                android:id="@+id/to_fiat_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/to_fiat_amount"
+                android:layout_weight="0.4"
                 android:hint="@string/amount_in_currency"
                 android:textColorHint="@color/colorPrimaryHint"
+                android:textSize="13dp"
                 android:paddingLeft="10dp"
                 android:inputType="numberDecimal"
                 android:textColor="@color/colorPrimary"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:layout_weight="0.4"
                 android:gravity="right" />
         </LinearLayout>
 
@@ -227,7 +230,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@android:string/ok"
+        android:text="@string/send"
         android:id="@+id/wallet_accept_btn"
         android:background="@drawable/btn_effect_blue"
         android:textColor="@android:color/white"

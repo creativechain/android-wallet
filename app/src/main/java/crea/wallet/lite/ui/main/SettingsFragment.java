@@ -44,6 +44,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             feepreference.setValueIndex(1);
         }
 
+        final ListPreference priceIntervalPref = (ListPreference) findPreference("price_update_interval");
+        priceIntervalPref.setSummary(priceIntervalPref.getEntry());
+        priceIntervalPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                CharSequence[] values = priceIntervalPref.getEntryValues();
+                CharSequence[] entries = priceIntervalPref.getEntries();
+                int index = 0;
+                for (CharSequence c : values) {
+                    if (c.equals(newValue)) {
+                        break;
+                    }
+                    index++;
+                }
+                priceIntervalPref.setSummary(entries[index]);
+                return true;
+            }
+        });
+
         final Preference seedPreference = findPreference("export_seed");
         seedPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

@@ -53,7 +53,6 @@ import crea.wallet.lite.ui.main.MainActivity;
 import crea.wallet.lite.util.TimeUtils;
 import crea.wallet.lite.wallet.WalletHelper;
 import crea.wallet.lite.wallet.WalletUtils;
-import com.chip_chap.services.cash.coin.BitCoin;
 import com.chip_chap.services.status.TransactionStatus;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
 
@@ -101,7 +100,7 @@ import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC
  */
 public class CreativeCoinService extends Service implements BlockchainService {
 
-	private static final String TAG = "BitcoinService";
+	private static final String TAG = "CreativeCoinService";
 	private static final int NOTIFICATION_ID_CONNECTED = 0;
 	private static final int NOTIFICATION_ID_COINS_RECEIVED = 1;
 	private static final int NOTIFICATION_ID_BLOCKCHAIN_PROGRESS = 2;
@@ -182,8 +181,6 @@ public class CreativeCoinService extends Service implements BlockchainService {
 	private long serviceCreatedAt;
 	private boolean resetBlockchainOnShutdown = false;
 
-
-
 	private long saveTransaction(Transaction tx, String title) {
 		boolean cashIn = title.equals(CASH_IN_TITLE);
 		if (!Btc2BtcTransaction.exist(tx.getHashAsString())) {
@@ -223,9 +220,9 @@ public class CreativeCoinService extends Service implements BlockchainService {
 	}
 
 	private void notifyTransaction(long id, String action) {
-		Intent sendIntetn = new Intent(action);
-		sendIntetn.putExtra("txId", id);
-		sendBroadcast(sendIntetn);
+		Intent sendIntent = new Intent(action);
+		sendIntent.putExtra("txId", id);
+		sendBroadcast(sendIntent);
 	}
 
 	private void notifyCoinsReceived(final Coin amount, long id, @Nullable final Address... addresses) {
@@ -334,7 +331,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
                             remainingTime = TimeUtils.toHumanReadable(remainTime);
                         }
 
-                        Log.i(TAG, remainingTime + ", REMAINS=" + remain + ", " + blockSpeed + " blocks/s");
+                        Log.d(TAG, remainingTime + ", REMAINS=" + remain + ", " + blockSpeed + " blocks/s");
                         blockSpeed = 0;
                         if (progressBar != null) {
                             progressBar.post(new Runnable() {
@@ -367,19 +364,11 @@ public class CreativeCoinService extends Service implements BlockchainService {
             delayHandler.removeCallbacksAndMessages(null);
             Configuration.getInstance().maybeIncrementBestChainHeightEver(blockChain.getChainHead().getHeight());
 
-            if (progressBar != null) {
-                progressBar.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setText(getString(R.string.amount_in_currency, Configuration.getInstance().getMainCurrency().getName()));
-                    }
-                });
-            }
         }
 
         @Override
 		public void onBlocksDownloaded(final Peer peer, final Block block, final FilteredBlock filteredBlock, final int blocksLeft) {
-
+			super.onBlocksDownloaded(peer, block, filteredBlock, blocksLeft);
 			this.remain = blocksLeft;
 			blockSpeed++;
 
