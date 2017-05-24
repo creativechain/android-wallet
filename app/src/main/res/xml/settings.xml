@@ -17,18 +17,18 @@
     <android.support.v7.preference.PreferenceCategory
         android:title="@string/coin_settings">
 
-        <android.support.v7.preference.CheckBoxPreference
-            android:title="@string/show_exchange_value"
-            android:key="show_exchange_value"
-            android:summary="@string/show_exchange_value_summary"
-            android:defaultValue="false" />
-
         <android.support.v7.preference.ListPreference
             android:title="@string/exchange_currency"
             android:summary="@string/exchange_currency_explain"
             android:key="main_currency"
             android:entries="@array/currency_entries"
             android:entryValues="@array/currency_values"/>
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:title="@string/show_exchange_value"
+            android:key="show_exchange_value"
+            android:summary="@string/show_exchange_value_summary"
+            android:defaultValue="false" />
 
         <android.support.v7.preference.ListPreference
             android:title="@string/price_update_interval"
@@ -43,6 +43,12 @@
             android:key="transaction_fee"
             android:entries="@array/fees_entries"
             android:entryValues="@array/fees_values"/>
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:title="@string/allow_spent_unconfirmed_tx"
+            android:key="spend_unconfirmed_tx"
+            android:summary="@string/allow_spent_unconfirmed_tx_summary"
+            android:defaultValue="false" />
 
     </android.support.v7.preference.PreferenceCategory>
 

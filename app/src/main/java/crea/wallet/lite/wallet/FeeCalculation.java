@@ -13,6 +13,7 @@ import org.creativecoinj.core.Transaction;
 import org.creativecoinj.core.TransactionOutput;
 import org.creativecoinj.uri.BitcoinURI;
 import org.creativecoinj.uri.BitcoinURIParseException;
+import org.creativecoinj.wallet.DefaultCoinSelector;
 import org.creativecoinj.wallet.SendRequest;
 import org.creativecoinj.wallet.Wallet;
 
@@ -75,9 +76,16 @@ public class FeeCalculation {
             sReq = pi.toSendRequest();
         }
 
+        Configuration conf = Configuration.getInstance();
         sReq.signInputs = false;
-        sReq.feePerKb = Configuration.getInstance().getTransactionFee();
+        sReq.feePerKb = conf.getTransactionFee();
         try {
+            if (conf.isSpendPendintTxAvailable()) {
+                wallet.allowSpendingUnconfirmedTransactions();
+            } else {
+                wallet.setCoinSelector(new DefaultCoinSelector());
+            }
+
             wallet.completeTx(sReq);
             hasError = false;
             hasSufficientMoney = true;

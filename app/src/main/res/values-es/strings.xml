@@ -111,4 +111,6 @@
     <string name="price_update_interval">Actualizar precio de intercambio…</string>
     <string name="crea_address">Dirección creativecoin</string>
     <string name="send">Enviar</string>
+    <string name="allow_spent_unconfirmed_tx">Permitir el gasto de transacciones pendientes</string>
+    <string name="allow_spent_unconfirmed_tx_summary">Permite enviar dinero de transacciones que aún no está confirmadas</string>
 </resources>

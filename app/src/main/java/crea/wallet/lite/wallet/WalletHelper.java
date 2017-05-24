@@ -173,30 +173,6 @@ public class WalletHelper {
         return balance;
     }
 
-    public Coin getBalance(File f) {
-        return wallets.get(f).getBalance();
-    }
-
-    public Coin getMainBalance() {
-        return getBalance(Configuration.getInstance().getMainWalletFile());
-    }
-
-    public WalletBalance getTotalWalletBalance() {
-        Coin cBalance = getTotalBalance();
-        Coin totalBalance = getTotalBalance(Wallet.BalanceType.ESTIMATED);
-        Coin pending = totalBalance.subtract(cBalance);
-
-        Log.i(TAG, "available balance: " + cBalance.getValue() + ", pending balance: " + pending.getValue());
-
-        WalletBalance wb = new WalletBalance();
-        wb.setCurrency(Currency.BTC);
-        wb.setAvailable(BitCoin.valueOf(cBalance.longValue()).getDoubleValue());
-        wb.setBalance(BitCoin.valueOf(cBalance.add(pending).longValue()).getDoubleValue());
-        wb.setScale(8);
-        wb.setExchange(1);
-        return wb;
-    }
-
     public Coin getValueSentToMe(Transaction tx) {
         Coin value = Coin.ZERO;
         for (Wallet w : getWallets()) {

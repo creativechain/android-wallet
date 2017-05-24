@@ -112,4 +112,6 @@
     <string name="price_update_interval">Update exchange price…</string>
     <string name="crea_address">Creativecoin address</string>
     <string name="send">Send</string>
+    <string name="allow_spent_unconfirmed_tx">Allow spending unconfirmed transactions</string>
+    <string name="allow_spent_unconfirmed_tx_summary">Allows sending money from transactions that are not yet confirmed.</string>
 </resources>

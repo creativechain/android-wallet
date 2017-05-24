@@ -64,6 +64,7 @@ public class Configuration {
 	public static final String PREFS_KEY_CREA_PRICE_USD = "crea_price_usd";
 	public static final String PREFS_KEY_SHOW_EXCHANGE_VALUE = "show_exchange_value";
 	public static final String PREFS_KEY_PRICE_UPDATE_INTERVAL = "price_update_interval";
+	public static final String PREFS_KEY_SPEND_UNCONFIRMED_TX = "spend_unconfirmed_tx";
 
 	private static final int PREFS_DEFAULT_BTC_SHIFT = 8;
 	private static final int PREFS_DEFAULT_BTC_PRECISION = 8;
@@ -286,6 +287,10 @@ public class Configuration {
 	public long getPriceUpdateInterval() {
         return Long.parseLong(prefs.getString(PREFS_KEY_PRICE_UPDATE_INTERVAL, "300000"));
     }
+
+    public boolean isSpendPendintTxAvailable() {
+		return prefs.getBoolean(PREFS_KEY_SPEND_UNCONFIRMED_TX, false);
+	}
 
 	public static Configuration getInstance() {
 		return new Configuration(WalletApplication.INSTANCE);
