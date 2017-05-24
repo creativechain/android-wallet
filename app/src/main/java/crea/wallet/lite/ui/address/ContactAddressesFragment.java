@@ -19,7 +19,7 @@ import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;
-import crea.wallet.lite.ui.tool.SendBitcoinActivity;
+import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.BookAddressAdapter;
 import crea.wallet.lite.ui.base.AddressBookFragment;
 import crea.wallet.lite.util.IntentUtils;
@@ -73,7 +73,7 @@ public class ContactAddressesFragment extends AddressBookFragment {
                         showQR(address);
                         break;
                     case R.id.action_send:
-                        Intent sendIntent = new Intent(getActivity(), SendBitcoinActivity.class);
+                        Intent sendIntent = new Intent(getActivity(), SendCoinActivity.class);
                         sendIntent.putExtra(Tags.ADDRESS, address.getAddress());
                         startActivity(sendIntent);
                         break;

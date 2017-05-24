@@ -62,7 +62,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ui.tool.SendBitcoinActivity"
+            android:name=".ui.tool.SendCoinActivity"
             android:label="@string/send_bitcoin"
             android:screenOrientation="portrait">
             <intent-filter>

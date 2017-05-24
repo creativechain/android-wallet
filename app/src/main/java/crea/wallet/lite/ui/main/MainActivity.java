@@ -21,7 +21,7 @@ import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
 import crea.wallet.lite.service.CreativeCoinService;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;
 import crea.wallet.lite.ui.address.AddressBookActivity;
-import crea.wallet.lite.ui.tool.SendBitcoinActivity;
+import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.TransactionAdapter;
 import crea.wallet.lite.util.CoinConverter;
 import crea.wallet.lite.util.CreaCoin;
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 showQRCode(address);
                 break;
             case R.id.action_cash_out:
-                Intent cashOut = new Intent(this, SendBitcoinActivity.class);
+                Intent cashOut = new Intent(this, SendCoinActivity.class);
                 startActivity(cashOut);
                 break;
             case R.id.action_address_book:

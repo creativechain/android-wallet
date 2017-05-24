@@ -52,7 +52,7 @@ import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_RECEIVED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_SENT;
 
-public class SendBitcoinActivity extends AppCompatActivity {
+public class SendCoinActivity extends AppCompatActivity {
 
     private static final String TAG = "InputW2WActivity";
 
@@ -81,7 +81,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(Transaction tx) {
-            SendBitcoinActivity.this.tx = tx;
+            SendCoinActivity.this.tx = tx;
             setState(State.SENT);
         }
 
@@ -442,7 +442,7 @@ public class SendBitcoinActivity extends AppCompatActivity {
             @Override
             public void doTask(Void s) {
 
-                PaymentProcess paymentProcess = new PaymentProcess(SendBitcoinActivity.this, sReq, conf.getMainWalletFile());
+                PaymentProcess paymentProcess = new PaymentProcess(SendCoinActivity.this, sReq, conf.getMainWalletFile());
                 paymentProcess.setProcessListener(CONFIDENCE_LISTENER)
                         .start();
             }
