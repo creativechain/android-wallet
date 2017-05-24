@@ -57,16 +57,22 @@ public class TransactionAdapter extends RecyclerAdapter<TransactionAdapter.ViewH
         holder.destinyAmount.setText(coin.toFriendlyString());
         holder.feeAmountBtc.setText(fee.toFriendlyString());
 
-        Configuration conf = Configuration.getInstance();
-        Coin price = conf.getCreaPrice(conf.getMainCurrency());
-        Coin feeConversion = new CoinConverter()
-                .amount(CreaCoin.valueOf(transaction.getFee()))
-                .price(price).getConversion();
+        if (transaction.getExchangeMethod().equals(Method.B2BO)) {
+            Configuration conf = Configuration.getInstance();
+            Coin price = conf.getCreaPrice(conf.getMainCurrency());
+            Coin feeConversion = new CoinConverter()
+                    .amount(CreaCoin.valueOf(transaction.getFee()))
+                    .price(price).getConversion();
 
-        holder.feeAmountFiat.setText(feeConversion.toFriendlyString());
+            holder.feeAmountFiat.setText(feeConversion.toFriendlyString());
+        } else {
+            holder.feeRow.setVisibility(View.GONE);
+        }
+
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
+        View feeRow;
         TextView txDate;
         TextView txStatusIcon;
         TextView destinies;
@@ -76,6 +82,7 @@ public class TransactionAdapter extends RecyclerAdapter<TransactionAdapter.ViewH
 
         public ViewHolder(View v) {
             super(v);
+            feeRow = v.findViewById(R.id.fee_row);
             txDate = (TextView) v.findViewById(R.id.transaction_date);
             txStatusIcon = (TextView) v.findViewById(R.id.transaction_status_icon);
             destinies = (TextView) v.findViewById(R.id.destination_address);
