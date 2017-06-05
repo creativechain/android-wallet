@@ -9,8 +9,8 @@ Implementation of [creacoinj][creacoinj] library in Android
 
 ## Warning
 
-This project uses the main network. On 01/05/2017 the main network will generate a new genesis block.
-This means that all the transactions and blocks generated up to that date will be discarded by the network.
+This project uses the main network. On 01/05/2017 the main network did generate a new genesis block.
+This means that all the transactions and blocks generated up to that date were discarded by the network.
 
 ## License
 
