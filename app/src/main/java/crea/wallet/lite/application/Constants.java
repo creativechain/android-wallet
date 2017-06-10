@@ -41,11 +41,11 @@ public final class Constants {
 	public final static class APP {
 
 		public static final String VERSION = BuildConfig.VERSION_NAME;
-		public static final String CHIPCHAP_PATH = FILES.DATA_DIRECTORY.getAbsolutePath() + "/Creativechain/";
-		public static final String BARCODE_PATH = CHIPCHAP_PATH + "Barcode/";
+		public static final String CREATIVECHAIN_PATH = FILES.DATA_DIRECTORY.getAbsolutePath() + "/Creativechain/";
+		public static final String BARCODE_PATH = CREATIVECHAIN_PATH + "Barcode/";
 
 		/** Folder for backups */
-		public static final String BACKUP_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ChipChap/Backup/";
+		public static final String BACKUP_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CreativeChain/Backup/";
 
 		/** User-agent to use for network access. */
 		public static final String CLIENT_NAME = "Creativechain Wallet";
@@ -74,7 +74,7 @@ public final class Constants {
 		public static final Context CONTEXT = new Context(NETWORK_PARAMETERS);
 		public static final long WALLET_TIMESTAMP = 1490036400;
 
-		public static final String WALLET_PATH = APP.CHIPCHAP_PATH + "Wallet/";
+		public static final String WALLET_PATH = APP.CREATIVECHAIN_PATH + "Wallet/";
 		public static final String WALLET_FILES_NAME = WALLET_PATH + "wallet";
 		public static final String WALLET_BACKUP_FILES_NAME = APP.BACKUP_FOLDER + "backup-protobuf";
 		public static final File FIRST_WALLET_FILE = new File(WALLET_FILES_NAME + FILES.FILENAME_NETWORK_SUFFIX);

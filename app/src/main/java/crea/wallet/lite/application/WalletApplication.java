@@ -66,10 +66,6 @@ public class WalletApplication extends Application {
     private Intent blockchainServiceCancelCoinsReceivedIntent;
     private Intent blockchainServiceResetBlockchainIntent;
     private File walletFile;
-    private boolean isBackupWallet = false;
-    private String pass;
-    private boolean waitingForEncrypt = false;
-    private boolean createBackupWallet = true;
 
     @Override
     public void onCreate() {
@@ -201,7 +197,7 @@ public class WalletApplication extends Application {
             if (!WalletHelper.INSTANCE.getWalletParams().equals(Constants.WALLET.NETWORK_PARAMETERS)) {
                 throw new Error("bad wallet network parameters: " + WalletHelper.INSTANCE.getWalletParams().getId());
             }
-            return false;
+            return true;
         } else if (Constants.WALLET.MAIN_WALLET_BACKUP_FILE.exists()) {
             return restoreWalletFromBackup();
         }
@@ -220,7 +216,6 @@ public class WalletApplication extends Application {
         try	{
             WalletHelper.INSTANCE = WalletHelper.fromBackupWallets();
             WalletHelper.INSTANCE.cleanup();
-            isBackupWallet = true;
             resetBlockchain();
             Log.i(TAG, "wallet restored from backup: '" + Constants.WALLET.MAIN_WALLET_BACKUP_FILE + "'");
             return true;
@@ -238,11 +233,12 @@ public class WalletApplication extends Application {
 
     public void migrateBackup() {
         if (!Constants.WALLET.MAIN_WALLET_BACKUP_FILE.exists()) {
-            Log.i(TAG, "migrating automatic backup to protobuf");
+            Log.d(TAG, "migrating automatic backup to protobuf");
 
             // make sure there is at least one recent backup
             localBackupWallet();
-            createBackupWallet = false;
+        } else {
+            Log.e(TAG, "Wallet backup exist");
         }
     }
 

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="fees_entries">
-        <item>25000 s/Kb (Low)</item>
-        <item>135000 s/Kb (Normal)</item>
-        <item>225000 s/Kb (High)</item>
+        <item>105000 s/Kb (Low)</item>
+        <item>305000 s/Kb (Normal)</item>
+        <item>505000 s/Kb (High)</item>
     </string-array>
 
     <string-array name="fees_values" translatable="false">
-        <item>25000</item>
-        <item>135000</item>
-        <item>225000</item>
+        <item>105000</item>
+        <item>305000</item>
+        <item>505000</item>
     </string-array>
 
     <string-array name="currency_entries">

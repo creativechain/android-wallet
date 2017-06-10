@@ -173,6 +173,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                     Log.d(TAG, "Ecrypting with: " + Utils.HEX.encode(pass.getBytes()));
                     WalletHelper.INSTANCE.encrypt(pass);
                     WalletHelper.INSTANCE.save();
+                    WalletApplication.INSTANCE.migrateBackup();
                     publishProgress(true);
                 } catch (Exception e) {
                     e.printStackTrace();
