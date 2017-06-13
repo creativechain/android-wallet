@@ -159,7 +159,7 @@ public class Configuration {
 	}
 
 	public FeeCategory getFeeCategory() {
-		String s = prefs.getString(PREFS_KEY_TRANSACTION_FEE_CATEGORY, FeeCategory.PRIORITY.toString());
+		String s = prefs.getString(PREFS_KEY_TRANSACTION_FEE, FeeCategory.PRIORITY.toString());
 		return FeeCategory.valueOf(s);
 	}
 

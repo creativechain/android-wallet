@@ -48,6 +48,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.Locale;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -58,8 +59,6 @@ public class WalletApplication extends Application {
 
     private static final String TAG = "WalletApplication";
     private static final X500Principal DEBUG_DN = new X500Principal("CN=Android Debug,O=Android,C=US");
-
-    private static final String BIP39_WORDLIST_FILENAME = "bitcoin/bip39-wordlist.txt";
 
     public static WalletApplication INSTANCE;
     private ActivityManager activityManager;
@@ -153,7 +152,8 @@ public class WalletApplication extends Application {
         Log.e(TAG, "Initializing MnemonicCode");
         long t = System.currentTimeMillis();
         try	{
-            MnemonicCode.INSTANCE = new MnemonicCode(getAssets().open(BIP39_WORDLIST_FILENAME), null);
+            String path = "bitcoin/wordlist/" + Locale.getDefault().getCountry().toLowerCase() + ".txt";
+            MnemonicCode.INSTANCE = new MnemonicCode(getAssets().open(path), null);
         } catch (final IOException x) {
             throw new Error(x);
         }

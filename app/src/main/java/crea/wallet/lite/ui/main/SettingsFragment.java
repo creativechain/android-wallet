@@ -41,7 +41,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.settings);
 
         final ListPreference feepreference = (ListPreference) findPreference("transaction_fee");
-        FeeCategory category = FeeCategory.valueOf(feepreference.getValue());
+        FeeCategory category;
+        if (feepreference.getValue() != null) {
+            category = FeeCategory.valueOf(feepreference.getValue());
+        } else {
+            category = conf.getFeeCategory();
+        }
+
         String summary = feepreference.getEntry() + ", " + conf.getTransactionFee(category).longValue() + " s/Kb";
         feepreference.setSummary(summary);
         feepreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
