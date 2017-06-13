@@ -59,6 +59,7 @@ import com.chip_chap.services.transaction.Btc2BtcTransaction;
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Block;
 import org.creativecoinj.core.BlockChain;
+import org.creativecoinj.core.CheckpointManager;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.FilteredBlock;
 import org.creativecoinj.core.Peer;
@@ -78,6 +79,8 @@ import org.creativecoinj.utils.Threading;
 import org.creativecoinj.wallet.Wallet;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
@@ -639,7 +642,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 				final long earliestKeyCreationTime = WalletHelper.INSTANCE.getFirstKeyCreationTime();
 
 				Log.e(TAG,"CREATION_TIME=" + earliestKeyCreationTime +  " BLOCKCHAIN_FILE=" + blockChainFileExists);
-/*				if (!blockChainFileExists && earliestKeyCreationTime > 0){
+				if (!blockChainFileExists && earliestKeyCreationTime > 0){
 					try	{
 						Configuration.getInstance().setDeletingBlockchain(true);
 						final long start = System.currentTimeMillis();
@@ -649,7 +652,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 					} catch (final IOException x) {
 						Log.e(TAG, "problem reading checkpoints, continuing without", x);
 					}
-				}*/
+				}
 			} catch (final BlockStoreException x) {
 				blockChainFile.delete();
 

@@ -90,9 +90,6 @@ public final class Constants {
 		/** Filename of the block checkpoints file. */
 		public static final String CHECKPOINTS_FILENAME = "checkpoints" + FILES.FILENAME_NETWORK_SUFFIX + "chkp";
 
-		/** Password to create new Wallets */
-		public static final String CREATION_PASSWORD = "chipchapping";
-
 		public static final String MAIN_ADDRESS = "CPw1tJF6wWcdXPKYwS4pg3wF37XVqJZ9JC";
 		public static final String TEST_ADDRESS = "mgvgQKuyUMyT1C5VT7iYDt1cFF1MPaHTNt";
 		public static final String ADDRESS = TEST ? TEST_ADDRESS : MAIN_ADDRESS;
