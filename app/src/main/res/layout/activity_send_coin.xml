@@ -96,6 +96,37 @@
                 android:gravity="right" />
         </LinearLayout>
 
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <crea.wallet.lite.widget.FontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/transaction_fee"
+                app:font="roboto_bold"
+                android:textColor="@color/gray_2e2"/>
+
+            <RadioButton
+                android:id="@+id/economic_fee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/economic_fee"/>
+
+            <RadioButton
+                android:id="@+id/normal_fee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/normal_fee"/>
+
+            <RadioButton
+                android:id="@+id/priority_fee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/priority_fee"/>
+        </RadioGroup>
+
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

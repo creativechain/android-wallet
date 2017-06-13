@@ -33,14 +33,16 @@ public class FeeCalculation {
     private Coin totalToSent = Coin.ZERO;
     private Coin missing = Coin.ZERO;
     private Coin fee = Coin.ZERO;
+    private FeeCategory feeCategory;
     private boolean hasSufficientMoney;
     private boolean hasError = false;
     private boolean emptyWallet = false;
 
-    public FeeCalculation(Wallet wallet, Address address) {
+    public FeeCalculation(Wallet wallet, Address address, FeeCategory category) {
         this.wallet = wallet;
         this.emptyWallet = true;
         this.address = address;
+        this.feeCategory = category;
         try {
             calculate();
         } catch (BitcoinURIParseException e) {
@@ -48,16 +50,16 @@ public class FeeCalculation {
         }
     }
 
-    public FeeCalculation(Wallet wallet) {
-        this(wallet, DONATION_ADDRESS);
+    public FeeCalculation(Wallet wallet, FeeCategory category) {
+        this(wallet, DONATION_ADDRESS, category);
     }
 
-    public FeeCalculation(Wallet wallet, Coin amountToSent) {
-        this(wallet, DONATION_ADDRESS, amountToSent);
+    public FeeCalculation(Wallet wallet, Coin amountToSent, FeeCategory category) {
+        this(wallet, DONATION_ADDRESS, amountToSent, category);
     }
 
-    public FeeCalculation(Wallet wallet, Address address, Coin amountToSent) {
-        this(wallet);
+    public FeeCalculation(Wallet wallet, Address address, Coin amountToSent, FeeCategory category) {
+        this(wallet, category);
         this.emptyWallet = false;
         this.address = address;
         this.amountToSent = amountToSent;
@@ -78,7 +80,7 @@ public class FeeCalculation {
 
         Configuration conf = Configuration.getInstance();
         sReq.signInputs = false;
-        sReq.feePerKb = conf.getTransactionFee();
+        sReq.feePerKb = conf.getTransactionFee(this.feeCategory);
         try {
             if (conf.isSpendPendintTxAvailable()) {
                 wallet.allowSpendingUnconfirmedTransactions();

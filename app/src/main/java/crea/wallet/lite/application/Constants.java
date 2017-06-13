@@ -101,7 +101,7 @@ public final class Constants {
 		public static final int MAX_HD_ACCOUNTS = 5;
 	}
 
-	public static final class WEB_EXPLORER {
+	public static final class URLS {
 		private static final String BITEASY_API_URL_PROD = "https://api.biteasy.com/v2/btc/mainnet/";
 		private static final String BITEASY_API_URL_TEST = "https://api.biteasy.com/v2/btc/testnet/";
 
@@ -111,6 +111,8 @@ public final class Constants {
 		public static final String BLOCKEXPLORER_PROD_URL = "https://search.creativechain.net/api/getrawtransaction?txid=";
 		public static final String BLOCKEXPLORER_TEST_URL = "https://testnet.blockexplorer.com/";
 		public static final String BLOCKEXPLORER_URL = "https://search.creativechain.net/tx/";
+
+		public static final String FEES_URL = "https://wallet.schildbach.de/fees";
 	}
 
 	public final static class FILES {
@@ -118,6 +120,8 @@ public final class Constants {
 
 		/** Path to external storage */
 		public static final File EXTERNAL_STORAGE_DIR = Environment.getExternalStorageDirectory();
+
+		public static final String FEES_FILENAME = "fees" + FILENAME_NETWORK_SUFFIX;
 
 		public static final File DATA_DIRECTORY = WalletApplication.INSTANCE.getFilesDir();
 	}

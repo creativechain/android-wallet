@@ -20,6 +20,7 @@ import crea.wallet.lite.background.WalletExporter;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.QR;
+import crea.wallet.lite.wallet.FeeCategory;
 
 import com.activeandroid.query.Delete;
 import com.chip_chap.services.task.Task;
@@ -39,7 +40,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.settings);
 
-        ListPreference feepreference = (ListPreference) findPreference("transaction_fee");
+        final ListPreference feepreference = (ListPreference) findPreference("transaction_fee");
+        FeeCategory category = FeeCategory.valueOf(feepreference.getValue());
+        String summary = feepreference.getEntry() + ", " + conf.getTransactionFee(category).longValue() + " s/Kb";
+        feepreference.setSummary(summary);
+        feepreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                CharSequence[] values = feepreference.getEntryValues();
+                CharSequence[] entries = feepreference.getEntries();
+                int index = 0;
+                for (CharSequence c : values) {
+                    if (c.equals(newValue)) {
+                        break;
+                    }
+                    index++;
+                }
+                FeeCategory category = FeeCategory.valueOf(values[index].toString());
+                String summary = entries[index] + ", " + conf.getTransactionFee(category).longValue() + " s/Kb";
+                feepreference.setSummary(summary);
+                return true;
+            }
+        });
         if (feepreference.getValue() == null) {
             feepreference.setValueIndex(1);
         }

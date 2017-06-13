@@ -114,4 +114,7 @@
     <string name="send">Send</string>
     <string name="allow_spent_unconfirmed_tx">Allow spending unconfirmed transactions</string>
     <string name="allow_spent_unconfirmed_tx_summary">Allows sending money from transactions that are not yet confirmed.</string>
+    <string name="economic_fee">Economic</string>
+    <string name="normal_fee">Normal</string>
+    <string name="priority_fee">Priority</string>
 </resources>

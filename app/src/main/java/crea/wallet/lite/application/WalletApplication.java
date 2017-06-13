@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.AsyncTask;
 import android.support.multidex.MultiDex;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -20,6 +21,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.android.LogcatAppender;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import crea.wallet.lite.R;
+import crea.wallet.lite.background.DynamicFeeLoader;
 import crea.wallet.lite.background.PriceUpdater;
 import crea.wallet.lite.service.CreativeCoinService;
 import crea.wallet.lite.service.BlockchainService;
@@ -92,6 +94,7 @@ public class WalletApplication extends Application {
                 BlockchainService.ACTION_RESET_BLOCKCHAIN, null, this, CreativeCoinService.class);
 
         new PriceUpdater().start();
+        new DynamicFeeLoader(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         walletFile = Constants.WALLET.FIRST_WALLET_FILE;
         if (loadWalletHelper()) {
             afterLoadWallet();

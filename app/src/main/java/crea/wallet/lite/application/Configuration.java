@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+import crea.wallet.lite.wallet.FeeCategory;
+
 /**
  * @author Andreas Schildbach
  */
@@ -51,6 +53,7 @@ public class Configuration {
 	public static final String PREFS_KEY_REMIND_BACKUP = "remind_backup";
 	public static final String PREFS_KEY_LAST_PRICE = "last_price";
 	public static final String PREFS_KEY_TRANSACTION_FEE = "transaction_fee";
+	public static final String PREFS_KEY_TRANSACTION_FEE_CATEGORY = "tx_fee_category";
 	public static final String PREFS_KEY_IDLE_DETECTION = "idle_detection";
 	private static final String PREFS_KEY_NOTIF_TRANSACTIONS = "notif_transactions";
 	public static final String PREFS_KEY_DELETE_BLOCKCHAIN = "delete_blockchain";
@@ -151,9 +154,27 @@ public class Configuration {
 		editor.apply();
 	}
 
+	public void setFeeCategory(FeeCategory category) {
+		prefs.edit().putString(PREFS_KEY_TRANSACTION_FEE_CATEGORY, category.toString()).apply();
+	}
+
+	public FeeCategory getFeeCategory() {
+		String s = prefs.getString(PREFS_KEY_TRANSACTION_FEE_CATEGORY, FeeCategory.PRIORITY.toString());
+		return FeeCategory.valueOf(s);
+	}
+
+	public void setTransactionFee(FeeCategory category, Coin fee) {
+		prefs.edit().putLong(category.toString(), fee.longValue()).apply();
+	}
+
+	public Coin getTransactionFee(FeeCategory category) {
+		long fee = prefs.getLong(category.toString(), 505000);
+		return Coin.valueOf(fee);
+	}
+
 	public Coin getTransactionFee() {
-		long feeValue = Long.parseLong(prefs.getString(PREFS_KEY_TRANSACTION_FEE, "135000"));
-		return Coin.valueOf(feeValue);
+		FeeCategory category = getFeeCategory();
+		return getTransactionFee(category);
 	}
 
 	public boolean isDeletingBlockchain() {

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.OnTextChangeListener;
 import crea.wallet.lite.wallet.AbstractPaymentProcessListener;
 import crea.wallet.lite.wallet.FeeCalculation;
+import crea.wallet.lite.wallet.FeeCategory;
 import crea.wallet.lite.wallet.PaymentProcess;
 import crea.wallet.lite.wallet.PaymentProcessListener;
 import crea.wallet.lite.wallet.WalletHelper;
@@ -157,11 +159,12 @@ public class SendCoinActivity extends AppCompatActivity {
     private Task<Void> keyTask;
     private Configuration conf;
     private Address address;
+    private FeeCategory feeCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_bitcoin);
+        setContentView(R.layout.activity_send_coin);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         conf = new Configuration(this);
@@ -187,6 +190,8 @@ public class SendCoinActivity extends AppCompatActivity {
 
         wallet = WalletHelper.INSTANCE.getMainWallet();
 
+        feeCategory = conf.getFeeCategory();
+        setUpFeeOptions();
 
         amountEditText.setHint(getString(R.string.amount_in_currency, "CREA"));
         amountEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -322,11 +327,59 @@ public class SendCoinActivity extends AppCompatActivity {
 
     }
 
+    private void setUpFeeOptions() {
+        RadioButton economic = (RadioButton) findViewById(R.id.economic_fee);
+        RadioButton normal = (RadioButton) findViewById(R.id.normal_fee);
+        RadioButton priority = (RadioButton) findViewById(R.id.priority_fee);
+
+        switch (this.feeCategory) {
+            case ECONOMIC:
+                economic.setChecked(true);
+                break;
+            case NORMAL:
+                normal.setChecked(true);
+                break;
+            case PRIORITY:
+                priority.setChecked(true);
+                break;
+        }
+
+        economic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    feeCategory = FeeCategory.ECONOMIC;
+                    calculateBitcoinFee();
+                }
+            }
+        });
+
+        normal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    feeCategory = FeeCategory.NORMAL;
+                    calculateBitcoinFee();
+                }
+            }
+        });
+
+        priority.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    feeCategory = FeeCategory.PRIORITY;
+                    calculateBitcoinFee();
+                }
+            }
+        });
+    }
+
     private void enableEditTextAmount(boolean enable) {
 
         if (!enable) {
             amountEditText.requestFocus();
-            FeeCalculation feeCalculation = new FeeCalculation(wallet);
+            FeeCalculation feeCalculation = new FeeCalculation(wallet, feeCategory);
             BitCoin amount = BitCoin.valueOf(feeCalculation.getTotalToSent().getValue());
             amountEditText.setText(amount.toPlainString());
         }
@@ -386,9 +439,9 @@ public class SendCoinActivity extends AppCompatActivity {
             FeeCalculation feeCalculation;
 
             if (emptyWallet) {
-                feeCalculation = new FeeCalculation(wallet, getAddress());
+                feeCalculation = new FeeCalculation(wallet, getAddress(), this.feeCategory);
             } else {
-                feeCalculation = new FeeCalculation(wallet, getAddress(), amountToSent);
+                feeCalculation = new FeeCalculation(wallet, getAddress(), amountToSent, this.feeCategory);
             }
 
             Log.e(TAG, "calculation error " + feeCalculation.hasError() + ", has money: " + feeCalculation.hasSufficientMoney());
@@ -406,7 +459,7 @@ public class SendCoinActivity extends AppCompatActivity {
                 toFiatAmount.setTextColor(errorColor);
             }
 
-            setState(State.PREPARED);
+            setState(feeCalculation.isToDonationAddress() ? null : State.PREPARED);
         }
 
     }
@@ -457,38 +510,41 @@ public class SendCoinActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                broadcastStatus.setVisibility(View.VISIBLE);
-                CharSequence explRes = state.getExplRes() != null ? state.getExplRes() : "";
+                if (state != null) {
+                    broadcastStatus.setVisibility(View.VISIBLE);
+                    CharSequence explRes = state.getExplRes() != null ? state.getExplRes() : "";
 
-                txStatus.setText(getString(state.toStringResource()) + "\n" + explRes);
-                txStatusIcon.setTextColor(getResources().getColor(state.toColorResource()));
+                    txStatus.setText(getString(state.toStringResource()) + "\n" + explRes);
+                    txStatusIcon.setTextColor(getResources().getColor(state.toColorResource()));
 
-                if (state == State.SENT) {
-                    View txDetails = findViewById(R.id.transaction_details);
-                    View feeDetails = findViewById(R.id.fee_details);
-                    txDetails.setVisibility(View.VISIBLE);
-                    feeDetails.setVisibility(View.VISIBLE);
+                    if (state == State.SENT) {
+                        View txDetails = findViewById(R.id.transaction_details);
+                        View feeDetails = findViewById(R.id.fee_details);
+                        txDetails.setVisibility(View.VISIBLE);
+                        feeDetails.setVisibility(View.VISIBLE);
 
-                    Coin totalOutput = tx.getOutputSum();
-                    Coin feeOutput = tx.getFee();
-                    com.chip_chap.services.cash.coin.base.Coin feeConversion
-                            = new CoinConverter()
-                            .amount(BitCoin.valueOf(feeOutput.getValue()))
-                            .price(conf.getCreaPrice(Currency.EUR)).getConversion();
+                        Coin totalOutput = tx.getOutputSum();
+                        Coin feeOutput = tx.getFee();
+                        com.chip_chap.services.cash.coin.base.Coin feeConversion
+                                = new CoinConverter()
+                                .amount(BitCoin.valueOf(feeOutput.getValue()))
+                                .price(conf.getCreaPrice(Currency.EUR)).getConversion();
 
-                    destinyAddress.setText(getAddress().toString());
-                    destinyAmount.setText(totalOutput.toFriendlyString());
-                    feeAmountBtc.setText(feeOutput.toFriendlyString());
-                    feeAmountFiat.setText(feeConversion.toFriendlyString());
-                    acceptBtn.setEnabled(false);
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    }, 3000);
+                        destinyAddress.setText(getAddress().toString());
+                        destinyAmount.setText(totalOutput.toFriendlyString());
+                        feeAmountBtc.setText(feeOutput.toFriendlyString());
+                        feeAmountFiat.setText(feeConversion.toFriendlyString());
+                        acceptBtn.setEnabled(false);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        }, 3000);
+                    }
                 }
+
             }
         });
 

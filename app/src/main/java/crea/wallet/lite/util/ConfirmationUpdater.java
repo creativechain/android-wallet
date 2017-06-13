@@ -8,19 +8,13 @@ import com.chip_chap.services.asynchttp.net.ApiRequester;
 import com.chip_chap.services.asynchttp.net.handler.SilentApiHandler;
 import com.chip_chap.services.asynchttp.net.util.ApiRequest;
 import com.chip_chap.services.calls.base.BaseGetApiRequest;
-import com.chip_chap.services.cash.coin.BitCoin;
 import com.chip_chap.services.transaction.Btc2BtcTransaction;
-import com.chip_chap.services.transaction.ChipChapTransaction;
-import com.chip_chap.services.updater.Btc2BtcTransactionUpdater;
-import com.chip_chap.services.updater.TransactionUpdaterExecutor;
-import com.chip_chap.services.updater.UpdaterLauncher;
 import com.chip_chap.services.util.ViewUpdater;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import crea.wallet.lite.application.Constants;
@@ -71,7 +65,7 @@ public class ConfirmationUpdater implements Runnable {
                 ApiRequest confRequest = new BaseGetApiRequest() {
                     @Override
                     public String getURL() {
-                        return Constants.WEB_EXPLORER.BLOCKEXPLORER_PROD_URL + tx.getTxHash() + "&decrypt=1";
+                        return Constants.URLS.BLOCKEXPLORER_PROD_URL + tx.getTxHash() + "&decrypt=1";
                     }
                 };
 

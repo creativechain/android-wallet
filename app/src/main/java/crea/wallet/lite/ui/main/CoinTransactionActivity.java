@@ -66,7 +66,7 @@ public class CoinTransactionActivity extends TransactionActivity<Btc2BtcTransact
         amount.setText(coinAmount.toFriendlyString());
         fee.setText(coinFee.toFriendlyString());
 
-        final String url = Constants.WEB_EXPLORER.BLOCKEXPLORER_URL;
+        final String url = Constants.URLS.BLOCKEXPLORER_URL;
 
         txHash.setText(Html.fromHtml("<u>"+transaction.getTxHash() + "</u>"));
         txHash.setOnClickListener(new View.OnClickListener() {
