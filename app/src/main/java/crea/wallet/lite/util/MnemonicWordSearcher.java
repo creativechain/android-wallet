@@ -1,7 +1,10 @@
 package crea.wallet.lite.util;
 
+import android.util.Log;
+
 import org.creativecoinj.crypto.MnemonicCode;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +29,10 @@ public class MnemonicWordSearcher {
         if (startWith != null  && !startWith.isEmpty()) {
             boolean hasMatches = false;
             for (String s : wordMap) {
-                if (s.startsWith(startWith)) {
+                String sN = Normalizer.normalize(s, Normalizer.Form.NFD);
+                sN = sN.replaceAll("[^\\p{ASCII}]", "");
+                Log.d(TAG, "Normalized : " + s + " - " + sN);
+                if (sN.startsWith(startWith)) {
                     matches.add(s);
                     hasMatches = true;
                 } else if (!s.startsWith(startWith) && hasMatches) {
