@@ -116,4 +116,7 @@
     <string name="economic_fee">Económica</string>
     <string name="normal_fee">Normal</string>
     <string name="priority_fee">Prioritaria</string>
+    <string name="skip">Saltar</string>
+    <string name="wallet_creation_date">Fecha de creación</string>
+    <string name="wallet_creation_time_text">Recuerdas cuando creaste esta cartera? La sincronización puede ser mucho mas rapida si indecas la fecha de creación.</string>
 </resources>

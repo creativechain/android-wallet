@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import crea.wallet.lite.R;
@@ -26,6 +28,7 @@ import org.creativecoinj.core.Utils;
 import org.creativecoinj.crypto.MnemonicException;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -100,6 +103,35 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         } catch (MnemonicException.MnemonicLengthException | IOException e) {
             setResultStatus(false, e.getMessage());
         }
+    }
+
+    private void showCreationTimeDialog() {
+        View walletDateView = LayoutInflater.from(this).inflate(R.layout.wallet_time_dialog, null);
+        final DatePicker datePicker = (DatePicker) walletDateView.findViewById(R.id.datePicker);
+
+        AlertDialog aDialog = DialogFactory.alert(this, R.string.wallet_creation_date, walletDateView);
+        aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int day = datePicker.getDayOfMonth();
+                int month = datePicker.getMonth();
+                int year = datePicker.getYear();
+                Calendar c = Calendar.getInstance();
+                c.set(year, month, day);
+                creationTime = c.getTimeInMillis();
+                generateWallet();
+
+            }
+        });
+
+        aDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.skip), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                generateWallet();
+            }
+        });
+
+        aDialog.show();
     }
 
     private void generateWallet() {
@@ -232,7 +264,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             if (requestCode == IntentUtils.IMPORT_SEED) {
                 seed = data.getStringArrayListExtra(SeedActivity.EXTRA_SEED);
                 Log.d(TAG, "IMPORTED SEED: " + seed.toString());
-                generateWallet();
+                showCreationTimeDialog();
             } else if (requestCode == IntentUtils.PIN) {
                 String pin = Configuration.getInstance().getPin();
                 cypherWallet(pin);

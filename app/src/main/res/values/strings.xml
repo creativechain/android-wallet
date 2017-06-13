@@ -117,4 +117,8 @@
     <string name="economic_fee">Economic</string>
     <string name="normal_fee">Normal</string>
     <string name="priority_fee">Priority</string>
+    <string name="wallet_creation_date">Creation date</string>
+    <string name="skip">Skip</string>
+    <string name="wallet_creation_time_text">Do you remember the date you created this wallet? Synchronization can be much faster if you indicate the date. If you are not sure you can skip this step.</string>
+
 </resources>
