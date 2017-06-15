@@ -152,7 +152,18 @@ public class WalletApplication extends Application {
         Log.e(TAG, "Initializing MnemonicCode");
         long t = System.currentTimeMillis();
         try	{
-            String path = "bitcoin/wordlist/" + Locale.getDefault().getCountry().toLowerCase() + ".txt";
+            String lang = Locale.getDefault().getCountry().toLowerCase();
+            switch (lang) {
+                case "es":
+                case "fr":
+                case "it":
+                    break;
+                default:
+                    lang = "en";
+                    break;
+            }
+
+            String path = "bitcoin/wordlist/" + lang + ".txt";
             MnemonicCode.INSTANCE = new MnemonicCode(getAssets().open(path), null);
         } catch (final IOException x) {
             throw new Error(x);

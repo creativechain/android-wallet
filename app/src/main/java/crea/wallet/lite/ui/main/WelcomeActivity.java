@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
+import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.ui.tool.SeedActivity;
@@ -24,8 +25,14 @@ import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.wallet.WalletHelper;
 
+import org.creativecoinj.core.DumpedPrivateKey;
 import org.creativecoinj.core.Utils;
+import org.creativecoinj.crypto.DeterministicKey;
 import org.creativecoinj.crypto.MnemonicException;
+import org.creativecoinj.wallet.DeterministicSeed;
+import org.creativecoinj.wallet.KeyChainGroup;
+import org.creativecoinj.wallet.Protos;
+import org.creativecoinj.wallet.Wallet;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -156,8 +163,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-
     }
 
     private void showMnemonicCode() {

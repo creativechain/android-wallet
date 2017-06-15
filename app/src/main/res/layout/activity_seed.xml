@@ -33,4 +33,56 @@
         android:id="@+id/text_keyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:checkedButton="@+id/english"
+        android:orientation="vertical">
+
+        <crea.wallet.lite.widget.FontTextView
+            android:id="@+id/fontTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/indicate_words_language"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"/>
+
+        <RadioButton
+            android:id="@+id/english"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/english"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"/>
+
+        <RadioButton
+            android:id="@+id/spanish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/spanish"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"/>
+
+        <RadioButton
+            android:id="@+id/french"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/french"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"/>
+
+        <RadioButton
+            android:id="@+id/italian"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/italian"
+            android:textColor="@android:color/white"
+            android:textSize="18dp"/>
+    </RadioGroup>
 </LinearLayout>

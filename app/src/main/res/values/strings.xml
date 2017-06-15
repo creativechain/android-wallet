@@ -120,5 +120,11 @@
     <string name="wallet_creation_date">Creation date</string>
     <string name="skip">Skip</string>
     <string name="wallet_creation_time_text">Do you remember the date you created this wallet? Synchronization can be much faster if you indicate the date. If you are not sure you can skip this step.</string>
+    <string name="export_xprv">Export Master Private Key</string>
+    <string name="indicate_words_language">Indicates the language of the words</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+    <string name="french">French</string>
+    <string name="italian">Italian</string>
 
 </resources>

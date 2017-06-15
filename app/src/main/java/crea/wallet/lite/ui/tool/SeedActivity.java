@@ -5,15 +5,21 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
+
+import org.creativecoinj.crypto.MnemonicCode;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.util.MnemonicWordSearcher;
 import crea.wallet.lite.widget.keyboard.OnButtonPressedListener;
 import crea.wallet.lite.widget.keyboard.TextKeyboard;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import me.kaede.tagview.OnTagClickListener;
 import me.kaede.tagview.Tag;
@@ -22,7 +28,7 @@ import me.kaede.tagview.TagView;
 /**
  * Created by ander on 16/03/16.
  */
-public class SeedActivity extends AppCompatActivity {
+public class SeedActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "SeedActivity";
 
@@ -31,6 +37,16 @@ public class SeedActivity extends AppCompatActivity {
     private TagView seed;
     private String seedWord = "";
     private String[] tags;
+
+    private TagView word;
+    private TextView search;
+    private RadioButton english;
+    private RadioButton spanish;
+    private RadioButton french;
+    private RadioButton italian;
+    private MnemonicWordSearcher searcher;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +54,20 @@ public class SeedActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_seed);
 
-        final MnemonicWordSearcher searcher = new MnemonicWordSearcher();
+        english = (RadioButton) findViewById(R.id.english);
+        spanish = (RadioButton) findViewById(R.id.spanish);
+        french = (RadioButton) findViewById(R.id.french);
+        italian = (RadioButton) findViewById(R.id.italian);
+
+        english.setOnCheckedChangeListener(this);
+        spanish.setOnCheckedChangeListener(this);
+        french.setOnCheckedChangeListener(this);
+        italian.setOnCheckedChangeListener(this);
 
         final TextKeyboard keyboard = (TextKeyboard) findViewById(R.id.text_keyboard);
         seed = (TagView) findViewById(R.id.seed);
-        final TagView word = (TagView) findViewById(R.id.word);
-        final TextView search = (TextView) findViewById(R.id.search);
+        word = (TagView) findViewById(R.id.word);
+        search = (TextView) findViewById(R.id.search);
 
         seed.setOnTagClickListener(new OnTagClickListener() {
             @Override
@@ -89,6 +113,71 @@ public class SeedActivity extends AppCompatActivity {
 
             }
         });
+
+        setLanguage();
+    }
+
+    private void setLanguage() {
+        String lang = Locale.getDefault().getCountry().toLowerCase();
+        RadioButton toChecked;
+        switch (lang) {
+            case "es":
+                toChecked = spanish;
+                break;
+            case "fr":
+                toChecked = french;
+                break;
+            case "it":
+                toChecked = italian;
+                break;
+            default:
+                toChecked = english;
+                break;
+        }
+
+        toChecked.setChecked(true);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            int id = buttonView.getId();
+            String locale;
+            switch (id) {
+                case R.id.spanish:
+                    locale = "es";
+                    break;
+                case R.id.french:
+                    locale = "fr";
+                    break;
+                case R.id.italian:
+                    locale = "it";
+                    break;
+                default:
+                    locale = "en";
+            }
+
+            loadSearcher(locale);
+        }
+    }
+
+    private void loadSearcher(String locale) {
+        try	{
+            String path = "bitcoin/wordlist/" + locale + ".txt";
+            MnemonicCode.INSTANCE = new MnemonicCode(getAssets().open(path), null);
+            searcher = new MnemonicWordSearcher();
+            clearAllTags();
+        } catch (final IOException x) {
+            throw new Error(x);
+        }
+    }
+
+    private void clearAllTags() {
+        tags = new String[0];
+        seed.removeAllTags();
+        seedWord = "";
+        word.removeAllTags();
+        search.setText(seedWord);
     }
 
     private void cancelResult() {
