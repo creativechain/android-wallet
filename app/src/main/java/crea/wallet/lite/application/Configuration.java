@@ -25,8 +25,7 @@ import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.chip_chap.services.cash.Currency;
-
+import org.creativecoinj.core.AbstractCoin;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.utils.MonetaryFormat;
 import org.slf4j.Logger;
@@ -34,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+import crea.wallet.lite.coin.CoinUtils;
 import crea.wallet.lite.wallet.FeeCategory;
 
 /**
@@ -85,53 +85,57 @@ public class Configuration {
 		this.prefs = prefs;
 	}
 
-	public com.chip_chap.services.cash.coin.base.Coin getCreaPrice(Currency c) {
+	public AbstractCoin getCreaPrice(String c) {
 		String key;
-		Currency curr = c;
+		c = c.toUpperCase();
 		switch (c) {
-			case USD:
+			case "USD":
 				key = PREFS_KEY_CREA_PRICE_USD;
 				break;
-			case GBP:
+			case "GBP":
 				key = PREFS_KEY_CREA_PRICE_GBP;
 				break;
-			case MXN:
+			case "MXN":
 				key = PREFS_KEY_CREA_PRICE_MXN;
 				break;
-			case BTC:
+			case "BTC":
 				key = PREFS_KEY_CREA_PRICE_BTC;
 				break;
 			default:
 				key = PREFS_KEY_CREA_PRICE_EUR;
-				curr = Currency.EUR;
+				c = "EUR";
 				break;
 		}
 		long val = prefs.getLong(key, 0);
 
-		return com.chip_chap.services.cash.coin.base.Coin.fromCurrency(curr, val);
+		return CoinUtils.valueOf(c, val);
 
 	}
 
-	public com.chip_chap.services.cash.coin.base.Coin getPriceForMainCurrency() {
+	public AbstractCoin getPriceForMainCurrency() {
 		return getCreaPrice(getMainCurrency());
 	}
 
-	public void setCreaPrice(Currency c, long value) {
+	public void setCreaPrice(String c, long value) {
 		String key = null;
+		c = c.toUpperCase();
 		switch (c) {
-			case USD:
+			case "USD":
+			case "$":
 				key = PREFS_KEY_CREA_PRICE_USD;
 				break;
-			case GBP:
+			case "GBP":
+			case "£":
 				key = PREFS_KEY_CREA_PRICE_GBP;
 				break;
-			case MXN:
+			case "MXN":
 				key = PREFS_KEY_CREA_PRICE_MXN;
 				break;
-			case EUR:
+			case "EUR":
+			case "€":
 				key = PREFS_KEY_CREA_PRICE_EUR;
 				break;
-			case BTC:
+			case "BTC":
 				key = PREFS_KEY_CREA_PRICE_BTC;
 				break;
 		}
@@ -143,14 +147,13 @@ public class Configuration {
 		}
 	}
 
-	public Currency getMainCurrency() {
-		String curr = prefs.getString(PREFS_KEY_MAIN_CURRENCY, "EUR");
-		return Currency.getCurrency(curr);
+	public String getMainCurrency() {
+		return prefs.getString(PREFS_KEY_MAIN_CURRENCY, "EUR");
 	}
 
-	public void setMainCurrency(Currency c) {
+	public void setMainCurrency(String c) {
 		Editor editor = prefs.edit();
-		editor.putString(PREFS_KEY_MAIN_CURRENCY, c.getCode());
+		editor.putString(PREFS_KEY_MAIN_CURRENCY, c);
 		editor.apply();
 	}
 

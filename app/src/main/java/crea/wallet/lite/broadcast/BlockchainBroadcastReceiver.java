@@ -4,10 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.activeandroid.query.Select;
-import com.chip_chap.services.transaction.Btc2BtcTransaction;
+import org.creativecoinj.core.Sha256Hash;
+import org.creativecoinj.core.Transaction;
 
-import crea.wallet.lite.service.BlockchainService;
+import crea.wallet.lite.wallet.WalletHelper;
 
 /**
  * Created by ander on 15/11/16.
@@ -32,12 +32,12 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
         if (action.equals(PRICE_UPDATE)) {
             onPriceUpdated();
         } else if (action.equals(TRANSACTION_SENT)) {
-            long id = intent.getExtras().getLong("txId");
-            Btc2BtcTransaction t = findBtcTransaction(id);
+            String txHash = intent.getExtras().getString("txId");
+            Transaction t = WalletHelper.INSTANCE.getTransaction(Sha256Hash.wrap(txHash));
             onTransactionSend(t);
         } else if (action.equals(TRANSACTION_RECEIVED)) {
-            long id = intent.getExtras().getLong("txId");
-            Btc2BtcTransaction t = findBtcTransaction(id);
+            String txHash = intent.getExtras().getString("txId");
+            Transaction t = WalletHelper.INSTANCE.getTransaction(Sha256Hash.wrap(txHash));
             onTransactionSend(t);
         } else if (action.equals(LAST_BLOCK_RECEIVED)) {
             onLastDownloadedBlock();
@@ -56,15 +56,11 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
 
     }
 
-    private Btc2BtcTransaction findBtcTransaction(long id) {
-        return new Select().from(Btc2BtcTransaction.class).where("id = " + id).executeSingle();
-    }
-
-    public void onTransactionSend(Btc2BtcTransaction transaction) {
+    public void onTransactionSend(Transaction transaction) {
 
     }
 
-    public void onTransactionReceived(Btc2BtcTransaction transaction) {
+    public void onTransactionReceived(Transaction transaction) {
 
     }
 

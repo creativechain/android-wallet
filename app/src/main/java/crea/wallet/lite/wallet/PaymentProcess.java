@@ -12,9 +12,8 @@ import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.util.DialogFactory;
-import crea.wallet.lite.util.Utils;
-import com.chip_chap.services.task.Task;
-import com.chip_chap.services.task.TaskExceptionHandler;
+import crea.wallet.lite.util.Task;
+import crea.wallet.lite.util.TaskExceptionHandler;
 
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
@@ -26,13 +25,8 @@ import org.creativecoinj.wallet.SendRequest;
 import org.creativecoinj.wallet.Wallet;
 
 import java.io.File;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 

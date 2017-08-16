@@ -9,6 +9,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -28,7 +29,6 @@ import crea.wallet.lite.service.BlockchainService;
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
-import com.chip_chap.services.calls.Settings;
 import com.gotcreations.materialpin.managers.LockManager;
 
 import org.creativecoinj.core.Transaction;
@@ -84,7 +84,7 @@ public class WalletApplication extends Application {
         org.creativecoinj.core.Context.enableStrictMode();
         org.creativecoinj.core.Context.propagate(Constants.WALLET.CONTEXT);
         Log.d(TAG, "App in debug mode: " + Constants.TEST);
-        Settings.setPreapiEnable(Constants.TEST);
+
         initMnemonicCode();
         blockchainServiceIntent = new Intent(this, CreativeCoinService.class);
         blockchainServiceCancelCoinsReceivedIntent = new Intent(
@@ -274,6 +274,17 @@ public class WalletApplication extends Application {
         final Intent intent = new Intent(BlockchainService.ACTION_BROADCAST_TRANSACTION, null, this, CreativeCoinService.class);
         intent.putExtra(BlockchainService.ACTION_BROADCAST_TRANSACTION_HASH, tx.getHash().getBytes());
         startService(intent);
+    }
+
+    public boolean isLowRamDevice() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            return activityManager.isLowRamDevice();
+        else
+            return activityManager.getMemoryClass() <= Constants.MEMORY_CLASS_LOWEND;
+    }
+
+    public int getScryptIterations() {
+        return isLowRamDevice() ? 32768 : 65536;
     }
 
     public int maxConnectedPeers() 	{

@@ -24,8 +24,6 @@ import crea.wallet.lite.ui.adapter.BookAddressAdapter;
 import crea.wallet.lite.ui.base.AddressBookFragment;
 import crea.wallet.lite.util.IntentUtils;
 
-import com.chip_chap.services.util.Tags;
-
 import org.creativecoinj.core.Address;
 import org.creativecoinj.uri.BitcoinURI;
 import org.creativecoinj.uri.BitcoinURIParseException;
@@ -74,7 +72,7 @@ public class ContactAddressesFragment extends AddressBookFragment {
                         break;
                     case R.id.action_send:
                         Intent sendIntent = new Intent(getActivity(), SendCoinActivity.class);
-                        sendIntent.putExtra(Tags.ADDRESS, address.getAddress());
+                        sendIntent.putExtra("address", address.getAddress());
                         startActivity(sendIntent);
                         break;
                     case R.id.action_delete:

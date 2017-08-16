@@ -60,8 +60,9 @@ public class DynamicFeeLoader extends AsyncTask<Void, Map<FeeCategory, Coin>, Vo
         return null;
     }
 
+    @SafeVarargs
     @Override
-    protected void onProgressUpdate(Map<FeeCategory, Coin>... values) {
+    protected final void onProgressUpdate(Map<FeeCategory, Coin>... values) {
         Map<FeeCategory, Coin> staticFees = values[0];
         saveFees(staticFees);
     }
@@ -74,7 +75,7 @@ public class DynamicFeeLoader extends AsyncTask<Void, Map<FeeCategory, Coin>, Vo
     }
 
     private Map<FeeCategory, Coin> parseFees(final InputStream is) throws IOException {
-        final Map<FeeCategory, Coin> dynamicFees = new HashMap<FeeCategory, Coin>();
+        final Map<FeeCategory, Coin> dynamicFees = new HashMap<>();
         BufferedReader reader = null;
         String line = null;
         try {

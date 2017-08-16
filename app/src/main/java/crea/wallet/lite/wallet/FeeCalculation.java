@@ -3,14 +3,10 @@ package crea.wallet.lite.wallet;
 import android.util.Log;
 
 import crea.wallet.lite.application.Configuration;
-import crea.wallet.lite.application.Constants;
-import com.chip_chap.services.cash.coin.BitCoin;
 
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.InsufficientMoneyException;
-import org.creativecoinj.core.Transaction;
-import org.creativecoinj.core.TransactionOutput;
 import org.creativecoinj.uri.BitcoinURI;
 import org.creativecoinj.uri.BitcoinURIParseException;
 import org.creativecoinj.wallet.DefaultCoinSelector;
@@ -74,7 +70,7 @@ public class FeeCalculation {
         if (emptyWallet) {
             sReq = SendRequest.emptyWallet(address);
         } else {
-            PaymentIntent pi = PaymentIntent.fromBitcoinUri(new BitcoinURI("creativecoin:" + address.toString() + "?amount=" + BitCoin.valueOf(amountToSent.longValue()).getDoubleValue()));
+            PaymentIntent pi = PaymentIntent.fromBitcoinUri(new BitcoinURI("creativecoin:" + address.toString() + "?amount=" + Coin.valueOf(amountToSent.longValue()).toPlainString()));
             sReq = pi.toSendRequest();
         }
 

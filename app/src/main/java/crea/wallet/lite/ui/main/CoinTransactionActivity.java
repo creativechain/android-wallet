@@ -1,9 +1,7 @@
 package crea.wallet.lite.ui.main;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
@@ -11,115 +9,87 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
-import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.ui.base.TransactionActivity;
-import crea.wallet.lite.util.ConfirmationUpdater;
-
-import com.chip_chap.services.transaction.Btc2BtcTransaction;
-import com.chip_chap.services.util.ViewUpdater;
+import crea.wallet.lite.util.TxInfo;
 
 import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.Transaction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class CoinTransactionActivity extends TransactionActivity<Btc2BtcTransaction> implements ViewUpdater<Btc2BtcTransaction> {
+public class CoinTransactionActivity extends TransactionActivity {
 
     private static final String TAG = "BTCTransactionActivity";
-    public static final String ACTION_TX_UPDATE = CoinTransactionActivity.class.getPackage().getName();
 
-    public final BroadcastReceiver TX_UPDATE_RECEIVER = new BroadcastReceiver() {
+    public final BroadcastReceiver TX_UPDATE_RECEIVER = new BlockchainBroadcastReceiver() {
+
         @Override
-        public void onReceive(Context context, Intent intent) {
-            updateView(getTransaction());
+        public void onLastDownloadedBlock() {
+            setConfirmations();
         }
     };
 
-    private ConfirmationUpdater tUpdaterExecutor;
-    private Configuration conf;
+    private TextView confirmations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bitcoin_transaction);
-        setTransactionClass(Btc2BtcTransaction.class);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setFinishOnPause(false);
-        conf = Configuration.getInstance();
 
         TextView addressee = (TextView) findViewById(R.id.addressee);
         TextView sender = (TextView) findViewById(R.id.sender);
         TextView amount = (TextView) findViewById(R.id.amount);
         TextView fee = (TextView) findViewById(R.id.fee);
         TextView txHash = (TextView) findViewById(R.id.tx_hash);
-        TextView confirmations = (TextView) findViewById(R.id.confirmations);
+        confirmations = (TextView) findViewById(R.id.confirmations);
 
-        final Btc2BtcTransaction transaction = getTransaction();
+        final Transaction transaction = getTransaction();
+        TxInfo txInfo = new TxInfo(transaction);
+        confirmations.setText(String.valueOf(transaction.getConfidence().getDepthInBlocks()));
 
-        confirmations.setText(String.valueOf(transaction.getConfirmations()));
-
-        Coin coinAmount = Coin.valueOf(transaction.getSatoshis());
-        Coin coinFee = Coin.valueOf(transaction.getFee());
+        Coin coinAmount = txInfo.getAmountReceived();
+        Coin coinFee = txInfo.getFee();
         amount.setText(coinAmount.toFriendlyString());
         fee.setText(coinFee.toFriendlyString());
 
         final String url = Constants.URLS.BLOCKEXPLORER_URL;
 
-        txHash.setText(Html.fromHtml("<u>"+transaction.getTxHash() + "</u>"));
+        txHash.setText(Html.fromHtml("<u>"+transaction.getHashAsString() + "</u>"));
         txHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url  + transaction.getTxHash()));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url  + transaction.getHashAsString()));
                 startActivity(browserIntent);
             }
         });
 
-        String[] origins = transaction.getOrigins();
-        String[] destinies = transaction.getDestiny();
+        String[] origins = txInfo.getInputAddressesResolved().toArray(new String[]{});
+        String[] destinies = txInfo.getOutputAddressesResolved().toArray(new String[]{});
         ArrayList<String> resolvedInput = new ArrayList<>();
         ArrayList<String> resolvedOutput = new ArrayList<>();
 
-        for (String o : origins) {
-            BookAddress book = BookAddress.resolveAddress(o);
-            if (book != null && !TextUtils.isEmpty(book.getLabel())) {
-                resolvedInput.add(book.getLabel());
-            } else {
-                resolvedInput.add(o);
-            }
-        }
-
-        for (String o : destinies) {
-            BookAddress book = BookAddress.resolveAddress(o);
-            if (book != null && !TextUtils.isEmpty(book.getLabel())) {
-                resolvedOutput.add(book.getLabel());
-            } else {
-                resolvedOutput.add(o);
-            }
-        }
+        resolvedInput.addAll(Arrays.asList(origins));
+        resolvedOutput.addAll(Arrays.asList(destinies));
 
         sender.setText(TextUtils.join(", ", resolvedInput));
         addressee.setText(TextUtils.join(", ", resolvedOutput));
     }
 
-    @Override
-    public void updateView(final Btc2BtcTransaction btc2BtcTransaction) {
-
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                TextView confirmations = (TextView) findViewById(R.id.confirmations);
-                confirmations.setText(Integer.toString(btc2BtcTransaction.getConfirmations()));
-            }
-        });
+    public void setConfirmations() {
+        confirmations.setText(String.valueOf(getTransaction().getConfidence().getDepthInBlocks()));
     }
 
     @Override
     protected void onPause() {
-        tUpdaterExecutor.cancel();
-        tUpdaterExecutor = null;
         unregisterReceiver(TX_UPDATE_RECEIVER);
         super.onPause();
     }
@@ -127,10 +97,5 @@ public class CoinTransactionActivity extends TransactionActivity<Btc2BtcTransact
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(TX_UPDATE_RECEIVER, new IntentFilter(ACTION_TX_UPDATE + "." + getTransaction().getTxHash()));
-        if(tUpdaterExecutor == null) {
-            tUpdaterExecutor = ConfirmationUpdater.create(this, 120000L, getTransaction());
-            tUpdaterExecutor.start();
-        }
     }
 }

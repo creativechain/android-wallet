@@ -44,7 +44,6 @@
             android:name=".ui.tool.SeedActivity"
             android:label="@string/activity_seed"
             android:screenOrientation="portrait"/>
-
         <activity android:name=".ui.tool.PinActivity"/>
 
         <service
@@ -92,6 +91,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.tool.PaperWalletActivity">
+        </activity>
+        <activity android:name=".ui.tool.RBFActivity">
         </activity>
     </application>
 

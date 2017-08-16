@@ -7,9 +7,7 @@ import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.util.Io;
-import com.chip_chap.services.cash.Currency;
-import com.chip_chap.services.cash.coin.BitCoin;
-import com.chip_chap.services.user.WalletBalance;
+
 
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Block;

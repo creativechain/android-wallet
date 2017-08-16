@@ -20,11 +20,9 @@ import crea.wallet.lite.background.WalletExporter;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.QR;
+import crea.wallet.lite.util.Task;
 import crea.wallet.lite.wallet.FeeCategory;
 
-import com.activeandroid.query.Delete;
-import com.chip_chap.services.task.Task;
-import com.chip_chap.services.transaction.Btc2BtcTransaction;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -119,7 +117,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         conf.setDeletingBlockchain(true);
                         deleteBlockchain.setEnabled(false);
                         deleteBlockchain.setSummary(getString(R.string.synchronization_in_progress));
-                        new Delete().from(Btc2BtcTransaction.class).execute();
+
                     }
                 });
 

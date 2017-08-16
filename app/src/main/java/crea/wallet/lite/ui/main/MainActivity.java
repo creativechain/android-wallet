@@ -2,11 +2,17 @@ package crea.wallet.lite.ui.main;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Process;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
@@ -24,16 +31,17 @@ import crea.wallet.lite.ui.address.AddressBookActivity;
 import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.TransactionAdapter;
 import crea.wallet.lite.util.CoinConverter;
-import crea.wallet.lite.util.CreaCoin;
+import crea.wallet.lite.util.DeriveKeyTask;
 import crea.wallet.lite.util.QR;
+import crea.wallet.lite.util.TxInfo;
 import crea.wallet.lite.wallet.WalletHelper;
 
-import com.chip_chap.services.cash.Currency;
-import com.chip_chap.services.transaction.Btc2BtcTransaction;
-
+import org.creativecoinj.core.AbstractCoin;
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
+import org.creativecoinj.core.Transaction;
 import org.creativecoinj.wallet.Wallet;
+import org.spongycastle.crypto.params.KeyParameter;
 
 import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC_STARTED;
@@ -43,7 +51,7 @@ import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.PRICE_UPDAT
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_RECEIVED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_SENT;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, TransactionAdapter.OnOptionsClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -54,12 +62,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
 
         @Override
-        public void onTransactionSend(Btc2BtcTransaction transaction) {
+        public void onTransactionSend(Transaction transaction) {
             invalidateData();
         }
 
         @Override
-        public void onTransactionReceived(Btc2BtcTransaction transaction) {
+        public void onTransactionReceived(Transaction transaction) {
             invalidateData();
         }
 
@@ -114,19 +122,21 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         adapter = new TransactionAdapter(this);
         txList.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener<Btc2BtcTransaction>() {
+        adapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener<Transaction>() {
             @Override
-            public void OnItemClick(View v, int position, Btc2BtcTransaction tx) {
+            public void OnItemClick(View v, int position, Transaction tx) {
                 Intent txIntent = new Intent(MainActivity.this, CoinTransactionActivity.class);
-                txIntent.putExtra("id", tx.getId());
+                txIntent.putExtra("id", tx.getHashAsString());
                 startActivity(txIntent);
             }
 
             @Override
-            public boolean OnItemLongClick(View v, int position, Btc2BtcTransaction btc2BtcTransaction) {
+            public boolean OnItemLongClick(View v, int position, Transaction btc2BtcTransaction) {
                 return false;
             }
         });
+
+        adapter.setOptionsClickListener(this);
     }
 
     private void invalidateData() {
@@ -134,8 +144,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         final Coin total = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.ESTIMATED);
         final Coin pending = total.minus(WalletHelper.INSTANCE.getTotalBalance());
 
-        Currency main = conf.getMainCurrency();
-        com.chip_chap.services.cash.coin.base.Coin price = conf.getCreaPrice(main);
+        AbstractCoin price = conf.getPriceForMainCurrency();
 
         if (conf.isExchangeValueEnabled()) {
             valueInFiatView.setVisibility(View.VISIBLE);
@@ -145,11 +154,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
 
         final String totalFiat = new CoinConverter()
-                .amount(CreaCoin.valueOf(total.getValue()))
+                .amount(total)
                 .price(price)
-                .getConversion().toFriendlyString();
-
-
+                .toString();
 
         totalBtcView.post(new Runnable() {
             @Override
@@ -176,9 +183,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             });
 
             final String pendingFiat = new CoinConverter()
-                    .amount(CreaCoin.valueOf(pending.getValue()))
+                    .amount(pending)
                     .price(price)
-                    .getConversion().toFriendlyString();
+                    .toString();
 
             pendingFiatView.post(new Runnable() {
                 @Override
@@ -269,5 +276,59 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         unregisterReceiver(TRANSACTION_RECEIVER);
         CreativeCoinService.progressBar = null;
         super.onPause();
+    }
+
+    @Override
+    public void onOptionsClick(View view, TransactionAdapter.ViewHolder holder, final TxInfo txInfo) {
+        PopupMenu optionsMenu = new PopupMenu(this, view);
+
+        optionsMenu.inflate(txInfo.isReplaceable() ? R.menu.replaceable_transaction_options : R.menu.unreplaceable_transaction_options);
+
+        optionsMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+
+                switch (id) {
+                    case R.id.action_explore:
+                        final String url = Constants.URLS.BLOCKEXPLORER_URL;
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url  + txInfo.getHashAsString()));
+                        startActivity(browserIntent);
+                        break;
+                    case R.id.action_show_qr:
+                        byte[] txBytes = txInfo.getRaw();
+                        Bitmap txBitmap = QR.fromString(QR.encodeCompressBinary(txBytes));
+                        QR.getCoinQrDialog(MainActivity.this, txBitmap, txInfo.getHashAsString()).show();
+                        break;
+                    case R.id.action_change_fee:
+                        handleChangeFeeAction(txInfo);
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+        optionsMenu.show();
+    }
+
+    private void handleChangeFeeAction(TxInfo txInfo) {
+        HandlerThread backgroundThread = new HandlerThread("backgroundThread", Process.THREAD_PRIORITY_BACKGROUND);
+        backgroundThread.start();
+        Handler backgroundHandler = new Handler(backgroundThread.getLooper());
+
+        if (WalletHelper.INSTANCE.isWalletEncrypted()) {
+            new DeriveKeyTask(backgroundHandler, INSTANCE.getScryptIterations()) {
+
+                @Override
+                protected void onSuccess(KeyParameter encryptionKey, boolean changed) {
+                    if (changed) {
+                        INSTANCE.localBackupWallet();
+                    }
+
+
+                }
+            };
+        }
     }
 }

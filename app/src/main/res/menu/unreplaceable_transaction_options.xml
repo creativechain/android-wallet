@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item
+        android:id="@+id/action_explore"
+        android:title="@string/explore_in_browser"/>
+
+    <item
+        android:id="@+id/action_show_qr"
+        android:title="@string/show_qr" />
+
+</menu>

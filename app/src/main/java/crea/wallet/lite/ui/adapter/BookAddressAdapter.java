@@ -12,8 +12,8 @@ import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.util.CoinConverter;
 import crea.wallet.lite.wallet.WalletHelper;
-import com.chip_chap.services.cash.coin.BitCoin;
 
+import org.creativecoinj.core.AbstractCoin;
 import org.creativecoinj.core.Coin;
 
 import java.util.List;
@@ -51,13 +51,12 @@ public class BookAddressAdapter extends RecyclerAdapter<BookAddressAdapter.ViewH
         holder.amountView.setVisibility(walletAddresses ? View.VISIBLE : View.GONE);
         if (walletAddresses) {
             Coin balance = WalletHelper.INSTANCE.getMainAddressBalance(item.getAddress());
-            com.chip_chap.services.cash.coin.base.Coin fiat =
-                    new CoinConverter()
-                            .amount(BitCoin.valueOf(balance.getValue()))
+            AbstractCoin fiat = new CoinConverter()
+                            .amount(balance)
                             .price(conf.getCreaPrice(conf.getMainCurrency()))
                             .getConversion();
             holder.amountBtc.setText(balance.toFriendlyString().toLowerCase());
-            holder.amountFiat.setText(fiat.getDoubleValue() + " " + fiat.getCurrency().getCode().toLowerCase());
+            holder.amountFiat.setText(fiat.toFriendlyString());
         }
     }
 

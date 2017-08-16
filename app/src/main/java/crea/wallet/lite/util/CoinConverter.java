@@ -2,8 +2,14 @@ package crea.wallet.lite.util;
 
 import android.util.Log;
 
-import com.chip_chap.services.cash.Currency;
-import com.chip_chap.services.cash.coin.base.Coin;
+import com.google.common.math.LongMath;
+
+import org.creativecoinj.core.AbstractCoin;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import crea.wallet.lite.coin.CoinUtils;
 
 /**
  * Created by ander on 21/01/16.
@@ -12,44 +18,20 @@ public class CoinConverter {
 
     private static final String TAG = "CoinConverter";
 
-    private Coin price;
-    private Coin amountToConvert;
-    private Coin amountConverted;
+    private AbstractCoin price;
+    private AbstractCoin amountToConvert;
+    private AbstractCoin amountConverted;
 
-    public CoinConverter amount(Coin amount) {
+    public CoinConverter amount(AbstractCoin amount) {
         amountToConvert = amount;
         calculate();
         return this;
     }
-    
-    public CoinConverter amount(long amount, Currency currency) {
-        return amount(Coin.fromCurrency(currency, amount));
-    }
 
-    public CoinConverter amount(int amount, Currency currency) {
-        return amount(Coin.fromCurrency(currency, amount));
-    }
-
-    public CoinConverter amount(double amount, Currency currency) {
-        return amount(Coin.fromCurrency(currency, amount));
-    }
-
-    public CoinConverter price(Coin price) {
+    public CoinConverter price(AbstractCoin price) {
         this.price = price;
         calculate();
         return this;
-    }
-
-    public CoinConverter price(long price, Currency currency) {
-        return price(Coin.fromCurrency(currency, price));
-    }
-
-    public CoinConverter price(int price, Currency currency) {
-        return price(Coin.fromCurrency(currency, price));
-    }
-
-    public CoinConverter price(double price, Currency currency) {
-        return price(Coin.fromCurrency(currency, price));
     }
 
     private void calculate() {
@@ -58,14 +40,19 @@ public class CoinConverter {
         // 1 ------- PRICE
         // A ------- ?
 
-        if (price != null  && amountToConvert != null) {
-            //Log.d(TAG, amountToConvert.toFriendlyString() + " * " + price.toFriendlyString());
-            double converted = amountToConvert.getDoubleValue() * price.getDoubleValue();
-            amountConverted = Coin.fromCurrency(price.getCurrency(), converted);
+
+        if (price != null && amountToConvert != null && !price.isZero()) {
+            BigDecimal amount = BigDecimal.valueOf(amountToConvert.getValue(), amountToConvert.smallestUnitExponent());
+            BigDecimal priceAmount = BigDecimal.valueOf(price.getValue(), price.smallestUnitExponent());
+            BigDecimal converted = amount.multiply(priceAmount);
+
+
+            Log.d(TAG, converted.toString());
+            amountConverted = CoinUtils.valueOf(price.getCurrencyCode(), converted.doubleValue());
         }
     }
 
-    public Coin getConversion() {
+    public AbstractCoin getConversion() {
         return amountConverted;
     }
 
@@ -75,6 +62,6 @@ public class CoinConverter {
             return "0.00";
         }
 
-        return amountConverted.toPlainString();
+        return amountConverted.toFriendlyString();
     }
 }

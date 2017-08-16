@@ -48,13 +48,12 @@ import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
+import crea.wallet.lite.ui.base.TransactionActivity;
 import crea.wallet.lite.ui.main.CoinTransactionActivity;
 import crea.wallet.lite.ui.main.MainActivity;
 import crea.wallet.lite.util.TimeUtils;
 import crea.wallet.lite.wallet.WalletHelper;
 import crea.wallet.lite.wallet.WalletUtils;
-import com.chip_chap.services.status.TransactionStatus;
-import com.chip_chap.services.transaction.Btc2BtcTransaction;
 
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Block;
@@ -112,9 +111,6 @@ public class CreativeCoinService extends Service implements BlockchainService {
 	private static final int IDLE_TRANSACTION_TIMEOUT_MIN = 9;
 	private static final int MAX_HISTORY_SIZE = Math.max(IDLE_TRANSACTION_TIMEOUT_MIN, IDLE_BLOCK_TIMEOUT_MIN);
 
-	private static final String CASH_IN_TITLE = "BTC Cash In";
-	private static final String CASH_OUT_TITLE = "BTC Cash Out";
-
 	public static TextView progressBar;
 
 	private final AbstractWalletCoinListener WALLET_COIN_LISTENER = new AbstractWalletCoinListener() {
@@ -142,12 +138,9 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
 					if (isReceived && !isReplayedTx) {
 						//NOTIFY INPUT TRANSACTION
-						long id = saveTransaction(tx, CASH_IN_TITLE);
-						Log.e(TAG,"Saved transaction, id : " + id);
-						if (id > 0) {
-							notifyCoinsReceived(amount, id, addresses);
-							broadcastTransactionReceived(id);
-						}
+						String id = tx.getHashAsString();
+						notifyCoinsReceived(amount, id, addresses);
+						broadcastTransactionReceived(id);
 					}
 				}
 			});
@@ -156,7 +149,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 		@Override
 		public void onCoinsSent(Wallet wallet, Transaction tx, Coin coin, Coin coin1) {
 			transactionsReceived.incrementAndGet();
-			long id = saveTransaction(tx, CASH_OUT_TITLE);
+			String id = tx.getHashAsString();
 			broadcastTransactionSend(id);
 		}
 	};
@@ -184,51 +177,21 @@ public class CreativeCoinService extends Service implements BlockchainService {
 	private long serviceCreatedAt;
 	private boolean resetBlockchainOnShutdown = false;
 
-	private long saveTransaction(Transaction tx, String title) {
-		boolean cashIn = title.equals(CASH_IN_TITLE);
-		if (!Btc2BtcTransaction.exist(tx.getHashAsString())) {
-			final Btc2BtcTransaction transaction = new Btc2BtcTransaction();
-			transaction.setOrigins(WalletUtils.getAddressStrings(tx, WalletUtils.TRANSACTION_INPUTS, cashIn));
-			transaction.setDestiny(WalletUtils.getAddressStrings(tx, WalletUtils.TRANSACTION_OUTPUTS, cashIn));
-
-			transaction.setConfirmations(0);
-			transaction.setTitle(title);
-			transaction.setTxHash(tx.getHashAsString());
-			transaction.setStatus(TransactionStatus.OK);
-			transaction.setDate(String.valueOf(tx.getUpdateTime().getTime()));
-
-			if (cashIn) {
-				transaction.setSatoshis(WalletHelper.INSTANCE.getValueSentToMe(tx).getValue());
-			} else {
-				transaction.setSatoshis(WalletHelper.INSTANCE.getValueSentFromMe(tx).getValue());
-			}
-
-			Coin fee = tx.getFee() != null ? tx.getFee() : Coin.ZERO;
-
-			Log.e(TAG,tx.toString());
-
-			transaction.setFee(fee.getValue());
-			return transaction.save();
-		}
-
-		return 0;
-	}
-
-	private void broadcastTransactionSend(long id) {
+	private void broadcastTransactionSend(String id) {
 		notifyTransaction(id, BlockchainBroadcastReceiver.TRANSACTION_SENT);
 	}
 
-	private void broadcastTransactionReceived(long id) {
+	private void broadcastTransactionReceived(String id) {
 		notifyTransaction(id, BlockchainBroadcastReceiver.TRANSACTION_RECEIVED);
 	}
 
-	private void notifyTransaction(long id, String action) {
+	private void notifyTransaction(String id, String action) {
 		Intent sendIntent = new Intent(action);
 		sendIntent.putExtra("txId", id);
 		sendBroadcast(sendIntent);
 	}
 
-	private void notifyCoinsReceived(final Coin amount, long id, @Nullable final Address... addresses) {
+	private void notifyCoinsReceived(final Coin amount, String id, @Nullable final Address... addresses) {
 		if (!Configuration.getInstance().isNotificationsEnabled()) {
 			return;
 		}
@@ -255,7 +218,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		}
 
-		intent.putExtra("id", id);
+		intent.putExtra(TransactionActivity.TRANSACTION_ID, id);
 
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 

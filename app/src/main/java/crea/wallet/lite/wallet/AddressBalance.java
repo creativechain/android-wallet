@@ -69,8 +69,8 @@ public class AddressBalance implements CoinSelector {
                     depth2 = conf2.getDepthInBlocks();
                 Coin aValue = a.getValue();
                 Coin bValue = b.getValue();
-		BigInteger aCoinDepth = BigInteger.valueOf(aValue.value).multiply(BigInteger.valueOf(depth1));
-		BigInteger bCoinDepth = BigInteger.valueOf(bValue.value).multiply(BigInteger.valueOf(depth2));
+		BigInteger aCoinDepth = BigInteger.valueOf(aValue.getValue()).multiply(BigInteger.valueOf(depth1));
+		BigInteger bCoinDepth = BigInteger.valueOf(bValue.getValue()).multiply(BigInteger.valueOf(depth2));
                 int c1 = bCoinDepth.compareTo(aCoinDepth);
                 if (c1 != 0) return c1;
                 // The "coin*days" destroyed are equal, sort by value alone to get the lowest transaction size.

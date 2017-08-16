@@ -19,13 +19,14 @@ import android.widget.Toast;
 
 import crea.wallet.lite.R;
 
-import com.chip_chap.services.cash.coin.BitCoin;
-
 import net.glxn.qrgen.android.QRCode;
 
 import org.creativecoinj.core.Address;
+import org.creativecoinj.core.Coin;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.zip.GZIPOutputStream;
 
 import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 
@@ -49,7 +50,7 @@ public class QR {
         return fromString(uri.toString());
     }
 
-    public static Bitmap fromCoinUri(String address, BitCoin amount) {
+    public static Bitmap fromCoinUri(String address, Coin amount) {
         return fromUri(Uri.parse("creativecoin:" + address + (amount != null ? "?amount=" + amount.toPlainString() : "")));
     }
 
@@ -118,4 +119,23 @@ public class QR {
         return getCoinQrDialog(activity, fromCoinUri(address), address.toString());
     }
 
+    public static String encodeCompressBinary(final byte[] bytes) {
+        try {
+            final ByteArrayOutputStream bos = new ByteArrayOutputStream(bytes.length);
+            final GZIPOutputStream gos = new GZIPOutputStream(bos);
+            gos.write(bytes);
+            gos.close();
+
+            final byte[] gzippedBytes = bos.toByteArray();
+            final boolean useCompressioon = gzippedBytes.length < bytes.length;
+
+            final StringBuilder str = new StringBuilder();
+            str.append(useCompressioon ? 'Z' : '-');
+            str.append(Base43.encode(useCompressioon ? gzippedBytes : bytes));
+
+            return str.toString();
+        } catch (final IOException x) {
+            throw new RuntimeException(x);
+        }
+    }
 }

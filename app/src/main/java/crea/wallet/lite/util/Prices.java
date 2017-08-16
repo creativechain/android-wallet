@@ -3,8 +3,9 @@ package crea.wallet.lite.util;
 import android.support.annotation.NonNull;
 
 import crea.wallet.lite.application.Configuration;
-import com.chip_chap.services.cash.Currency;
-import com.chip_chap.services.cash.coin.base.Coin;
+import crea.wallet.lite.coin.CoinUtils;
+
+import org.creativecoinj.core.AbstractCoin;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,18 +17,19 @@ public class Prices {
 
     private static final String TAG = "Prices";
 
-    private static Map<Currency, Long> coinPrices = new HashMap<>();
+    private static Map<String, Long> coinPrices = new HashMap<>();
 
-    public static void setPrice(@NonNull Coin price) {
-        coinPrices.put(price.getCurrency(), price.getLongValue());
+    public static void setPrice(@NonNull AbstractCoin price) {
+        coinPrices.put(price.getCurrencyCode(), price.getValue());
         Configuration conf = Configuration.getInstance();
-        conf.setCreaPrice(price.getCurrency(), price.getLongValue());
+        conf.setCreaPrice(price.getCurrencyCode(), price.getValue());
     }
 
-    public static Coin getPrice(Currency c) {
+    public static AbstractCoin getPrice(String c) {
+        c = c.toUpperCase();
         long price = coinPrices.get(c);
         if (price > 0) {
-            return Coin.fromCurrency(c, price);
+            return CoinUtils.valueOf(c, price);
         } else {
             Configuration conf = Configuration.getInstance();
             return conf.getCreaPrice(c);

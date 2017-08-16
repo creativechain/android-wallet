@@ -4,7 +4,6 @@ import android.util.Log;
 
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.util.Sha384Hash;
-import com.chip_chap.services.user.User;
 
 import org.creativecoinj.crypto.MnemonicCode;
 import org.creativecoinj.crypto.MnemonicException;
@@ -63,7 +62,7 @@ public final class WalletGenerator {
     public WalletGenerator create(int num, CharSequence encryptionKey) throws MnemonicException.MnemonicChecksumException, MnemonicException.MnemonicLengthException, MnemonicException.MnemonicWordException {
         File f = fileFrom(num+1);
 
-        if (!f.exists() || User.getCurrentUser() == null || forceOverride) {
+        if (!f.exists() || forceOverride) {
             DeterministicSeed seed;
             if (num <= 1) {
                 seed = new DeterministicSeed(words, null, "", creationTime);

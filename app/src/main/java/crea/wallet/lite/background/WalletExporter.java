@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.db.WalletCrypt;
-import crea.wallet.lite.util.Utils;
+import crea.wallet.lite.util.Task;
 import crea.wallet.lite.wallet.WalletHelper;
-import com.chip_chap.services.task.Task;
 
 import org.creativecoinj.wallet.DeterministicSeed;
-import org.creativecoinj.wallet.Wallet;
 
 import java.util.List;
 

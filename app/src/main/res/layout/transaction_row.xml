@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_above="@+id/wallet_accept_btn"
-    app:contentPadding="5dp"
     android:id="@+id/broadcast_status"
     android:visibility="visible"
+    app:contentPaddingBottom="5dp"
     android:layout_margin="5dp">
 
     <LinearLayout
@@ -21,21 +21,39 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <crea.wallet.lite.widget.FontTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:font="material_icon"
-                android:text="\ue061"
-                android:textColor="@color/green"
-                android:id="@+id/transaction_status_icon"/>
-
-            <crea.wallet.lite.widget.FontTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:font="roboto_bold"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="0.95"
                 android:layout_marginLeft="5dp"
-                android:text="23 ago, a las 13:31"
-                android:id="@+id/transaction_date"/>
+                android:layout_marginTop="5dp">
+                <crea.wallet.lite.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.04"
+                    app:font="material_icon"
+                    android:text="\ue061"
+                    android:textColor="@color/green"
+                    android:id="@+id/transaction_status_icon"/>
+
+                <crea.wallet.lite.widget.FontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.86"
+                    app:font="roboto_bold"
+                    android:text="23 ago, a las 13:31"
+                    android:id="@+id/transaction_date"/>
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/transaction_options"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.05"
+                android:tint="?android:attr/textColorPrimary"
+                app:srcCompat="@drawable/ic_options"/>
         </LinearLayout>
 
         <LinearLayout
@@ -43,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
-            >
+            android:layout_marginRight="18dp">
 
             <crea.wallet.lite.widget.FontTextView
                 android:id="@+id/destination_address"
@@ -61,7 +79,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 app:font="roboto_bold"
-                android:text="0.236252 BTC"
+                android:text="0.236252 CREA"
                 android:gravity="right"/>
         </LinearLayout>
 
@@ -71,6 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
+            android:layout_marginRight="18dp"
             android:layout_marginTop="5dp">
 
             <crea.wallet.lite.widget.FontTextView
@@ -91,7 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:font="roboto_bold"
-                    android:text="0.006252 BTC"
+                    android:text="0.006252 CREA"
                     android:textColor="@color/colorPrimaryHint"
                     android:gravity="right"/>
 

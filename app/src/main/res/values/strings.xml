@@ -126,5 +126,7 @@
     <string name="spanish">Spanish</string>
     <string name="french">French</string>
     <string name="italian">Italian</string>
+    <string name="explore_in_browser">Explore in browser</string>
+    <string name="change_fee">Change fee</string>
 
 </resources>

@@ -22,11 +22,14 @@ import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
+import crea.wallet.lite.coin.CoinUtils;
+import crea.wallet.lite.ui.main.PrepareTxActivity;
 import crea.wallet.lite.util.CoinConverter;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.FormUtils;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.OnTextChangeListener;
+import crea.wallet.lite.util.Task;
 import crea.wallet.lite.wallet.AbstractPaymentProcessListener;
 import crea.wallet.lite.wallet.FeeCalculation;
 import crea.wallet.lite.wallet.FeeCategory;
@@ -34,12 +37,8 @@ import crea.wallet.lite.wallet.PaymentProcess;
 import crea.wallet.lite.wallet.PaymentProcessListener;
 import crea.wallet.lite.wallet.WalletHelper;
 import crea.wallet.lite.wallet.WalletUtils;
-import com.chip_chap.services.cash.Currency;
-import com.chip_chap.services.cash.coin.BitCoin;
-import com.chip_chap.services.task.Task;
-import com.chip_chap.services.transaction.Btc2BtcTransaction;
-import com.chip_chap.services.util.Tags;
 
+import org.creativecoinj.core.AbstractCoin;
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.Transaction;
@@ -54,90 +53,10 @@ import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_RECEIVED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_SENT;
 
-public class SendCoinActivity extends AppCompatActivity {
+public class SendCoinActivity extends PrepareTxActivity {
 
     private static final String TAG = "InputW2WActivity";
 
-    private final BlockchainBroadcastReceiver TRANSACTION_RECEIVER = new BlockchainBroadcastReceiver() {
-        @Override
-        public void onTransactionSend(Btc2BtcTransaction transaction) {
-            wallet = WalletHelper.INSTANCE.getMainWallet();
-        }
-
-        @Override
-        public void onTransactionReceived(Btc2BtcTransaction transaction) {
-            wallet = WalletHelper.INSTANCE.getMainWallet();
-        }
-    };
-
-    private final PaymentProcessListener CONFIDENCE_LISTENER = new AbstractPaymentProcessListener() {
-        @Override
-        public void onSigning() {
-            setState(State.SIGNING);
-        }
-
-        @Override
-        public void onSending() {
-            setState(State.SENDING);
-        }
-
-        @Override
-        public void onSuccess(Transaction tx) {
-            SendCoinActivity.this.tx = tx;
-            setState(State.SENT);
-        }
-
-        @Override
-        public void onInsufficientMoney(Coin missing) {
-            State result = State.FAILED;
-            result.setExplRes(getString(R.string.insufficient_money_text, missing.toFriendlyString()));
-            setState(result);
-        }
-
-        @Override
-        public void onInvalidEncryptionKey() {
-            State result = State.FAILED;
-            result.setExplRes(getString(R.string.invalid_encryption_key));
-            setState(result);
-        }
-
-        @Override
-        public void onFailure(Exception exception) {
-            State result = State.FAILED;
-            result.setExplRes(exception.getLocalizedMessage());
-            setState(result);
-        }
-
-        @Override
-        public void onConfidenceChanged(TransactionConfidence confidence, ChangeReason reason) {
-            TransactionConfidence.ConfidenceType type = confidence.getConfidenceType();
-            int peers = confidence.numBroadcastPeers();
-            State result = State.FAILED;
-            switch (type) {
-                case BUILDING:
-                    if (peers > 1) {
-                        result = State.SENT;
-                    } else {
-                        result = State.SENDING;
-                        result.setExplRes(getString(R.string.broadcasting_transaction_in_nodes, peers));
-                    }
-                    break;
-                case PENDING:
-                    result = State.SENDING;
-                    result.setExplRes(getString(R.string.broadcasting_transaction_in_nodes, peers));
-                    break;
-                case DEAD:
-                    result = State.FAILED;
-                    result.setExplRes(getString(R.string.already_spent_funds));
-                    break;
-
-            }
-
-            setState(result);
-        }
-    };
-
-    private Transaction tx;
     private SendRequest sReq;
     private EditText addressEditText;
     private EditText amountEditText;
@@ -154,20 +73,15 @@ public class SendCoinActivity extends AppCompatActivity {
     private CheckBox sendAllMoney;
     private View broadcastStatus;
     private View acceptBtn;
-    private Wallet wallet;
-    private Currency currency;
+    private String currency;
     private Task<Void> keyTask;
-    private Configuration conf;
     private Address address;
-    private FeeCategory feeCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_coin);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        conf = new Configuration(this);
 
         feeTextView = (TextView) findViewById(R.id.transaction_fee);
         sendAllMoney = (CheckBox) findViewById(R.id.send_all_money);
@@ -188,9 +102,6 @@ public class SendCoinActivity extends AppCompatActivity {
             WalletHelper.INSTANCE = WalletHelper.fromWallets();
         }
 
-        wallet = WalletHelper.INSTANCE.getMainWallet();
-
-        feeCategory = conf.getFeeCategory();
         setUpFeeOptions();
 
         amountEditText.setHint(getString(R.string.amount_in_currency, "CREA"));
@@ -207,7 +118,7 @@ public class SendCoinActivity extends AppCompatActivity {
         });
 
         toFiatAmount = (EditText) findViewById(R.id.to_fiat_amount);
-        toFiatAmount.setHint(getString(R.string.amount_in_currency, conf.getMainCurrency().getCode()));
+        toFiatAmount.setHint(getString(R.string.amount_in_currency, conf.getMainCurrency()));
         toFiatAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -283,17 +194,17 @@ public class SendCoinActivity extends AppCompatActivity {
 
             if (amount != null) {
                 amountEditText.requestFocus();
-                amountEditText.setText(BitCoin.valueOf(amount.getValue()).toPlainString());
+                amountEditText.setText(amount.toPlainString());
             }
 
-            calculateBitcoinFee();
+            calculateFee();
         } catch (BitcoinURIParseException e) {
             try {
                 String data = uri.toString();
                 Address a = Address.fromBase58(Constants.WALLET.NETWORK_PARAMETERS, data);
                 addressEditText.requestFocus();
                 addressEditText.setText(a.toString());
-                calculateBitcoinFee();
+                calculateFee();
             } catch (Exception e1) {
                 Toast.makeText(this, R.string.not_found_valid_data, Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -304,11 +215,11 @@ public class SendCoinActivity extends AppCompatActivity {
     private void handleBundleExtras(Bundle extras) {
         currency = conf.getMainCurrency();
         if (extras != null) {
-            if (extras.containsKey(Tags.CURRENCY)) {
-                currency = (Currency) extras.getSerializable(Tags.CURRENCY);
+            if (extras.containsKey("currency")) {
+                currency = extras.getString("currency");
             }
 
-            String address = extras.getString(Tags.ADDRESS);
+            String address = extras.getString("address");
             if (address != null && !address.isEmpty()) {
                 if (WalletUtils.isValidAddress(NETWORK_PARAMETERS, address)) {
                     addressEditText.setText(address);
@@ -317,11 +228,11 @@ public class SendCoinActivity extends AppCompatActivity {
                 }
             }
 
-            double amount = extras.getDouble(Tags.AMOUNT);
+            double amount = extras.getDouble("amount");
             if (amount > 0) {
                 amountEditText.setText(String.valueOf(amount));
                 amountEditText.requestFocus();
-                calculateBitcoinFee();
+                calculateFee();
             }
         }
 
@@ -349,7 +260,7 @@ public class SendCoinActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     feeCategory = FeeCategory.ECONOMIC;
-                    calculateBitcoinFee();
+                    calculateFee();
                 }
             }
         });
@@ -359,7 +270,7 @@ public class SendCoinActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     feeCategory = FeeCategory.NORMAL;
-                    calculateBitcoinFee();
+                    calculateFee();
                 }
             }
         });
@@ -369,7 +280,7 @@ public class SendCoinActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     feeCategory = FeeCategory.PRIORITY;
-                    calculateBitcoinFee();
+                    calculateFee();
                 }
             }
         });
@@ -380,7 +291,7 @@ public class SendCoinActivity extends AppCompatActivity {
         if (!enable) {
             amountEditText.requestFocus();
             FeeCalculation feeCalculation = new FeeCalculation(wallet, feeCategory);
-            BitCoin amount = BitCoin.valueOf(feeCalculation.getTotalToSent().getValue());
+            Coin amount = feeCalculation.getTotalToSent();
             amountEditText.setText(amount.toPlainString());
         }
 
@@ -396,20 +307,21 @@ public class SendCoinActivity extends AppCompatActivity {
         if (number.matches("-?\\d+(\\.\\d+)?")) {
 
             CoinConverter converter = new CoinConverter();
+            AbstractCoin price = conf.getPriceForMainCurrency();
             double amount = Double.parseDouble(number);
             if (amount > 0) {
                 if (id == amountEditText.getId()) {
-                    converter.amount(BitCoin.valueOf(amount)).price(conf.getPriceForMainCurrency());
+                    converter.amount(CoinUtils.valueOf("CREA", amount)).price(price);
                     toFiatAmount.setText(converter.toString());
                 } else  {
-                    double btcPrice = 1 / conf.getPriceForMainCurrency().getDoubleValue();
-                    BitCoin price = BitCoin.valueOf(btcPrice);
-                    converter.amount(com.chip_chap.services.cash.coin.base.Coin.fromCurrency(conf.getMainCurrency(), amount))
-                            .price(price );
+                    double fiatDouble = 1 / price.getValue();
+                    AbstractCoin fiatPrice = CoinUtils.valueOf("CREA", fiatDouble);
+                    converter.amount(CoinUtils.valueOf(conf.getMainCurrency(), amount))
+                            .price(fiatPrice);
                     amountEditText.setText(converter.toString());
                 }
 
-                calculateBitcoinFee();
+                calculateFee();
             } else {
                 feeTextView.setTextColor(errorColor);
                 amountEditText.setTextColor(errorColor);
@@ -419,11 +331,11 @@ public class SendCoinActivity extends AppCompatActivity {
 
         } else {
             feeTextView.setTextColor(errorColor);
-            feeTextView.setText(String.format(getResources().getString(R.string.enter_valid_amount), currency.getName()));
+            feeTextView.setText(String.format(getResources().getString(R.string.enter_valid_amount), currency));
         }
     }
 
-    private void calculateBitcoinFee() {
+    private void calculateFee() {
         int normalColor = getResources().getColor(R.color.gray_2e2);
         int normalColorBlue = getResources().getColor(R.color.colorPrimary);
         int errorColor = getResources().getColor(R.color.red);
@@ -459,7 +371,8 @@ public class SendCoinActivity extends AppCompatActivity {
                 toFiatAmount.setTextColor(errorColor);
             }
 
-            setState(feeCalculation.isToDonationAddress() ? null : State.PREPARED);
+
+            onTransactionState(feeCalculation.isToDonationAddress() ? null : State.PREPARED);
         }
 
     }
@@ -505,7 +418,8 @@ public class SendCoinActivity extends AppCompatActivity {
 
     }
 
-    private void setState(final State state) {
+    @Override
+    public void onTransactionState(final State state) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -525,10 +439,10 @@ public class SendCoinActivity extends AppCompatActivity {
 
                         Coin totalOutput = tx.getOutputSum();
                         Coin feeOutput = tx.getFee();
-                        com.chip_chap.services.cash.coin.base.Coin feeConversion
+                        AbstractCoin feeConversion
                                 = new CoinConverter()
-                                .amount(BitCoin.valueOf(feeOutput.getValue()))
-                                .price(conf.getCreaPrice(Currency.EUR)).getConversion();
+                                .amount(feeOutput)
+                                .price(conf.getPriceForMainCurrency()).getConversion();
 
                         destinyAddress.setText(getAddress().toString());
                         destinyAmount.setText(totalOutput.toFriendlyString());
@@ -547,7 +461,6 @@ public class SendCoinActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void getPinFromUser() {
@@ -582,24 +495,6 @@ public class SendCoinActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver();
-    }
-
-    @Override
-    protected void onPause() {
-        unregisterReceiver(TRANSACTION_RECEIVER);
-        super.onPause();
-    }
-
-    private void registerReceiver() {
-        IntentFilter filter = new IntentFilter(TRANSACTION_SENT);
-        filter.addAction(TRANSACTION_RECEIVED);
-        registerReceiver(TRANSACTION_RECEIVER, filter);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
@@ -613,11 +508,5 @@ public class SendCoinActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.bad_pn_too_many_times, Toast.LENGTH_LONG).show();
             }
         }
-    }
-    
-    @Override
-    protected void onDestroy() {
-        DialogFactory.removeDialogsFrom(getClass());
-        super.onDestroy();
     }
 }
