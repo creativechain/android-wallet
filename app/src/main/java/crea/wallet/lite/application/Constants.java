@@ -35,20 +35,19 @@ import java.io.File;
  * @author Andreas Schildbach
  */
 public final class Constants {
-	public static final boolean TEST = false;
+	public static final boolean TEST = true;
 
 	/** Network this wallet is on (e.g. testnet or mainnet). */
 	public final static class APP {
 
 		public static final String VERSION = BuildConfig.VERSION_NAME;
 		public static final String CREATIVECHAIN_PATH = FILES.DATA_DIRECTORY.getAbsolutePath() + "/Creativechain/";
-		public static final String BARCODE_PATH = CREATIVECHAIN_PATH + "Barcode/";
 
 		/** Folder for backups */
 		public static final String BACKUP_FOLDER = Environment.getExternalStorageDirectory().getAbsolutePath() + "/CreativeChain/Backup/";
 
 		/** User-agent to use for network access. */
-		public static final String CLIENT_NAME = "Creativechain Wallet";
+		public static final String CLIENT_NAME = "CreativecoinWallet";
 
 		/** MIME type used for transmitting single transactions. */
 		public static final String MIMETYPE_TRANSACTION = "application/x-btctx";
@@ -91,7 +90,7 @@ public final class Constants {
 		public static final String CHECKPOINTS_FILENAME = "checkpoints" + FILES.FILENAME_NETWORK_SUFFIX + "chkp";
 
 		public static final String MAIN_ADDRESS = "CPw1tJF6wWcdXPKYwS4pg3wF37XVqJZ9JC";
-		public static final String TEST_ADDRESS = "mgvgQKuyUMyT1C5VT7iYDt1cFF1MPaHTNt";
+		public static final String TEST_ADDRESS = "cLGBL8Jb5iAchT86xGrZjqHSRry1aya6bb";
 		public static final String ADDRESS = TEST ? TEST_ADDRESS : MAIN_ADDRESS;
 		public static final Address DONATION_ADDRESS = Address.fromBase58(WALLET.NETWORK_PARAMETERS, ADDRESS);
 
