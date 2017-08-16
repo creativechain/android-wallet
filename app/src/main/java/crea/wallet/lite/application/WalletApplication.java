@@ -246,13 +246,15 @@ public class WalletApplication extends Application {
     }
 
     public void migrateBackup() {
-        if (!Constants.WALLET.MAIN_WALLET_BACKUP_FILE.exists()) {
-            Log.d(TAG, "migrating automatic backup to protobuf");
+        migrateBackup(true);
+    }
 
-            // make sure there is at least one recent backup
-            localBackupWallet();
-        } else {
+    public void migrateBackup(boolean checkIfExist) {
+        if (checkIfExist && Constants.WALLET.MAIN_WALLET_BACKUP_FILE.exists()) {
             Log.e(TAG, "Wallet backup exist");
+        } else {
+            Log.d(TAG, "migrating automatic backup to protobuf");
+            localBackupWallet();
         }
     }
 

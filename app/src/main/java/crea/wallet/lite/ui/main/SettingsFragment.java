@@ -17,6 +17,7 @@ import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.background.WalletExporter;
+import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.QR;
@@ -137,11 +138,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void exportSeed() {
+    private void exportSeed(String pin) {
         final ProgressDialog pDialog = DialogFactory.progress(getActivity(), R.string.mnemonic_code, R.string.getting_mnemonic_code);
         pDialog.setCancelable(false);
         pDialog.show();
-        new WalletExporter(Configuration.getInstance().getPin(), new Task<Bundle>() {
+        new WalletExporter(pin, new Task<Bundle>() {
             @Override
             public void doTask(Bundle data) {
                 pDialog.dismiss();
@@ -179,7 +180,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         if (resultCode == RESULT_OK) {
             if (requestCode == IntentUtils.PIN) {
-                exportSeed();
+                String pin = data.getStringExtra(PinActivity.EXTRA_CODE);
+                exportSeed(pin);
             }
         }
     }

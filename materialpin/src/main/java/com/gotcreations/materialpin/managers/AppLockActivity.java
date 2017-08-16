@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.gotcreations.materialpin.PinActivity;
 import com.gotcreations.materialpin.R;
+import com.gotcreations.materialpin.encryption.Encryptor;
+import com.gotcreations.materialpin.enums.Algorithm;
 import com.gotcreations.materialpin.enums.KeyboardButtonEnum;
 import com.gotcreations.materialpin.interfaces.KeyboardButtonClickedListener;
 import com.gotcreations.materialpin.views.KeyboardView;
@@ -33,6 +35,7 @@ public abstract class AppLockActivity extends PinActivity implements KeyboardBut
 
     public static final String TAG = AppLockActivity.class.getSimpleName();
     public static final String ACTION_CANCEL = TAG + ".actionCancelled";
+    public static final String EXTRA_CODE = TAG + ".extra_code";
     private static final int DEFAULT_PIN_LENGTH = 4;
 
     protected TextView mStepTextView;
@@ -292,7 +295,12 @@ public abstract class AppLockActivity extends PinActivity implements KeyboardBut
                 break;
             case AppLock.CONFIRM_PIN:
                 if (mPinCode.equals(mOldPinCode)) {
-                    setResult(RESULT_OK);
+                    Intent data = new Intent();
+                    byte[] hashed = Encryptor.getSHA(mPinCode, Algorithm.SHA256);
+                    String hashedText = new String(hashed);
+                    data.putExtra(EXTRA_CODE, hashedText);
+                    setResult(RESULT_OK, data);
+
                     mLockManager.getAppLock().setPasscode(mPinCode);
                     onPinCodeSuccess();
                     finish();
@@ -316,7 +324,11 @@ public abstract class AppLockActivity extends PinActivity implements KeyboardBut
                 break;
             case AppLock.UNLOCK_PIN:
                 if (mLockManager.getAppLock().checkPasscode(mPinCode)) {
-                    setResult(RESULT_OK);
+                    Intent data = new Intent();
+                    byte[] hashed = Encryptor.getSHA(mPinCode, Algorithm.SHA256);
+                    String hashedText = new String(hashed);
+                    data.putExtra(EXTRA_CODE, hashedText);
+                    setResult(RESULT_OK, data);
                     onPinCodeSuccess();
                     finish();
                 } else {

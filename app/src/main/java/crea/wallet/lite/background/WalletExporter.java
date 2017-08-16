@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.util.Task;
 import crea.wallet.lite.wallet.WalletHelper;
@@ -26,7 +27,7 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
     /**
      * Method to export the DeterministicSeed valueOf a wallet.
      */
-    public static final int DETERMINISTIC_SEED = 0;
+    public static final int MIGRATION = 0;
     private String key;
     private Task<Bundle> task;
     private int mode = 0;
@@ -37,7 +38,7 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
      * @param task the Task that will be executed in Exception error.
      * @param mode the exporter mode. Can be: <b/><pre/>
      *             {@link WalletExporter#MNEMONIC_CODE}<b/><pre/>
-     *             {@link WalletExporter#DETERMINISTIC_SEED}
+     *             {@link WalletExporter#MIGRATION}
      */
     public WalletExporter(String key, Task<Bundle> task, int mode) {
         this.key = key;
@@ -58,43 +59,51 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
     @Override
     protected Bundle doInBackground(Void... voids) {
         long creationTime;
-
-        String k = null;
         WalletCrypt walletCrypt = WalletCrypt.getInstance();
+        String k = null;
+        Bundle bundle = new Bundle();
 
-        try {
-            if (WalletHelper.INSTANCE.isWalletEncrypted()) {
-                Log.d(TAG, "pass: " + key);
-                Log.d(TAG, walletCrypt.toString());
-                k = walletCrypt.generate(key);
-                Log.d(TAG, "Decrypting with: " + org.creativecoinj.core.Utils.HEX.encode(k.getBytes()));
+        switch (mode) {
+            case MIGRATION:
+                if (WalletHelper.INSTANCE.isWalletEncrypted()) {
+                    k = walletCrypt.generate(key);
+                    WalletHelper.INSTANCE.decrypt(k);
+                } else {
+                    k = key;
+                }
+
+                WalletHelper.INSTANCE.encrypt(k);
+                WalletApplication.INSTANCE.migrateBackup(false);
+                return bundle;
+            case MNEMONIC_CODE:
+                try {
+                    if (WalletHelper.INSTANCE.isWalletEncrypted()) {
+                        Log.d(TAG, "pass: " + key);
+                        k = key;
+                        Log.d(TAG, "Decrypting with: " + org.creativecoinj.core.Utils.HEX.encode(k.getBytes()));
+                        WalletHelper.INSTANCE.decrypt(k);
+                    } else {
+                        Log.d(TAG, "Wallet not encrypted");
+                    }
+
+                    String seed;
+                    DeterministicSeed dSeed = WalletHelper.INSTANCE.getKeyChainSeed();
+                    seed = getMnemonicCodeAsString(dSeed.getMnemonicCode());
+                    creationTime = dSeed.getCreationTimeSeconds();
+
+                    Log.i(TAG, "seed: " + seed + ", creation time: " + creationTime);
 
 
-                WalletHelper.INSTANCE.decrypt(k);
-            } else {
-                Log.d(TAG, "Wallet not encrypted");
-            }
+                    WalletHelper.INSTANCE.encrypt(k);
+                    WalletHelper.INSTANCE.save();
 
-            String seed;
-            DeterministicSeed dSeed = WalletHelper.INSTANCE.getKeyChainSeed();
-            seed = getMnemonicCodeAsString(dSeed.getMnemonicCode());
-            creationTime = dSeed.getCreationTimeSeconds();
+                    bundle.putString("exported", seed);
+                    bundle.putLong("creation_time", creationTime);
+                    return bundle;
 
-            Log.i(TAG, "seed: " + seed + ", creation time: " + creationTime);
-
-            if (k == null) {
-                k = walletCrypt.generate(key);
-            }
-            WalletHelper.INSTANCE.encrypt(k);
-            WalletHelper.INSTANCE.save();
-
-            Bundle bundle = new Bundle();
-            bundle.putString("exported", seed);
-            bundle.putLong("creation_time", creationTime);
-            return bundle;
-
-        } catch (Throwable e) {
-            Log.e(TAG, "Failed to decrypt wallet", e);
+                } catch (Throwable e) {
+                    Log.e(TAG, "Failed to decrypt wallet", e);
+                }
         }
 
         return null;

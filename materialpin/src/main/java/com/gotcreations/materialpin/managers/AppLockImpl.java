@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
@@ -274,7 +273,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
 
         String salt = getSalt();
         passcode = salt + passcode + salt;
-        passcode = Encryptor.getSHA(passcode, algorithm);
+        passcode = Encryptor.getSHAHex(passcode, algorithm);
         String storedPasscode = "";
 
         if (mSharedPreferences.contains(PASSWORD_PREFERENCE_KEY)) {
@@ -298,7 +297,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
         } else {
             passcode = salt + passcode + salt;
             setAlgorithm(Algorithm.SHA256);
-            passcode = Encryptor.getSHA(passcode, Algorithm.SHA256);
+            passcode = Encryptor.getSHAHex(passcode, Algorithm.SHA256);
             editor.putString(PASSWORD_PREFERENCE_KEY, passcode);
             editor.apply();
             this.enable();

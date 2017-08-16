@@ -1,6 +1,7 @@
 package com.gotcreations.materialpin.encryption;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.gotcreations.materialpin.enums.Algorithm;
 
@@ -33,26 +34,33 @@ public class Encryptor {
         return hs.toLowerCase(Locale.ENGLISH);
     }
 
+    public static byte[] getSHA(String text, Algorithm algorithm) {
+        return getSHA(text.getBytes(), algorithm);
+    }
+
+    public static byte[] getSHA(byte[] data, Algorithm algorithm) {
+
+        MessageDigest shaDigest = getShaDigest(algorithm);
+
+        if (data != null && shaDigest != null) {
+            shaDigest.update(data, 0, data.length);
+            return shaDigest.digest();
+        }
+
+        return null;
+    }
     /**
      * Allows to get the SHA of a {@link String} using {@link MessageDigest}
      * if device does not support sha-256, fall back to sha-1 instead
      */
-    public static String getSHA(String text, Algorithm algorithm) {
+    public static String getSHAHex(String text, Algorithm algorithm) {
         String sha = "";
         if (TextUtils.isEmpty(text)) {
             return sha;
         }
 
-        MessageDigest shaDigest = getShaDigest(algorithm);
-
-        if (shaDigest != null) {
-            byte[] textBytes = text.getBytes();
-            shaDigest.update(textBytes, 0, text.length());
-            byte[] shahash = shaDigest.digest();
-            return bytes2Hex(shahash);
-        }
-
-        return null;
+        byte[] data = getSHA(text, algorithm);
+        return bytes2Hex(data);
     }
 
     /**
@@ -68,6 +76,7 @@ public class Encryptor {
                 try {
                     return MessageDigest.getInstance("SHA-256");
                 } catch (Exception e) {
+                    Log.d("Error", "", e);
                     try {
                         return MessageDigest.getInstance("SHA-1");
                     } catch (Exception e2) {

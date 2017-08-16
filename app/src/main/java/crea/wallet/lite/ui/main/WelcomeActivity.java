@@ -20,6 +20,7 @@ import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.db.WalletCrypt;
+import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.SeedActivity;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
@@ -201,16 +202,9 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    WalletCrypt walletCrypt = WalletCrypt.random();
-                    walletCrypt.save();
-
-                    Log.d(TAG, walletCrypt.toString());
-                    Log.d(TAG, "Pass: " + pin);
-                    String pass = walletCrypt.generate(pin);
-                    Log.d(TAG, "Ecrypting with: " + Utils.HEX.encode(pass.getBytes()));
-                    WalletHelper.INSTANCE.encrypt(pass);
+                    WalletHelper.INSTANCE.encrypt(pin);
                     WalletHelper.INSTANCE.save();
-                    WalletApplication.INSTANCE.migrateBackup();
+                    WalletApplication.INSTANCE.migrateBackup(false);
                     publishProgress(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -271,7 +265,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d(TAG, "IMPORTED SEED: " + seed.toString());
                 showCreationTimeDialog();
             } else if (requestCode == IntentUtils.PIN) {
-                String pin = Configuration.getInstance().getPin();
+                String pin = data.getStringExtra(PinActivity.EXTRA_CODE);
                 cypherWallet(pin);
             }
         }
