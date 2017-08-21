@@ -40,6 +40,12 @@ public class IntentUtils {
         activity.startActivityForResult(pinIntent, PIN);
     }
 
+    public static void changePin(Activity activity) {
+        Intent pinIntent = new Intent(activity, PinActivity.class);
+        pinIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.CHANGE_PIN);
+        activity.startActivityForResult(pinIntent, PIN);
+    }
+
     public static void checkPin(Activity activity) {
         Intent pinIntent = new Intent(activity, PinActivity.class);
         pinIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);

@@ -119,4 +119,14 @@
     <string name="skip">Saltar</string>
     <string name="wallet_creation_date">Fecha de creación</string>
     <string name="wallet_creation_time_text">Recuerdas cuando creaste esta cartera? La sincronización puede ser mucho mas rapida si indecas la fecha de creación.</string>
+    <string name="change_pin_for_security">Para mejorar la seguridad de tu billetera es necesario que vuelvas a introducir el PIN de 4 dígitos que creaste. Vamos a mejorar el cifrado de tu billetera con un nuevo sistema de seguridad que proporcionará mayor robustez.</string>
+    <string name="change_fee">Cambiar comisión</string>
+    <string name="english">Inglés</string>
+    <string name="explore_in_browser">Ver en un explorador</string>
+    <string name="export_xprv">Exportar Clave Privada Maestra</string>
+    <string name="french">Francés</string>
+    <string name="indicate_words_language">Indica el idioma de las palabras</string>
+    <string name="italian">Italiano</string>
+    <string name="security">Seguridad</string>
+    <string name="spanish">Español</string>
 </resources>

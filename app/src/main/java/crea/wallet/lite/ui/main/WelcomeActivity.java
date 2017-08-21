@@ -74,10 +74,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         IntentUtils.inputSeed(this);
     }
 
-    private void setProgressText(CharSequence text) {
-        progressText.setText(text);
-    }
-
     private void setProgressText(@StringRes int text) {
         progressText.setText(text);
     }
@@ -205,6 +201,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                     WalletHelper.INSTANCE.encrypt(pin);
                     WalletHelper.INSTANCE.save();
                     WalletApplication.INSTANCE.migrateBackup(false);
+                    Configuration.getInstance().setSecurityModeActive(true);
                     publishProgress(true);
                 } catch (Exception e) {
                     e.printStackTrace();

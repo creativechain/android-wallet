@@ -68,6 +68,7 @@ public class Configuration {
 	public static final String PREFS_KEY_SHOW_EXCHANGE_VALUE = "show_exchange_value";
 	public static final String PREFS_KEY_PRICE_UPDATE_INTERVAL = "price_update_interval";
 	public static final String PREFS_KEY_SPEND_UNCONFIRMED_TX = "spend_unconfirmed_tx";
+	public static final String PREFS_KEY_NEW_SECURITY_MODE = "new_security_mode";
 
 	private static final int PREFS_DEFAULT_BTC_SHIFT = 8;
 	private static final int PREFS_DEFAULT_BTC_PRECISION = 8;
@@ -314,6 +315,14 @@ public class Configuration {
 
     public boolean isSpendPendintTxAvailable() {
 		return prefs.getBoolean(PREFS_KEY_SPEND_UNCONFIRMED_TX, false);
+	}
+
+	public void setSecurityModeActive(boolean active) {
+		prefs.edit().putBoolean(PREFS_KEY_NEW_SECURITY_MODE, active).apply();
+	}
+
+	public boolean isNewSecurityModeActive() {
+		return prefs.getBoolean(PREFS_KEY_NEW_SECURITY_MODE, false);
 	}
 
 	public static Configuration getInstance() {

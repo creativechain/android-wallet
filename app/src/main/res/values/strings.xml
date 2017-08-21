@@ -128,5 +128,8 @@
     <string name="italian">Italian</string>
     <string name="explore_in_browser">Explore in browser</string>
     <string name="change_fee">Change fee</string>
+    <string name="security">Security</string>
+    <string name="change_pin_for_security">To improve the security of your wallet, you need to re-enter the 4-digit PIN you created. We will improve the encryption of your wallet with a new security system that will provide greater robustness.</string>
+    <string name="invalid_pin">Invalid PIN</string>
 
 </resources>

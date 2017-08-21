@@ -65,16 +65,21 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
 
         switch (mode) {
             case MIGRATION:
-                if (WalletHelper.INSTANCE.isWalletEncrypted()) {
-                    k = walletCrypt.generate(key);
-                    WalletHelper.INSTANCE.decrypt(k);
-                } else {
-                    k = key;
+                try {
+                    if (WalletHelper.INSTANCE.isWalletEncrypted()) {
+                        k = walletCrypt.generate(key);
+                        WalletHelper.INSTANCE.decrypt(k);
+                    } else {
+                        k = key;
+                    }
+
+                    WalletHelper.INSTANCE.encrypt(k);
+                    WalletApplication.INSTANCE.migrateBackup(false);
+                    return bundle;
+                } catch (Throwable e) {
+                    Log.e(TAG, "Failed to decrypt wallet", e);
                 }
 
-                WalletHelper.INSTANCE.encrypt(k);
-                WalletApplication.INSTANCE.migrateBackup(false);
-                return bundle;
             case MNEMONIC_CODE:
                 try {
                     if (WalletHelper.INSTANCE.isWalletEncrypted()) {
