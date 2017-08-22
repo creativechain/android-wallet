@@ -7,6 +7,7 @@ import android.util.Log;
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.TransactionInput;
 import org.creativecoinj.core.TransactionOutput;
 
 import java.util.ArrayList;
@@ -47,13 +48,11 @@ public class TxInfo {
         if (outputs != null && !outputs.isEmpty()) {
             for (TransactionOutput out : outputs) {
                 if (out.isMine(INSTANCE.getWallet())) {
-                    if (sentFromUser) {
-                        //Change Address
-                    } else {
+                    if (!sentFromUser) {
                         //Received
                         amountReceived = amountReceived.add(out.getValue());
                         try {
-                            inputAddresses.add(out.getScriptPubKey().getToAddress(NETWORK_PARAMETERS, true));
+                            outputAddresses.add(out.getScriptPubKey().getToAddress(NETWORK_PARAMETERS, true));
                         } catch (Exception ignored) {
                             Log.e(TAG, "Fail to get Address", ignored);
                         }
@@ -95,7 +94,7 @@ public class TxInfo {
     }
 
     public boolean isRBFTransaction() {
-        return tx.getPurpose() == Transaction.Purpose.RAISE_FEE;
+        return getAddressesResolved().isEmpty();
     }
 
     public long getTime() {
@@ -160,7 +159,7 @@ public class TxInfo {
     }
 
     public List<String> getAddressesResolved() {
-        return isSentFromUser() ? getOutputAddressesResolved() : getInputAddressesResolved();
+        return getOutputAddressesResolved();
     }
 
 

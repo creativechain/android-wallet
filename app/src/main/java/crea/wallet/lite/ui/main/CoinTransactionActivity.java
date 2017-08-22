@@ -2,6 +2,7 @@ package crea.wallet.lite.ui.main;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
@@ -35,6 +36,9 @@ public class CoinTransactionActivity extends TransactionActivity {
     };
 
     private TextView confirmations;
+    private View rbfDetail;
+    private View senderDetail;
+    private View addresseeDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,10 @@ public class CoinTransactionActivity extends TransactionActivity {
         TextView amount = (TextView) findViewById(R.id.amount);
         TextView fee = (TextView) findViewById(R.id.fee);
         TextView txHash = (TextView) findViewById(R.id.tx_hash);
+        rbfDetail = findViewById(R.id.rbf_detail);
+        senderDetail = findViewById(R.id.sender_detail);
+        addresseeDetail = findViewById(R.id.addressee_detail);
+
         confirmations = (TextView) findViewById(R.id.confirmations);
 
         final Transaction transaction = getTransaction();
@@ -82,6 +90,18 @@ public class CoinTransactionActivity extends TransactionActivity {
 
         sender.setText(TextUtils.join(", ", resolvedInput));
         addressee.setText(TextUtils.join(", ", resolvedOutput));
+
+        if (resolvedInput.isEmpty()) {
+            senderDetail.setVisibility(View.GONE);
+        }
+
+        if (resolvedOutput.isEmpty()) {
+            addresseeDetail.setVisibility(View.GONE);
+        }
+
+        if (txInfo.isRBFTransaction()) {
+            rbfDetail.setVisibility(View.VISIBLE);
+        }
     }
 
     public void setConfirmations() {
@@ -90,12 +110,13 @@ public class CoinTransactionActivity extends TransactionActivity {
 
     @Override
     protected void onPause() {
-        //unregisterReceiver(TX_UPDATE_RECEIVER);
+        unregisterReceiver(TX_UPDATE_RECEIVER);
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        registerReceiver(TX_UPDATE_RECEIVER, new IntentFilter(BlockchainBroadcastReceiver.LAST_BLOCK_RECEIVED));
         super.onResume();
     }
 }

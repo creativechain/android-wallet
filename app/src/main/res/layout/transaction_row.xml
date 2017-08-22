@@ -28,6 +28,7 @@
                 android:layout_weight="0.95"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp">
+
                 <crea.wallet.lite.widget.FontTextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -35,6 +36,7 @@
                     app:font="material_icon"
                     android:text="\ue061"
                     android:textColor="@color/green"
+                    android:gravity="center"
                     android:id="@+id/transaction_status_icon"/>
 
                 <crea.wallet.lite.widget.FontTextView

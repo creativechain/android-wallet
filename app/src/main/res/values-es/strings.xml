@@ -133,4 +133,5 @@
     <string name="raise_fee_to">Increamentar comisión a</string>
     <string name="raise_fee_tx">Incremento de comisión</string>
     <string name="rbf_warning">Atención! Esta acción reemplaza una transacción ya emitida pero incrementa la comisión restándola de la cantidad enviada al destinatario.</string>
+    <string name="rbf_tx_detail">Esta transacción fue emitida para incrementar la comisión de otra transacción.</string>
 </resources>

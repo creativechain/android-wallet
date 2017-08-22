@@ -134,5 +134,6 @@
     <string name="rbf_warning">Attention! This action replaces an already issued transaction but increases the commission by subtracting it from the amount sent to the recipient.</string>
     <string name="raise_fee_to">Raise fee to</string>
     <string name="raise_fee_tx">Raise fee</string>
+    <string name="rbf_tx_detail">This transaction was issued to increase the fee of another transaction.</string>
 
 </resources>
