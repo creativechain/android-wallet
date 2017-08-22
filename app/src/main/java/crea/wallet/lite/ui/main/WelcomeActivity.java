@@ -291,8 +291,8 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d(TAG, "IMPORTED SEED: " + seed.toString());
                 showCreationTimeDialog();
             } else if (requestCode == IntentUtils.RETYPE_SEED) {
-                String[] retypeSeed = data.getStringArrayExtra(SeedActivity.EXTRA_SEED);
-                verifySeed(Arrays.asList(retypeSeed));
+                ArrayList<String> retypeSeed = data.getStringArrayListExtra(SeedActivity.EXTRA_SEED);
+                verifySeed(retypeSeed);
             } else if (requestCode == IntentUtils.PIN) {
                 String pin = data.getStringExtra(PinActivity.EXTRA_CODE);
                 cypherWallet(pin);

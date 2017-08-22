@@ -40,7 +40,7 @@ public class IntentUtils {
     public static void inputSeed(Activity activity, boolean retype) {
         Intent seedIntent = new Intent(activity, SeedActivity.class);
         seedIntent.putExtra(SeedActivity.RETYPE_SEED, retype);
-        activity.startActivityForResult(seedIntent, IMPORT_SEED);
+        activity.startActivityForResult(seedIntent, retype ? RETYPE_SEED : IMPORT_SEED);
     }
 
     public static void createPin(Activity activity) {
