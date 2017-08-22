@@ -215,7 +215,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
 		String title = getString(R.string.notif_cash_in_title, coin.toFriendlyString());
 		final NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
-		notification.setSmallIcon(R.drawable.ic_notification);
+		notification.setSmallIcon(R.mipmap.ic_notification);
 		notification.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
 		notification.setColor(getResources().getColor(R.color.colorPrimary));
 		notification.setContentText(msg);
