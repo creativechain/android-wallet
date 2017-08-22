@@ -33,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/wallet_user_name_edit_text"
                 android:hint="@string/crea_address"
-                android:textColorHint="@color/colorPrimaryHint"
                 android:paddingLeft="10dp"
                 android:textColor="@color/colorPrimary"
                 android:maxLines="1"
@@ -61,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/amount"
                 android:hint="@string/amount_in_currency"
-                android:textColorHint="@color/colorPrimaryHint"
                 android:textSize="13dp"
                 android:paddingLeft="10dp"
                 android:inputType="numberDecimal"
@@ -86,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"
                 android:hint="@string/amount_in_currency"
-                android:textColorHint="@color/colorPrimaryHint"
                 android:textSize="13dp"
                 android:paddingLeft="10dp"
                 android:inputType="numberDecimal"
@@ -238,7 +235,6 @@
                         android:layout_height="wrap_content"
                         app:font="roboto_bold"
                         android:text="0.006252 BTC"
-                        android:textColor="@color/colorPrimaryHint"
                         android:gravity="right"/>
 
                     <crea.wallet.lite.widget.FontTextView
@@ -247,7 +243,6 @@
                         android:layout_height="wrap_content"
                         app:font="roboto_bold"
                         android:text="4.25 €"
-                        android:textColor="@color/colorPrimaryHint"
                         android:gravity="right"/>
                 </LinearLayout>
 

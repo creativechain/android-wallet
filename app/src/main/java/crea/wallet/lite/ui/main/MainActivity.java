@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Process;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +28,6 @@ import crea.wallet.lite.ui.address.AddressBookActivity;
 import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.TransactionAdapter;
 import crea.wallet.lite.util.CoinConverter;
-import crea.wallet.lite.util.DeriveKeyTask;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.QR;
 import crea.wallet.lite.util.TxInfo;
@@ -42,7 +38,6 @@ import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.Transaction;
 import org.creativecoinj.wallet.Wallet;
-import org.spongycastle.crypto.params.KeyParameter;
 
 import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC_STARTED;
@@ -142,8 +137,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void invalidateData() {
         final Configuration conf = Configuration.getInstance();
-        final Coin total = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.ESTIMATED);
-        final Coin pending = total.minus(WalletHelper.INSTANCE.getTotalBalance());
+        final Coin total = WalletHelper.INSTANCE.getBalance(Wallet.BalanceType.ESTIMATED);
+        final Coin pending = total.minus(WalletHelper.INSTANCE.getBalance());
 
         AbstractCoin price = conf.getPriceForMainCurrency();
 

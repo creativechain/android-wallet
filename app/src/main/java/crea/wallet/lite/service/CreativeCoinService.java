@@ -39,7 +39,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -49,13 +48,11 @@ import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
 import crea.wallet.lite.ui.base.TransactionActivity;
-import crea.wallet.lite.ui.main.CoinTransactionActivity;
 import crea.wallet.lite.ui.main.MainActivity;
 import crea.wallet.lite.util.TimeUtils;
+import crea.wallet.lite.util.TxInfo;
 import crea.wallet.lite.wallet.WalletHelper;
-import crea.wallet.lite.wallet.WalletUtils;
 
-import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Block;
 import org.creativecoinj.core.BlockChain;
 import org.creativecoinj.core.CheckpointManager;
@@ -83,14 +80,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
-import javax.annotation.Nullable;
 
 import static crea.wallet.lite.application.Constants.WALLET.CONTEXT;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
@@ -105,7 +100,6 @@ public class CreativeCoinService extends Service implements BlockchainService {
 	private static final String TAG = "CreativeCoinService";
 	private static final int NOTIFICATION_ID_CONNECTED = 0;
 	private static final int NOTIFICATION_ID_COINS_RECEIVED = 1;
-	private static final int NOTIFICATION_ID_BLOCKCHAIN_PROGRESS = 2;
 	private static final int MIN_COLLECT_HISTORY = 2;
 	private static final int IDLE_BLOCK_TIMEOUT_MIN = 2;
 	private static final int IDLE_TRANSACTION_TIMEOUT_MIN = 9;
@@ -119,36 +113,38 @@ public class CreativeCoinService extends Service implements BlockchainService {
             org.creativecoinj.core.Context.propagate(CONTEXT);
 
 			Log.e(TAG,"Coins received!");
-			transactionsReceived.incrementAndGet();
 
-			final int bestChainHeight = blockChain.getBestChainHeight();
+            TxInfo txInfo = new TxInfo(tx);
 
-			final Address[] addresses = WalletUtils.getWalletAddressOfReceived(tx, wallet);
-			final Coin amount = tx.getValue(wallet);
-			final ConfidenceType confidenceType = tx.getConfidence().getConfidenceType();
+            if (!txInfo.isSentFromUser()) {
+                final int bestChainHeight = blockChain.getBestChainHeight();
 
-			WalletHelper.INSTANCE.save();
-			//TO VERIFY ONLY NEW INPUT TRANSACTIONS
-			handler.post(new Runnable()	{
-				@Override
-				public void run() {
-					final boolean isReceived = amount.signum() > 0;
-					final boolean replaying = bestChainHeight < Configuration.getInstance().getBestChainHeightEver();
-					final boolean isReplayedTx = confidenceType == ConfidenceType.BUILDING && replaying;
+                final Coin amount = txInfo.getAmountReceived();
+                final ConfidenceType confidenceType = tx.getConfidence().getConfidenceType();
 
-					if (isReceived && !isReplayedTx) {
-						//NOTIFY INPUT TRANSACTION
-						String id = tx.getHashAsString();
-						notifyCoinsReceived(amount, id, addresses);
-						broadcastTransactionReceived(id);
-					}
-				}
-			});
+                WalletHelper.INSTANCE.save();
+                //TO VERIFY ONLY NEW INPUT TRANSACTIONS
+                handler.post(new Runnable()	{
+                    @Override
+                    public void run() {
+                        final boolean isReceived = amount.signum() > 0;
+                        final boolean replaying = bestChainHeight < Configuration.getInstance().getBestChainHeightEver();
+                        final boolean isReplayedTx = confidenceType == ConfidenceType.BUILDING && replaying;
+
+                        if (isReceived && !isReplayedTx) {
+                            transactionsReceived.put(tx.getHash(), Coin.valueOf(amount.longValue()));
+                            //NOTIFY INPUT TRANSACTION
+                            String id = tx.getHashAsString();
+                            notifyCoinsReceived(tx.getHash());
+                            broadcastTransactionReceived(id);
+                        }
+                    }
+                });
+            }
 		}
 
 		@Override
 		public void onCoinsSent(Wallet wallet, Transaction tx, Coin coin, Coin coin1) {
-			transactionsReceived.incrementAndGet();
 			String id = tx.getHashAsString();
 			broadcastTransactionSend(id);
 		}
@@ -158,7 +154,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 	private final Handler handler = new Handler();
 	private final Handler delayHandler = new Handler();
 	private final Handler rateHandler = new Handler();
-	private final List<Address> notificationAddresses = new LinkedList<>();
+
 
 	private WalletApplication application;
 
@@ -172,9 +168,8 @@ public class CreativeCoinService extends Service implements BlockchainService {
 	private PeerConnectivityListener peerConnectivityListener;
 	private NotificationManager nm;
 	private Coin notificationAccumulatedAmount = Coin.ZERO;
-	private AtomicInteger transactionsReceived = new AtomicInteger();
-	private int notificationCount = 0;
-	private long serviceCreatedAt;
+	private HashMap<Sha256Hash, Coin> transactionsReceived;
+    private long serviceCreatedAt;
 	private boolean resetBlockchainOnShutdown = false;
 
 	private void broadcastTransactionSend(String id) {
@@ -191,41 +186,38 @@ public class CreativeCoinService extends Service implements BlockchainService {
 		sendBroadcast(sendIntent);
 	}
 
-	private void notifyCoinsReceived(final Coin amount, String id, @Nullable final Address... addresses) {
+	private void notifyCoinsReceived(Sha256Hash hash) {
 		if (!Configuration.getInstance().isNotificationsEnabled()) {
 			return;
 		}
 
+        int notificationCount = transactionsReceived.size();
 		if (notificationCount == 1) {
 			nm.cancel(NOTIFICATION_ID_COINS_RECEIVED);
 		}
 
-		notificationCount++;
-		notificationAccumulatedAmount = notificationAccumulatedAmount.add(amount);
-
-		String person = TextUtils.join(",", WalletUtils.getAddressStrings(addresses));
+		notificationAccumulatedAmount = Coin.ZERO;
+        for (Coin c : transactionsReceived.values()) {
+            notificationAccumulatedAmount = notificationAccumulatedAmount.add(c);
+        }
 
 		Coin coin = Coin.valueOf(notificationAccumulatedAmount.getValue());
 		String msg;
 		Intent intent;
 
-		if (notificationCount < 2) {
-			msg = getString(R.string.notif_cash_in, coin.toFriendlyString(), person);
-			intent = new Intent(this, CoinTransactionActivity.class);
-		} else {
-			msg = getString(R.string.notif_accumulated_amount, coin.toFriendlyString(), notificationCount);
-			intent = new Intent(this, MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		}
+        msg = getString(R.string.notif_accumulated_amount, coin.toFriendlyString(), notificationCount);
+        intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-		intent.putExtra(TransactionActivity.TRANSACTION_ID, id);
+		intent.putExtra(TransactionActivity.TRANSACTION_ID, hash.toString());
 
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
 		String title = getString(R.string.notif_cash_in_title, coin.toFriendlyString());
 		final NotificationCompat.Builder notification = new NotificationCompat.Builder(this);
-		notification.setSmallIcon(R.mipmap.ic_notif);
+		notification.setSmallIcon(R.drawable.ic_notification);
 		notification.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+		notification.setColor(getResources().getColor(R.color.colorPrimary));
 		notification.setContentText(msg);
 		notification.setContentTitle(title);
 		notification.setWhen(System.currentTimeMillis());
@@ -317,8 +309,8 @@ public class CreativeCoinService extends Service implements BlockchainService {
         @Override
         protected void doneDownload() {
             Log.d(TAG, "doneDownload");
-            Coin estimated = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.ESTIMATED);
-            Coin available = WalletHelper.INSTANCE.getTotalBalance(Wallet.BalanceType.AVAILABLE);
+            Coin estimated = WalletHelper.INSTANCE.getBalance(Wallet.BalanceType.ESTIMATED);
+            Coin available = WalletHelper.INSTANCE.getBalance(Wallet.BalanceType.AVAILABLE);
             Coin pending = estimated.minus(available);
 
             Log.d(TAG, "ESTIMATED = " + estimated.toFriendlyString());
@@ -481,7 +473,8 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
 			if (lastChainHeight > 0) {
 				final int numBlocksDownloaded = chainHeight - lastChainHeight;
-				final int numTransactionsReceived = transactionsReceived.getAndSet(0);
+				final int numTransactionsReceived = transactionsReceived.size();
+                transactionsReceived.clear();
 
 				// push history
 				activityHistory.add(0, new ActivityHistoryEntry(numTransactionsReceived, numBlocksDownloaded));
@@ -570,6 +563,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
 		boolean startService = WalletHelper.INSTANCE != null;
 
+        transactionsReceived = new HashMap<>();
 		Log.e(TAG,"START_SERVICE=" + startService);
 		if (startService) {
 			nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -648,9 +642,8 @@ public class CreativeCoinService extends Service implements BlockchainService {
             final String action = intent.getAction();
 
             if (ACTION_CANCEL_COINS_RECEIVED.equals(action)) {
-                notificationCount = 0;
                 notificationAccumulatedAmount = Coin.ZERO;
-                notificationAddresses.clear();
+                transactionsReceived.clear();
 
                 if (nm != null) {
                     nm.cancel(NOTIFICATION_ID_COINS_RECEIVED);

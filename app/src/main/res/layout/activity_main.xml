@@ -62,7 +62,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/available_amount"
                                 android:layout_weight="0.5"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/textColorSecondary"
                                 android:textSize="10dp" />
 
                             <TextView
@@ -71,7 +71,7 @@
                                 android:id="@+id/value_in_fiat"
                                 android:layout_weight="0.5"
                                 android:gravity="right"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/textColorSecondary"
                                 android:textSize="10dp"
                                 tools:text="Sync... 00:10:56 remaining"/>
 
@@ -89,7 +89,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="12500.89898989 CREA"
                                 android:id="@+id/total_btc"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/textColorSecondary"
                                 android:textSize="22sp"
                                 android:maxLines="1"
                                 android:singleLine="true"
@@ -101,7 +101,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="0.00 €"
                                 android:id="@+id/total_fiat"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/textColorSecondary"
                                 android:textSize="14sp"
                                 app:font="roboto_light"
                                 android:gravity="end"
@@ -117,7 +117,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/unconfirmed"
-                                    android:textColor="@android:color/white"
+                                    android:textColor="@color/textColorSecondary"
                                     android:textSize="10sp"/>
 
                                 <LinearLayout
@@ -130,7 +130,7 @@
                                         android:layout_height="wrap_content"
                                         android:id="@+id/pending_btc"
                                         android:layout_weight="0.5"
-                                        android:textColor="@android:color/white"
+                                        android:textColor="@color/textColorSecondary"
                                         android:textSize="10dp"
                                         android:text="0.00 €"
                                         app:font="roboto_bold"
@@ -141,7 +141,7 @@
                                         android:layout_height="wrap_content"
                                         android:text="0.00 €"
                                         android:id="@+id/pending_fiat"
-                                        android:textColor="@android:color/white"
+                                        android:textColor="@color/textColorSecondary"
                                         android:textSize="10dp"
                                         android:gravity="right"
                                         app:font="roboto_light"
@@ -184,8 +184,7 @@
                             android:text="@string/transactions_not_found"
                             app:font="roboto_bold"
                             android:gravity="center"
-                            android:textSize="30dp"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:textSize="30dp" />
 
                         <crea.wallet.lite.widget.FontTextView
                             android:layout_width="match_parent"
@@ -194,8 +193,7 @@
                             android:text="@string/transactions_not_found_explain"
                             app:font="roboto_light"
                             android:gravity="center"
-                            android:textSize="16dp"
-                            android:textColor="@color/colorPrimaryDark" />
+                            android:textSize="16dp" />
 
                     </LinearLayout>
                 </LinearLayout>

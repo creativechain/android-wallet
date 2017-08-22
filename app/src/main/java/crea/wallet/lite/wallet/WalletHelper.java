@@ -119,11 +119,11 @@ public class WalletHelper {
         return list;
     }
 
-    public Coin getTotalBalance() {
+    public Coin getBalance() {
         return this.wallet.getBalance();
     }
 
-    public Coin getTotalBalance(Wallet.BalanceType balanceType) {
+    public Coin getBalance(Wallet.BalanceType balanceType) {
         return this.wallet.getBalance(balanceType);
     }
 

@@ -162,7 +162,6 @@
                             android:layout_height="wrap_content"
                             app:font="roboto_bold"
                             android:text="0.006252 BTC"
-                            android:textColor="@color/colorPrimaryHint"
                             android:gravity="right"/>
 
                         <crea.wallet.lite.widget.FontTextView
@@ -171,7 +170,6 @@
                             android:layout_height="wrap_content"
                             app:font="roboto_bold"
                             android:text="4.25 €"
-                            android:textColor="@color/colorPrimaryHint"
                             android:gravity="right"/>
                     </LinearLayout>
 

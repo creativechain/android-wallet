@@ -34,8 +34,7 @@
                 android:text="@string/address_not_found"
                 app:font="roboto_bold"
                 android:gravity="center"
-                android:textSize="30dp"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textSize="30dp" />
 
             <crea.wallet.lite.widget.FontTextView
                 android:layout_width="match_parent"
@@ -44,8 +43,7 @@
                 android:text="@string/address_not_found_explain"
                 app:font="roboto_light"
                 android:gravity="center"
-                android:textSize="16dp"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textSize="16dp"/>
 
         </LinearLayout>
     </LinearLayout>

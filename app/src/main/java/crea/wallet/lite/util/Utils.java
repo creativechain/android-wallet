@@ -334,4 +334,8 @@ public class Utils {
         canvas.restore();
         return image;
     }
+
+    public static <T> T[] listToArray(List<T> list) {
+        return (T[]) list.toArray();
+    }
 }
