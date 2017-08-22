@@ -9,13 +9,12 @@ Implementation of [creacoinj][creacoinj] library in Android
 
 ## Warning
 
-This project uses the main network. On 01/05/2017 the main network did generate a new genesis block.
-This means that all the transactions and blocks generated up to that date were discarded by the network.
+This project uses the test network.
 
 ## License
 
 ~~~
-Copyright [2017] [Andersson G. Acosta de la Rosa]
+Copyright 2017 Andersson G. Acosta de la Rosa
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
