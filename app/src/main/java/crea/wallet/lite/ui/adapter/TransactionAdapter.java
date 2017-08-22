@@ -77,7 +77,7 @@ public class TransactionAdapter extends RecyclerAdapter<TransactionAdapter.ViewH
         org.creativecoinj.core.Coin fee = org.creativecoinj.core.Coin.valueOf(txInfo.getFee().longValue());
         org.creativecoinj.core.Coin coin = txInfo.getTransactionedCoin();
         holder.txDate.setText(DateUtils.getRelativeTimeSpanString(txInfo.getTime(), System.currentTimeMillis(), DateUtils.DAY_IN_MILLIS ));
-        holder.destinies.setText(TextUtils.join(", ", txInfo.getAddressesResolved()));
+        holder.destinies.setText(txInfo.isRBFTransaction() ? getString(R.string.raise_fee_tx) : TextUtils.join(", ", txInfo.getAddressesResolved()));
         holder.destinyAmount.setText(coin.toFriendlyString());
         holder.feeAmount.setText(fee.toFriendlyString());
 

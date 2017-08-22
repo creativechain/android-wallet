@@ -94,6 +94,10 @@ public class TxInfo {
         return isSentFromUser() && !isConfirmed() && !isPayToManyTransaction();
     }
 
+    public boolean isRBFTransaction() {
+        return tx.getPurpose() == Transaction.Purpose.RAISE_FEE;
+    }
+
     public long getTime() {
         return tx.getUpdateTime().getTime();
     }
