@@ -131,5 +131,7 @@
     <string name="security">Security</string>
     <string name="change_pin_for_security">To improve the security of your wallet, you need to re-enter the 4-digit PIN you created. We will improve the encryption of your wallet with a new security system that will provide greater robustness.</string>
     <string name="invalid_pin">Invalid PIN</string>
+    <string name="rbf_warning">Attention! This action replaces an already issued transaction but increases the commission by subtracting it from the amount sent to the recipient.</string>
+    <string name="raise_fee_to">Raise fee to</string>
 
 </resources>

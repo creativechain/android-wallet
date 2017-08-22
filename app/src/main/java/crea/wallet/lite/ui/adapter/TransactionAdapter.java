@@ -48,7 +48,7 @@ public class TransactionAdapter extends RecyclerAdapter<TransactionAdapter.ViewH
 
     @Override
     protected List<Transaction> getItemList() {
-        List<Transaction> transactions = Lists.newArrayList(INSTANCE.getMainWallet().getTransactions(false));
+        List<Transaction> transactions = Lists.newArrayList(INSTANCE.getWallet().getTransactions(false));
 
         Collections.sort(transactions, new Comparator<Transaction>() {
             @Override

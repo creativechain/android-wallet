@@ -14,18 +14,17 @@ import crea.wallet.lite.application.Constants;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static crea.wallet.lite.application.Constants.WALLET.SCRYPT_ITERATIONS_TARGET;
 
 public abstract class DeriveKeyTask {
     private static final String TAG = "DeriveKeyTask";
 
     private final Handler backgroundHandler;
     private final Handler callbackHandler;
-    private final int scryptIterationsTarget;
 
-    public DeriveKeyTask(final Handler backgroundHandler, final int scryptIterationsTarget) {
+    public DeriveKeyTask(final Handler backgroundHandler) {
         this.backgroundHandler = backgroundHandler;
         this.callbackHandler = new Handler(Looper.myLooper());
-        this.scryptIterationsTarget = scryptIterationsTarget;
     }
 
     public final void deriveKey(final Wallet wallet, final String password) {
@@ -45,22 +44,20 @@ public abstract class DeriveKeyTask {
                 if (keyCrypter instanceof KeyCrypterScrypt) {
                     final long scryptIterations = ((KeyCrypterScrypt) keyCrypter).getScryptParameters().getN();
 
-                    if (scryptIterations != scryptIterationsTarget) {
-                        Log.i(TAG, String.format("upgrading scrypt iterations from %1$d to %2$d; re-encrypting wallet", scryptIterations,
-                                scryptIterationsTarget));
+                    Log.i(TAG, String.format("upgrading scrypt iterations from %1$d to %2$d; re-encrypting wallet", scryptIterations,
+                            SCRYPT_ITERATIONS_TARGET));
 
-                        final KeyCrypterScrypt newKeyCrypter = new KeyCrypterScrypt(scryptIterationsTarget);
-                        final KeyParameter newKey = newKeyCrypter.deriveKey(password);
+                    final KeyCrypterScrypt newKeyCrypter = new KeyCrypterScrypt(SCRYPT_ITERATIONS_TARGET);
+                    final KeyParameter newKey = newKeyCrypter.deriveKey(password);
 
-                        // Re-encrypt wallet with new key.
-                        try {
-                            wallet.changeEncryptionKey(newKeyCrypter, key, newKey);
-                            key = newKey;
-                            wasChanged = true;
-                            Log.i(TAG, "scrypt upgrade succeeded");
-                        } catch (final KeyCrypterException x) {
-                            Log.i(TAG, String.format("scrypt upgrade failed: %1$s", x.getMessage()));
-                        }
+                    // Re-encrypt wallet with new key.
+                    try {
+                        wallet.changeEncryptionKey(newKeyCrypter, key, newKey);
+                        key = newKey;
+                        wasChanged = true;
+                        Log.i(TAG, "scrypt upgrade succeeded");
+                    } catch (final KeyCrypterException x) {
+                        Log.i(TAG, String.format("scrypt upgrade failed: %1$s", x.getMessage()));
                     }
                 }
 

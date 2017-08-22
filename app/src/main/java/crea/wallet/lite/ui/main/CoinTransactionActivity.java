@@ -90,7 +90,7 @@ public class CoinTransactionActivity extends TransactionActivity {
 
     @Override
     protected void onPause() {
-        unregisterReceiver(TX_UPDATE_RECEIVER);
+        //unregisterReceiver(TX_UPDATE_RECEIVER);
         super.onPause();
     }
 

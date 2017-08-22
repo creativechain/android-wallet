@@ -6,8 +6,11 @@ import android.support.v4.app.Fragment;
 
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.QRScannerActivity;
+import crea.wallet.lite.ui.tool.RBFActivity;
 import crea.wallet.lite.ui.tool.SeedActivity;
 import com.gotcreations.materialpin.managers.AppLock;
+
+import org.creativecoinj.core.Transaction;
 
 /**
  * Created by ander on 10/11/16.
@@ -50,5 +53,11 @@ public class IntentUtils {
         Intent pinIntent = new Intent(activity, PinActivity.class);
         pinIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
         activity.startActivityForResult(pinIntent, PIN);
+    }
+
+    public static void raiseFee(Activity activity, Transaction tx) {
+        Intent feeIntent = new Intent(activity, RBFActivity.class);
+        feeIntent.putExtra(RBFActivity.TRANSACTION_ID, tx.getHash());
+        activity.startActivity(feeIntent);
     }
 }

@@ -50,7 +50,7 @@ public class BookAddressAdapter extends RecyclerAdapter<BookAddressAdapter.ViewH
         holder.address.setText(item.getAddress());
         holder.amountView.setVisibility(walletAddresses ? View.VISIBLE : View.GONE);
         if (walletAddresses) {
-            Coin balance = WalletHelper.INSTANCE.getMainAddressBalance(item.getAddress());
+            Coin balance = WalletHelper.INSTANCE.getAddressBalance(item.getAddress());
             AbstractCoin fiat = new CoinConverter()
                             .amount(balance)
                             .price(conf.getCreaPrice(conf.getMainCurrency()))

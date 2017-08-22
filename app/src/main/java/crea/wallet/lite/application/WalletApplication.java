@@ -179,7 +179,7 @@ public class WalletApplication extends Application {
             try	{
                 Log.e(TAG, "Loading wallet...");
                 walletStream = new FileInputStream(walletFile);
-                WalletHelper.INSTANCE = WalletHelper.fromWallets();
+                WalletHelper.INSTANCE = WalletHelper.fromWallet();
                 Log.e(TAG, "Wallets loaded successfully");
                 if (!WalletHelper.INSTANCE.getWalletParams().equals(Constants.WALLET.NETWORK_PARAMETERS)) {
                     throw new UnreadableWalletException("bad wallet network parameters: " + WalletHelper.INSTANCE.getWalletParams().getId());
@@ -228,7 +228,7 @@ public class WalletApplication extends Application {
         Log.e(TAG, "Restoring wallet from backup");
 
         try	{
-            WalletHelper.INSTANCE = WalletHelper.fromBackupWallets();
+            WalletHelper.INSTANCE = WalletHelper.loadFromBackup();
             WalletHelper.INSTANCE.cleanup();
             resetBlockchain();
             Log.i(TAG, "wallet restored from backup: '" + Constants.WALLET.MAIN_WALLET_BACKUP_FILE + "'");
@@ -274,7 +274,7 @@ public class WalletApplication extends Application {
 
     public void broadcastTransaction(final Transaction tx)	{
         final Intent intent = new Intent(BlockchainService.ACTION_BROADCAST_TRANSACTION, null, this, CreativeCoinService.class);
-        intent.putExtra(BlockchainService.ACTION_BROADCAST_TRANSACTION_HASH, tx.getHash().getBytes());
+        intent.putExtra(BlockchainService.ACTION_BROADCAST_TRANSACTION_HASH, tx.getHash());
         startService(intent);
     }
 

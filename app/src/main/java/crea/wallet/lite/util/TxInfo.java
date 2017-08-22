@@ -40,13 +40,13 @@ public class TxInfo {
 
     private void extractInfo() {
         fee = tx.getFee() != null ? tx.getFee() : Coin.ZERO;
-        Coin sended = tx.getValueSentFromMe(INSTANCE.getMainWallet());
+        Coin sended = tx.getValueSentFromMe(INSTANCE.getWallet());
         sentFromUser = sended.isGreaterThan(Coin.ZERO);
 
         List<TransactionOutput> outputs = tx.getOutputs();
         if (outputs != null && !outputs.isEmpty()) {
             for (TransactionOutput out : outputs) {
-                if (out.isMine(INSTANCE.getMainWallet())) {
+                if (out.isMine(INSTANCE.getWallet())) {
                     if (sentFromUser) {
                         //Change Address
                     } else {
@@ -86,8 +86,12 @@ public class TxInfo {
         return !tx.isPending();
     }
 
+    public boolean isPayToManyTransaction() {
+        return tx.getOutputs().size() > 20;
+    }
+
     public boolean isReplaceable() {
-        return isSentFromUser() && !isConfirmed();
+        return isSentFromUser() && !isConfirmed() && !isPayToManyTransaction();
     }
 
     public long getTime() {
@@ -143,6 +147,10 @@ public class TxInfo {
         return getAddressesResolved(getInputAddresses());
     }
 
+    public Transaction getTx() {
+        return tx;
+    }
+
     public List<String> getOutputAddressesResolved() {
         return getAddressesResolved(getOutputAddresses());
     }
@@ -150,4 +158,6 @@ public class TxInfo {
     public List<String> getAddressesResolved() {
         return isSentFromUser() ? getOutputAddressesResolved() : getInputAddressesResolved();
     }
+
+
 }

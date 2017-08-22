@@ -1,11 +1,9 @@
 package crea.wallet.lite.ui.tool;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -19,39 +17,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import crea.wallet.lite.R;
-import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
-import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
 import crea.wallet.lite.coin.CoinUtils;
 import crea.wallet.lite.ui.main.PrepareTxActivity;
 import crea.wallet.lite.util.CoinConverter;
-import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.FormUtils;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.OnTextChangeListener;
 import crea.wallet.lite.util.Task;
-import crea.wallet.lite.wallet.AbstractPaymentProcessListener;
 import crea.wallet.lite.wallet.FeeCalculation;
 import crea.wallet.lite.wallet.FeeCategory;
 import crea.wallet.lite.wallet.PaymentProcess;
-import crea.wallet.lite.wallet.PaymentProcessListener;
 import crea.wallet.lite.wallet.WalletHelper;
 import crea.wallet.lite.wallet.WalletUtils;
 
 import org.creativecoinj.core.AbstractCoin;
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
-import org.creativecoinj.core.Transaction;
-import org.creativecoinj.core.TransactionConfidence;
 import org.creativecoinj.uri.BitcoinURI;
 import org.creativecoinj.uri.BitcoinURIParseException;
 import org.creativecoinj.wallet.SendRequest;
-import org.creativecoinj.wallet.Wallet;
 
 import static crea.wallet.lite.application.Constants.WALLET.DONATION_ADDRESS;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
-import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_RECEIVED;
-import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_SENT;
 
 public class SendCoinActivity extends PrepareTxActivity {
 
@@ -74,7 +62,7 @@ public class SendCoinActivity extends PrepareTxActivity {
     private View broadcastStatus;
     private View acceptBtn;
     private String currency;
-    private Task<Void> keyTask;
+    private Task<String> keyTask;
     private Address address;
 
     @Override
@@ -99,7 +87,7 @@ public class SendCoinActivity extends PrepareTxActivity {
         feeTextView.setText(formattedFeeString);
 
         if (WalletHelper.isInstanceNull()) {
-            WalletHelper.INSTANCE = WalletHelper.fromWallets();
+            WalletHelper.INSTANCE = WalletHelper.fromWallet();
         }
 
         setUpFeeOptions();
@@ -404,11 +392,11 @@ public class SendCoinActivity extends PrepareTxActivity {
 
     public void processTransaction() {
         broadcastStatus.setVisibility(View.VISIBLE);
-        keyTask = new Task<Void>() {
+        keyTask = new Task<String>() {
             @Override
-            public void doTask(Void s) {
+            public void doTask(String s) {
 
-                PaymentProcess paymentProcess = new PaymentProcess(SendCoinActivity.this, sReq, conf.getMainWalletFile());
+                PaymentProcess paymentProcess = new PaymentProcess(SendCoinActivity.this, sReq, s);
                 paymentProcess.setProcessListener(CONFIDENCE_LISTENER)
                         .start();
             }
@@ -499,7 +487,7 @@ public class SendCoinActivity extends PrepareTxActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == IntentUtils.PIN) {
-                keyTask.doTask(null);
+                keyTask.doTask(data.getStringExtra(PinActivity.EXTRA_CODE));
             } else if (requestCode == IntentUtils.QR_SCAN) {
                 handleBitcoinUri(data.getData());
             }

@@ -3,10 +3,11 @@ package crea.wallet.lite.wallet;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.common.collect.Lists;
+
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
-import crea.wallet.lite.util.Io;
 
 
 import org.creativecoinj.core.Address;
@@ -17,6 +18,7 @@ import org.creativecoinj.core.InsufficientMoneyException;
 import org.creativecoinj.core.NetworkParameters;
 import org.creativecoinj.core.Sha256Hash;
 import org.creativecoinj.core.Transaction;
+import org.creativecoinj.crypto.KeyCrypter;
 import org.creativecoinj.crypto.MnemonicException;
 import org.creativecoinj.wallet.CoinSelector;
 import org.creativecoinj.wallet.DeterministicSeed;
@@ -33,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -73,157 +76,85 @@ public class WalletHelper {
 
     public static WalletHelper INSTANCE;
     private boolean newWallet = false;
-    private HashMap<File, Wallet> wallets;
+    private Wallet wallet;
 
-    private WalletHelper(HashMap<File, Wallet> wallets) {
-        this.wallets = wallets;
-        if (wallets.size() <= 0) {
-            throw new IllegalArgumentException("The list of wallets should contain at least one object.");
-        }
-    }
-
-    public boolean isWalletEncrypted(File f) {
-        return wallets.get(f).isEncrypted();
+    private WalletHelper(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     public boolean isWalletEncrypted() {
-        return isWalletEncrypted(Configuration.getInstance().getMainWalletFile());
-    }
-
-    public File[] getWalletFiles() {
-        return wallets.keySet().toArray(new File[1]);
-    }
-
-    public void addEventListener(WalletEventListener listener) {
-        addEventListener(listener, null);
+        return this.wallet.isEncrypted();
     }
 
     public void addEventListener(WalletEventListener listener, Executor executor) {
         if (executor == null) {
             executor = EXECUTOR;
         }
-        for (File k : wallets.keySet()) {
-            wallets.get(k).addEventListener(listener, executor);
-        }
+        wallet.addEventListener(listener, executor);
 
     }
 
     public void removeEventListener(WalletEventListener listener) {
-        for (File k : wallets.keySet()) {
-            wallets.get(k).removeEventListener(listener);
-        }
+        wallet.removeEventListener(listener);
     }
 
     public Address currentMainReceiveAddress() {
-        return currentReceiveAddress(Configuration.getInstance().getMainWalletFile());
+        return this.wallet.currentReceiveAddress();
     }
 
-    public Address currentReceiveAddress(File f) {
-        return wallets.get(f).currentReceiveAddress();
+    public int addIssuedAddressesToWatch() {
+        return addWatchedAddresses(getMainReceiveAddresses());
     }
 
-    public void addIssuedAddressesToWatch() {
-        for (File f : wallets.keySet()) {
-            addIssuedAddressesToWatch(f);
-        }
+    public int addWatchedAddresses(List<Address> addresses) {
+        return wallet.addWatchedAddresses(addresses, 0);
     }
 
-    public int addIssuedAddressesToWatch(File f) {
-        return addWatchedAddresses(f, getMainReceiveAddresses());
-    }
-
-    public int addIssuedMainAddressesToWatch() {
-        return addIssuedAddressesToWatch(Configuration.getInstance().getMainWalletFile());
-    }
-
-    public int addWatchedAddresses(File f, List<Address> addresses) {
-        return wallets.get(f).addWatchedAddresses(addresses, 0);
-    }
-
-    public List<Address> getReceiveAddresses(File f) {
-        List<Address> list = wallets.get(f).getIssuedReceiveAddresses();
+    public List<Address> getReceiveAddresses() {
+        List<Address> list = wallet.getIssuedReceiveAddresses();
         if (list.size() == 0) {
-            list.add(wallets.get(f).freshReceiveAddress());
+            list.add(wallet.freshReceiveAddress());
         }
 
         return list;
     }
 
     public List<Address> getMainReceiveAddresses() {
-        return getReceiveAddresses(Configuration.getInstance().getMainWalletFile());
+        return getReceiveAddresses();
     }
 
     public Coin getTotalBalance() {
-        Coin balance = Coin.ZERO;
-        for (Wallet w : wallets.values()) {
-            balance = balance.add(w.getBalance());
-        }
-
-        return balance;
+        return this.wallet.getBalance();
     }
 
     public Coin getTotalBalance(Wallet.BalanceType balanceType) {
-        Coin balance = Coin.ZERO;
-        for (Wallet w : wallets.values()) {
-            balance = balance.add(w.getBalance(balanceType));
-        }
-
-        return balance;
+        return this.wallet.getBalance(balanceType);
     }
 
-    public Coin getValueSentToMe(Transaction tx) {
-        Coin value = Coin.ZERO;
-        for (Wallet w : getWallets()) {
-            value = value.add(tx.getValueSentToMe(w));
-        }
-
-        return value;
+    public Coin getBalance(CoinSelector coinSelector) {
+        return this.wallet.getBalance(coinSelector);
     }
 
-    public Coin getValueSentFromMe(Transaction tx) {
-        Coin value = Coin.ZERO;
-        for (Wallet w : getWallets()) {
-            value = value.add(tx.getValueSentFromMe(w));
-        }
-
-        return value;
+    public Coin getAddressBalance(Address address) {
+        return getBalance(new AddressBalance(address));
     }
 
-    public Coin getBalance(File f, CoinSelector coinSelector) {
-        return wallets.get(f).getBalance(coinSelector);
+    public Coin getAddressBalance(String address) {
+        return getAddressBalance(Address.fromBase58(Constants.WALLET.NETWORK_PARAMETERS, address));
     }
 
-    public Coin getMainBalance(CoinSelector coinSelector) {
-        return getBalance(Configuration.getInstance().getMainWalletFile(), coinSelector);
-    }
-
-    public Coin getMainAddressBalance(File f, Address address) {
-        return getBalance(f, new AddressBalance(address));
-    }
-
-    public Coin getMainAddressBalance(Address address) {
-        return getMainAddressBalance(Configuration.getInstance().getMainWalletFile(), address);
-    }
-
-    public Coin getAddressBalance(File f, String address) {
-        return getMainAddressBalance(f, Address.fromBase58(Constants.WALLET.NETWORK_PARAMETERS, address));
-    }
-
-    public Coin getMainAddressBalance(String address) {
-        return getAddressBalance(Configuration.getInstance().getMainWalletFile(), address);
-    }
-
-    public void singTransaction(final File f, final CharSequence tryKey, SendRequest sReq) {
+    public void singTransaction(final CharSequence tryKey, SendRequest sReq) {
         try {
             Context.propagate(CONTEXT);
-            Wallet w = wallets.get(f);
-            w.decrypt(tryKey);
-            w.signTransaction(sReq);
+            if (wallet.isEncrypted()) {
+                wallet.decrypt(tryKey);
+            }
+            wallet.signTransaction(sReq);
             new Thread() {
                 @Override
                 public void run() {
                     Context.propagate(CONTEXT);
-                    encrypt(f, tryKey);
+                    encrypt(tryKey);
                 }
             }.start();
 
@@ -232,26 +163,26 @@ public class WalletHelper {
         }
     }
 
-    public SendRequest prepareTransaction(final File f, final CharSequence tryKey, final CharSequence newKey, Coin coinsToSent, Address address, boolean emptyWallet) throws InsufficientMoneyException {
+    public SendRequest prepareTransaction(final CharSequence tryKey, final CharSequence newKey, Coin coinsToSent, Address address, boolean emptyWallet) throws InsufficientMoneyException {
 
         try {
-            wallets.get(f).decrypt(tryKey);
+            wallet.decrypt(tryKey);
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
 
-        SendRequest sReq = prepareTransaction(f, coinsToSent, address, emptyWallet);
+        SendRequest sReq = prepareTransaction(coinsToSent, address, emptyWallet);
         new Thread() {
             @Override
             public void run() {
                 Context.propagate(CONTEXT);
-                encrypt(f, newKey);
+                encrypt(newKey);
             }
         }.start();
         return sReq;
     }
 
-    public SendRequest prepareTransaction(File f, Coin coinsToSent, Address address, boolean emptyWallet) throws InsufficientMoneyException {
+    public SendRequest prepareTransaction(Coin coinsToSent, Address address, boolean emptyWallet) throws InsufficientMoneyException {
         Context.propagate(CONTEXT);
         SendRequest sReq;
         if (emptyWallet) {
@@ -261,7 +192,7 @@ public class WalletHelper {
         }
 
         sReq.feePerKb = Configuration.getInstance().getTransactionFee();
-        wallets.get(f).completeTx(sReq);
+        wallet.completeTx(sReq);
         return sReq;
     }
 
@@ -273,151 +204,79 @@ public class WalletHelper {
         this.newWallet = isNewWallet;
     }
 
-    public void commitTx(File f, Transaction tx) {
-        wallets.get(f).commitTx(tx);
-    }
-
-    public void commitTx(File f, SendRequest sReq) {
-        commitTx(f, sReq.tx);
+    public void commitTx(Transaction tx) {
+        wallet.commitTx(tx);
     }
 
     public Transaction getTransaction(Sha256Hash hash) {
-        for (Wallet w : wallets.values()) {
-            Transaction t = w.getTransaction(hash);
-            if (t != null) {
-                return t;
-            }
-        }
-        return null;
+        return this.wallet.getTransaction(hash);
     }
 
     public boolean isTransactionRelevant(Transaction tx) {
-        boolean relevant = false;
-        for (Wallet w : wallets.values()) {
-            relevant = relevant || w.isTransactionRelevant(tx);
-        }
-
-        return relevant;
+        return this.wallet.isTransactionRelevant(tx);
     }
 
-    public void receivePending(Transaction tx, List<Transaction> dependecies) {
-        try {
-            for (File f : wallets.keySet()) {
-                receivePending(f, tx, dependecies);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void receivePending(File f, Transaction tx, List<Transaction> dependencies) {
-        wallets.get(f).receivePending(tx, dependencies);
+    public void receivePending(Transaction tx, List<Transaction> dependencies) {
+        wallet.receivePending(tx, dependencies);
     }
 
     public void setLastBlock(Block block, int height) {
-        for (Wallet w : wallets.values()) {
-            w.setLastBlockSeenHash(block.getHash());
-            w.setLastBlockSeenHeight(height);
-            w.setLastBlockSeenTimeSecs(block.getTimeSeconds());
-        }
+        wallet.setLastBlockSeenHash(block.getHash());
+        wallet.setLastBlockSeenHeight(height);
+        wallet.setLastBlockSeenTimeSecs(block.getTimeSeconds());
     }
 
     public int getLastBlockHeight() {
-        return wallets.get(Configuration.getInstance().getMainWalletFile()).getLastBlockSeenHeight();
+        return wallet.getLastBlockSeenHeight();
     }
 
-    public long getFirstKeyCreationTime() {
-        return getKeyCreationTime(getWalletFile(1));
-    }
-
-    public long getKeyCreationTime(File f) {
-        return wallets.get(f).getEarliestKeyCreationTime();
+    public long getKeyCreationTime() {
+        return wallet.getEarliestKeyCreationTime();
     }
 
     public DeterministicSeed getKeyChainSeed(CharSequence key) {
-        decrypt(Configuration.getInstance().getMainWalletFile(), key);
-        DeterministicSeed seed = wallets.get(Configuration.getInstance().getMainWalletFile()).getKeyChainSeed();
-        encrypt(Configuration.getInstance().getMainWalletFile(), key);
+        decrypt(key);
+        DeterministicSeed seed = wallet.getKeyChainSeed();
+        encrypt(key);
         return seed;
     }
 
-    public DeterministicSeed getKeyChainSeed(File f) {
-        return wallets.get(f).getKeyChainSeed();
-    }
-
     public DeterministicSeed getKeyChainSeed() {
-        return wallets.get(Configuration.getInstance().getMainWalletFile()).getKeyChainSeed();
+        return wallet.getKeyChainSeed();
     }
 
-    public int getWalletCount() {
-        return getWallets().length;
+    public Wallet getWallet() {
+        return wallet;
     }
 
-    public Wallet[] getWallets() {
-        return wallets.values().toArray(new Wallet[1]);
+    public File getWalletFile() {
+        return Constants.WALLET.FIRST_WALLET_FILE;
     }
 
-    public File getWalletFile(int num) {
-        if (num == 1) {
-            return Constants.WALLET.FIRST_WALLET_FILE;
-        }
-
-        return new File(Constants.WALLET.WALLET_FILES_NAME + num + Constants.FILES.FILENAME_NETWORK_SUFFIX);
-    }
-
-    public Wallet getMainWallet() {
-        return wallets.get(Configuration.getInstance().getMainWalletFile());
-    }
-
-    public Wallet getWallet(int num) {
-        return getWallet(getWalletFile(num));
-    }
-
-    public Wallet getWallet(File f) {
-        return wallets.get(f);
+    public KeyCrypter getKeyCrypter() {
+        return wallet.getKeyCrypter();
     }
 
     public void encrypt(CharSequence key) {
-        for (File f : wallets.keySet()) {
-            encrypt(f, key);
-        }
-    }
-
-    public void encrypt(File f, CharSequence key) {
-        if (wallets.get(f).isEncrypted()) {
-            Log.e(TAG, "Wallet " + f. getAbsolutePath() + " is already encrypted.");
+        if (wallet.isEncrypted()) {
+            Log.e(TAG, "Wallet is already encrypted.");
             return;
         }
-        wallets.get(f).encrypt(key);
+        wallet.encrypt(key);
     }
 
-    public void decryptAll(CharSequence key) {
-        for (File f : wallets.keySet()) {
-            decrypt(f, key);
-        }
-    }
 
     public void decrypt(CharSequence key) {
-        decrypt(Configuration.getInstance().getMainWalletFile(), key);
-    }
-
-    private void decrypt(File f, CharSequence key) {
         Context.propagate(CONTEXT);
-        if (wallets.get(f).isEncrypted()) {
-            wallets.get(f).decrypt(key);
+        if (wallet.isEncrypted()) {
+            wallet.decrypt(key);
         }
     }
 
-    public void createBackup() {
-        for (File f : wallets.keySet()) {
-            createBackup(f);
-        }
-    }
-
-    public void createBackup(File f)	{
-        Log.e(TAG, "Creating local backup from " + f.getAbsolutePath());
+    public void createBackup()	{
+        Log.e(TAG, "Creating local backup from wallet");
         long t = System.currentTimeMillis();
-        final Protos.Wallet.Builder builder = new WalletProtobufSerializer().walletToProto(wallets.get(f)).toBuilder();
+        final Protos.Wallet.Builder builder = new WalletProtobufSerializer().walletToProto(wallet).toBuilder();
 
         // strip redundant
         builder.clearTransaction();
@@ -459,52 +318,40 @@ public class WalletHelper {
             walletFolder.mkdirs();
         }
 
-        for (File f : wallets.keySet()) {
-            try {
-                wallets.get(f).saveToFile(f);
-                Log.e(TAG, "Wallet saved in " + f.getAbsolutePath());
-            } catch (IOException e) {
-                Log.e(TAG, "Impossible save the wallet", e);
-            }
+        try {
+            File f = Constants.WALLET.FIRST_WALLET_FILE;
+            wallet.saveToFile(f);
+            Log.e(TAG, "Wallet saved in " + f.getAbsolutePath());
+        } catch (IOException e) {
+            Log.e(TAG, "Impossible save the wallet", e);
         }
 
     }
 
     public void autoSave(long delayTimeInSeconds) {
         try {
-            for (File f : wallets.keySet()) {
-                wallets.get(f).autosaveToFile(f, delayTimeInSeconds, TimeUnit.SECONDS, AUTOSAVE_LISTENER);
-            }
+            wallet.autosaveToFile(Constants.WALLET.FIRST_WALLET_FILE, delayTimeInSeconds, TimeUnit.SECONDS, AUTOSAVE_LISTENER);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void cleanup() {
-        Log.e(TAG, "Cleaning wallets...");
-        for (File f : wallets.keySet()) {
-            wallets.get(f).cleanup();
-        }
+        Log.e(TAG, "Cleaning wallet...");
+        wallet.cleanup();
     }
 
     public void reset() {
-        Log.e(TAG, "Resetting wallets...");
-        for (File f : wallets.keySet()) {
-            wallets.get(f).reset();
-        }
+        Log.e(TAG, "Resetting wallet...");
+        wallet.reset();
     }
 
     public boolean isConsistentWallet() {
-        return wallets.get(Configuration.getInstance().getMainWalletFile()).isConsistent();
+        return wallet.isConsistent();
     }
 
     public void shutdownAutosave() {
-        for (Wallet wallet : wallets.values()) {
-            try {
-                wallet.shutdownAutosaveAndWait();
-            } catch (Exception ignore) {
-            }
-        }
+        wallet.shutdownAutosaveAndWait();
     }
 
     public NetworkParameters getWalletParams() {
@@ -513,11 +360,6 @@ public class WalletHelper {
 
     public static boolean isInstanceNull() {
         return INSTANCE == null;
-    }
-
-    @Override
-    public String toString() {
-        return "Wallets=" + getWalletCount() + ", ENCRYPTED=" + isWalletEncrypted();
     }
 
     private static WalletHelper setAndGetInstance(WalletHelper walletHelper, boolean forceSet) {
@@ -534,11 +376,11 @@ public class WalletHelper {
 
     public static WalletHelper create(List<String> wordList, long creationTime, boolean override) {
         try {
-            int numOfWallets = Configuration.getInstance().getHDAccounts();
-            Log.e(TAG, "NUM=" + numOfWallets + ", WORDS=" + wordList.size());
-            WalletGenerator walletGenerator = new WalletGenerator(wordList, creationTime).setNumOfWallets(numOfWallets).setIsNewAccount(true);
+
+            Log.e(TAG, "WORDS=" + wordList.size());
+            WalletGenerator walletGenerator = new WalletGenerator(wordList, creationTime).setIsNewAccount(true);
             walletGenerator.setForceOverride(override).create().saveInFiles();
-            return setAndGetInstance(new WalletHelper(walletGenerator.getWallets()), true);
+            return setAndGetInstance(new WalletHelper(walletGenerator.getWallet()), true);
         } catch (MnemonicException.MnemonicLengthException | MnemonicException.MnemonicWordException | MnemonicException.MnemonicChecksumException e) {
             throw new RuntimeException("Failed to create a WalletHelper.", e);
         }
@@ -553,89 +395,24 @@ public class WalletHelper {
         }
     }
 
-    public static WalletHelper fromWallets() {
-        HashMap<File, Wallet> wallets = new HashMap<>();
-        Wallet mainWallet = null;
+    public static WalletHelper fromWallet() {
         try {
-            mainWallet = Wallet.loadFromFile(Configuration.getInstance().getMainWalletFile(), null);
+            Wallet mainWallet = Wallet.loadFromFile(Constants.WALLET.FIRST_WALLET_FILE);
+            return new WalletHelper(mainWallet);
         } catch (UnreadableWalletException e) {
             try {
-                mainWallet = loadFromBackup(1);
+                return loadFromBackup();
             } catch (UnreadableWalletException e1) {
-                e1.printStackTrace();
+                throw new RuntimeException(e1);
             }
-        }
-
-        if (mainWallet != null) {
-            wallets.put(Configuration.getInstance().getMainWalletFile(), mainWallet);
-        }
-
-        for (int x = 2; x <= Constants.WALLET.MAX_HD_ACCOUNTS; x++) {
-            File wf = new File(Constants.WALLET.WALLET_FILES_NAME + x + Constants.FILES.FILENAME_NETWORK_SUFFIX);
-            if (wf.exists()) {
-                try {
-                    wallets.put(wf, Wallet.loadFromFile(wf, null));
-                } catch (UnreadableWalletException e) {
-                    try {
-                        wallets.put(wf, loadFromBackup(x));
-                    } catch (UnreadableWalletException e1) {
-                        Log.e(TAG, "Failed to load wallet " + wf.getAbsolutePath());
-                    }
-                }
-            } else {
-                try {
-                    wallets.put(wf, loadFromBackup(x));
-                } catch (UnreadableWalletException e1) {
-                    Log.e(TAG, "Failed to load wallet " + wf.getAbsolutePath());
-                }
-            }
-        }
-
-        return new WalletHelper(wallets);
-    }
-
-    private static Wallet loadFromBackup(int num) throws UnreadableWalletException {
-        if (num == 1) {
-            return Wallet.loadFromFile(Constants.WALLET.MAIN_WALLET_BACKUP_FILE);
-        } else {
-            File wb = new File(Constants.WALLET.WALLET_BACKUP_FILES_NAME + num + Constants.FILES.FILENAME_NETWORK_SUFFIX);
-            return Wallet.loadFromFile(wb);
         }
     }
 
-    public static WalletHelper fromBackupWallets() throws UnreadableWalletException {
-        HashMap<File, Wallet> wallets = new HashMap<>();
-        try {
-            wallets.put(Configuration.getInstance().getMainWalletFile(), loadFromBackup(1));
-        } catch (UnreadableWalletException e) {
-            e.printStackTrace();
-        }
-
-        for (int x = 2; x <= Constants.WALLET.MAX_HD_ACCOUNTS; x++) {
-            File wb = new File(Constants.WALLET.WALLET_BACKUP_FILES_NAME + x + Constants.FILES.FILENAME_NETWORK_SUFFIX);
-            File wf = new File(Constants.WALLET.WALLET_FILES_NAME + x + Constants.FILES.FILENAME_NETWORK_SUFFIX);
-            if (wb.exists()) {
-                try {
-                    wallets.put(wf, Wallet.loadFromFile(wb, null));
-                } catch (UnreadableWalletException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        if (wallets.size() <= 0) {
-            throw new UnreadableWalletException("Cannot read wallets!");
-        }
-
-        return new WalletHelper(wallets);
+    public static WalletHelper loadFromBackup() throws UnreadableWalletException {
+        return new WalletHelper(Wallet.loadFromFile(Constants.WALLET.MAIN_WALLET_BACKUP_FILE));
     }
 
     public List<Transaction> getPendingTransactions() {
-        List<Transaction> transactions = new ArrayList<>();
-        for (Wallet w : wallets.values()) {
-            transactions.addAll(w.getPendingTransactions());
-        }
-
-        return transactions;
+        return Lists.newArrayList(this.wallet.getPendingTransactions());
     }
 }

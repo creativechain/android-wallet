@@ -131,12 +131,12 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
             salt = generateSalt();
             setSalt(salt);
         }
-        Log.d(TAG, "getSalt: " + salt);
+
         return salt;
     }
 
     private void setSalt(String salt) {
-        Log.d(TAG, "setSalt: " + salt);
+
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(PASSWORD_SALT_PREFERENCE_KEY, salt);
         editor.apply();
@@ -210,7 +210,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
 
     @Override
     public void enable() {
-        Log.d(TAG, "enable");
+
         PinActivity.setListener(this);
         PinCompatActivity.setListener(this);
         PinFragmentActivity.setListener(this);
@@ -218,7 +218,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
 
     @Override
     public void disable() {
-        Log.d(TAG, "disable");
+
         PinActivity.clearListeners();
         PinCompatActivity.clearListeners();
         PinFragmentActivity.clearListeners();
@@ -226,7 +226,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
 
     @Override
     public void disableAndRemoveConfiguration() {
-        Log.d(TAG, "disableAndRemoveConfiguration");
+
         PinActivity.clearListeners();
         PinCompatActivity.clearListeners();
         PinFragmentActivity.clearListeners();
@@ -260,7 +260,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
 
     @Override
     public void setLastActiveMillis() {
-        Log.d(TAG, "setLastActiveMillis");
+
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putLong(LAST_ACTIVE_MILLIS_PREFERENCE_KEY, System.currentTimeMillis());
         editor.apply();
@@ -268,7 +268,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
 
     @Override
     public boolean checkPasscode(String passcode) {
-        Log.d(TAG, "checkPasscode: " + passcode);
+
         Algorithm algorithm = Algorithm.getFromText(mSharedPreferences.getString(PASSWORD_ALGORITHM_PREFERENCE_KEY, ""));
 
         String salt = getSalt();
@@ -280,13 +280,13 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
             storedPasscode = mSharedPreferences.getString(PASSWORD_PREFERENCE_KEY, "");
         }
 
-        Log.d(TAG, "checking " + passcode  + " : " + storedPasscode);
+
         return storedPasscode.equalsIgnoreCase(passcode);
     }
 
     @Override
     public boolean setPasscode(String passcode) {
-        Log.d(TAG, "setPasscode: " + passcode);
+
         String salt = getSalt();
         SharedPreferences.Editor editor = mSharedPreferences.edit();
 
@@ -310,7 +310,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
      * Set the algorithm used in {@link #setPasscode(String)}
      */
     private void setAlgorithm(Algorithm algorithm) {
-        Log.d(TAG, "setAlgorithm: " + algorithm.toString());
+
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(PASSWORD_ALGORITHM_PREFERENCE_KEY, algorithm.getValue());
         editor.apply();
@@ -318,7 +318,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
 
     @Override
     public boolean isPasscodeSet() {
-        Log.d(TAG, "isPasscodeSet: " + mSharedPreferences.contains(PASSWORD_PREFERENCE_KEY));
+
         return mSharedPreferences.contains(PASSWORD_PREFERENCE_KEY);
 
     }
@@ -329,7 +329,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
 
         // ignored activities
         if (mIgnoredActivities.contains(clazzName)) {
-            Log.d(TAG, "ignore activity " + clazzName);
+
             return true;
         }
 
@@ -380,7 +380,7 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
         }
 
         String clazzName = activity.getClass().getName();
-        Log.d(TAG, "onActivityPaused " + clazzName);
+
 
         if ((onlyBackgroundTimeout() || !shouldLockSceen(activity)) && !(activity instanceof AppLockActivity)) {
             setLastActiveMillis();
@@ -394,10 +394,10 @@ public class AppLockImpl<T extends AppLockActivity> extends AppLock implements L
         }
 
         String clazzName = activity.getClass().getName();
-        Log.d(TAG, "onActivityResumed " + clazzName);
+
 
         if (shouldLockSceen(activity)) {
-            Log.d(TAG, "mActivityClass.getClass() " + mActivityClass);
+
             Intent intent = new Intent(activity.getApplicationContext(),
                     mActivityClass);
             intent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);

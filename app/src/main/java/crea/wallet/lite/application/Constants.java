@@ -94,6 +94,7 @@ public final class Constants {
 		public static final String ADDRESS = TEST ? TEST_ADDRESS : MAIN_ADDRESS;
 		public static final Address DONATION_ADDRESS = Address.fromBase58(WALLET.NETWORK_PARAMETERS, ADDRESS);
 
+		public static final int SCRYPT_ITERATIONS_TARGET = 32768;
 		public static final int MAX_HD_ACCOUNTS = 5;
 	}
 

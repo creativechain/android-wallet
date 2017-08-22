@@ -32,6 +32,7 @@ import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.TransactionAdapter;
 import crea.wallet.lite.util.CoinConverter;
 import crea.wallet.lite.util.DeriveKeyTask;
+import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.util.QR;
 import crea.wallet.lite.util.TxInfo;
 import crea.wallet.lite.wallet.WalletHelper;
@@ -313,22 +314,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void handleChangeFeeAction(TxInfo txInfo) {
-        HandlerThread backgroundThread = new HandlerThread("backgroundThread", Process.THREAD_PRIORITY_BACKGROUND);
-        backgroundThread.start();
-        Handler backgroundHandler = new Handler(backgroundThread.getLooper());
-
-        if (WalletHelper.INSTANCE.isWalletEncrypted()) {
-            new DeriveKeyTask(backgroundHandler, INSTANCE.getScryptIterations()) {
-
-                @Override
-                protected void onSuccess(KeyParameter encryptionKey, boolean changed) {
-                    if (changed) {
-                        INSTANCE.localBackupWallet();
-                    }
-
-
-                }
-            };
-        }
+        IntentUtils.raiseFee(this, txInfo.getTx());
     }
 }

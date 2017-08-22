@@ -183,27 +183,27 @@ public class WalletUtils {
 
 	public static List<Address> getAddressFromTx(Transaction tx, int txPart, boolean cashIn) {
 		ArrayList<Address> addresses = new ArrayList<>();
-		for (Wallet wallet : WalletHelper.INSTANCE.getWallets()) {
-			switch (txPart) {
-				case TRANSACTION_INPUTS:
-					for (TransactionInput i : tx.getInputs()) {
-						Address a = i.getFromAddress();
-						boolean isMine = wallet.isPubKeyMine(a.getHash160()) || wallet.isPubKeyHashMine(a.getHash160());
 
-						if (cashIn && !isMine || !cashIn && isMine) {
-							addresses.add(a);
-						}
+		Wallet wallet = WalletHelper.INSTANCE.getWallet();
+		switch (txPart) {
+			case TRANSACTION_INPUTS:
+				for (TransactionInput i : tx.getInputs()) {
+					Address a = i.getFromAddress();
+					boolean isMine = wallet.isPubKeyMine(a.getHash160()) || wallet.isPubKeyHashMine(a.getHash160());
 
+					if (cashIn && !isMine || !cashIn && isMine) {
+						addresses.add(a);
 					}
-					break;
-				case TRANSACTION_OUTPUTS:
-					for (TransactionOutput o : tx.getOutputs()) {
-						if (cashIn && o.isMine(wallet) || !cashIn && !o.isMine(wallet)) {
-							Address a = o.getScriptPubKey().getToAddress(Constants.WALLET.NETWORK_PARAMETERS);
-							addresses.add(a);
-						}
+
+				}
+				break;
+			case TRANSACTION_OUTPUTS:
+				for (TransactionOutput o : tx.getOutputs()) {
+					if (cashIn && o.isMine(wallet) || !cashIn && !o.isMine(wallet)) {
+						Address a = o.getScriptPubKey().getToAddress(Constants.WALLET.NETWORK_PARAMETERS);
+						addresses.add(a);
 					}
-			}
+				}
 		}
 		return addresses;
 	}

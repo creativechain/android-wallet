@@ -21,7 +21,7 @@ public class PinActivity extends AppLockActivity {
 
     @Override
     public void showForgotDialog() {
-        Log.d(TAG, "showForgotDialog");
+
     }
 
     @Override
@@ -35,7 +35,7 @@ public class PinActivity extends AppLockActivity {
 
     @Override
     public void onPinSuccess(int attempts) {
-        Log.d(TAG, "onPinSuccess");
+
     }
 
     @Override

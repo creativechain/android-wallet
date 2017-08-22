@@ -30,6 +30,7 @@ public class CoinConverter {
 
     public CoinConverter price(AbstractCoin price) {
         this.price = price;
+        this.amountConverted = CoinUtils.valueOf(price.getCurrencyCode(), 0);
         calculate();
         return this;
     }

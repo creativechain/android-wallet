@@ -40,14 +40,14 @@ public class PaymentProcess {
     private WalletHelper walletHelper;
     private Activity activity;
     private SendRequest sendRequest;
-    private File walletFile;
+    private String key;
     private PaymentProcessListener processListener;
     private Transaction tx;
 
-    public PaymentProcess(Activity activity, SendRequest sendRequest, File walletFile) {
+    public PaymentProcess(Activity activity, SendRequest sendRequest, String key) {
         this.walletHelper = WalletHelper.INSTANCE;
         this.activity = activity;
-        this.walletFile = walletFile;
+        this.key = key;
         this.sendRequest = sendRequest;
     }
 
@@ -65,7 +65,7 @@ public class PaymentProcess {
     }
 
     public Address getDestiny() {
-        Wallet wallet = walletHelper.getWallet(walletFile);
+        Wallet wallet = walletHelper.getWallet();
         List<TransactionOutput> outputList = sendRequest.tx.getOutputs();
         for (TransactionOutput txOut : outputList) {
             if (!txOut.isMine(wallet)) {
@@ -81,7 +81,7 @@ public class PaymentProcess {
     }
 
     public Coin getAmountToSend() {
-        Wallet wallet = walletHelper.getWallet(walletFile);
+        Wallet wallet = walletHelper.getWallet();
         List<TransactionOutput> outputList = sendRequest.tx.getOutputs();
         for (TransactionOutput txOut : outputList) {
             if (!txOut.isMine(wallet)) {
@@ -148,11 +148,8 @@ public class PaymentProcess {
 
             @Override
             protected Void doInBackground(Void... params) {
-                String k = Configuration.getInstance().getPin();
                 try {
-                    k = WalletCrypt.getInstance().generate(k);
-
-                    WalletHelper.INSTANCE.singTransaction(walletFile, k, sendRequest);
+                    WalletHelper.INSTANCE.singTransaction(key, sendRequest);
                     tx = sendRequest.tx;
                     if (processListener != null) {
                         processListener.onSending();

@@ -35,12 +35,13 @@ public abstract class PrepareTxActivity extends AppCompatActivity {
     private final BlockchainBroadcastReceiver TRANSACTION_RECEIVER = new BlockchainBroadcastReceiver() {
         @Override
         public void onTransactionSend(Transaction transaction) {
-            wallet = WalletHelper.INSTANCE.getMainWallet();
+            wallet = WalletHelper.INSTANCE.getWallet();
+            CONFIDENCE_LISTENER.onSuccess(transaction);
         }
 
         @Override
         public void onTransactionReceived(Transaction transaction) {
-            wallet = WalletHelper.INSTANCE.getMainWallet();
+            wallet = WalletHelper.INSTANCE.getWallet();
         }
     };
 
@@ -120,7 +121,7 @@ public abstract class PrepareTxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         conf = Configuration.getInstance();
-        wallet = WalletHelper.INSTANCE.getMainWallet();
+        wallet = WalletHelper.INSTANCE.getWallet();
         feeCategory = conf.getFeeCategory();
 
     }

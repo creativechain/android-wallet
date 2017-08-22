@@ -408,6 +408,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 				peerGroup = new PeerGroup(NETWORK_PARAMETERS, blockChain);
 				peerGroup.setDownloadTxDependencies(0); // recursive implementation causes StackOverflowError
 				peerGroup.setBloomFilteringEnabled(true);
+                peerGroup.setMinBroadcastConnections(1);
 				addWallets();
 
 				peerGroup.setUserAgent(Constants.APP.CLIENT_NAME, Constants.APP.VERSION);
@@ -531,27 +532,19 @@ public class CreativeCoinService extends Service implements BlockchainService {
 		if (peerGroup != null) {
 			WalletHelper.INSTANCE.addIssuedAddressesToWatch();
 			WalletHelper.INSTANCE.addEventListener(WALLET_COIN_LISTENER, Threading.THREAD_POOL);
-			int count =0;
-			for (Wallet w : WalletHelper.INSTANCE.getWallets()) {
-				peerGroup.addWallet(w);
+			peerGroup.addWallet(WalletHelper.INSTANCE.getWallet());
 
-				count++;
-			}
-
-			Log.e(TAG,"Watching " + count + " wallets");
+			Log.e(TAG,"Watching wallets");
 		}
 	}
 
 	private void removeWallets() {
 		if (peerGroup != null) {
 			WalletHelper.INSTANCE.removeEventListener(WALLET_COIN_LISTENER);
-			int count =0;
-			for (Wallet w : WalletHelper.INSTANCE.getWallets()) {
-				peerGroup.removeWallet(w);
-				count++;
-			}
 
-			Log.e(TAG,"Removed " + count + " wallets");
+			peerGroup.removeWallet(WalletHelper.INSTANCE.getWallet());
+
+			Log.e(TAG,"Removed wallet");
 		}
 	}
 
@@ -602,7 +595,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 				blockStore = new SPVBlockStore(NETWORK_PARAMETERS, blockChainFile);
 				blockStore.getChainHead(); // detect corruptions as early as possible
 
-				final long earliestKeyCreationTime = WalletHelper.INSTANCE.getFirstKeyCreationTime();
+				final long earliestKeyCreationTime = WalletHelper.INSTANCE.getKeyCreationTime();
 
 				Log.e(TAG,"CREATION_TIME=" + earliestKeyCreationTime +  " BLOCKCHAIN_FILE=" + blockChainFileExists);
 				if (!blockChainFileExists && earliestKeyCreationTime > 0){
@@ -624,7 +617,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 			}
 
 			try	{
-				blockChain = new BlockChain(NETWORK_PARAMETERS, WalletHelper.INSTANCE.getMainWallet(), blockStore);
+				blockChain = new BlockChain(NETWORK_PARAMETERS, WalletHelper.INSTANCE.getWallet(), blockStore);
 			} catch (final BlockStoreException x) {
 				throw new Error("blockchain cannot be created", x);
 			}
@@ -693,7 +686,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 		if (peerGroup != null)	{
 			peerGroup.removeDisconnectedEventListener(peerConnectivityListener);
 			peerGroup.removeConnectedEventListener(peerConnectivityListener);
-			peerGroup.removeWallet(WalletHelper.INSTANCE.getMainWallet());
+			peerGroup.removeWallet(WalletHelper.INSTANCE.getWallet());
 			peerGroup.stop();
 
 			Log.i(TAG, "peergroup stopped");
@@ -785,7 +778,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
 	public void broadcastTransactionPendingTx(Intent data) {
 		if (peerGroup != null) {
-			final Sha256Hash hash = Sha256Hash.wrap(data.getByteArrayExtra(ACTION_BROADCAST_TRANSACTION_HASH));
+			final Sha256Hash hash = (Sha256Hash) data.getSerializableExtra(ACTION_BROADCAST_TRANSACTION_HASH);
 			final Transaction tx = WalletHelper.INSTANCE.getTransaction(hash);
 			Log.i(TAG, "broadcasting transaction " + tx.getHash().toString());
 			peerGroup.broadcastTransaction(tx);
