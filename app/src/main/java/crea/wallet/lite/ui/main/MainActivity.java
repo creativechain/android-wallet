@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void invalidateAddressBook() {
-        BookAddress.add(WalletHelper.INSTANCE.getMainReceiveAddresses(), true);
+        BookAddress.add(WalletHelper.INSTANCE.getReceiveAddresses(), true);
     }
 
     @Override

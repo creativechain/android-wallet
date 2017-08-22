@@ -103,7 +103,7 @@ public class WalletHelper {
     }
 
     public int addIssuedAddressesToWatch() {
-        return addWatchedAddresses(getMainReceiveAddresses());
+        return addWatchedAddresses(getReceiveAddresses());
     }
 
     public int addWatchedAddresses(List<Address> addresses) {
@@ -117,10 +117,6 @@ public class WalletHelper {
         }
 
         return list;
-    }
-
-    public List<Address> getMainReceiveAddresses() {
-        return getReceiveAddresses();
     }
 
     public Coin getTotalBalance() {
