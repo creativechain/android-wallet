@@ -20,7 +20,8 @@ public class IntentUtils {
     private static final String TAG = "IntentUtils";
     public static final int QR_SCAN = 1;
     public static final int IMPORT_SEED = 2;
-    public static final int PIN = 3;
+    public static final int RETYPE_SEED = 3;
+    public static final int PIN = 4;
 
     public static void startQRScanner(Fragment fragment) {
         Intent intent = new Intent(fragment.getActivity(), QRScannerActivity.class);
@@ -33,7 +34,12 @@ public class IntentUtils {
     }
 
     public static void inputSeed(Activity activity) {
+        inputSeed(activity, false);
+    }
+
+    public static void inputSeed(Activity activity, boolean retype) {
         Intent seedIntent = new Intent(activity, SeedActivity.class);
+        seedIntent.putExtra(SeedActivity.RETYPE_SEED, retype);
         activity.startActivityForResult(seedIntent, IMPORT_SEED);
     }
 

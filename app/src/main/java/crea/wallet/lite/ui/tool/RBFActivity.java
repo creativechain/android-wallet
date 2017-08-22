@@ -59,6 +59,7 @@ public class RBFActivity extends PrepareTxActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rbf);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         broadcastStatus = findViewById(R.id.broadcast_status);
         txStatus = (TextView) findViewById(R.id.transaction_status);

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class SeedActivity extends AppCompatActivity implements CompoundButton.On
 
     private static final String TAG = "SeedActivity";
 
+    public static final String RETYPE_SEED = "retype_seed";
     public static final String EXTRA_SEED = "extra_seed";
 
     private TagView seed;
@@ -53,6 +55,14 @@ public class SeedActivity extends AppCompatActivity implements CompoundButton.On
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_seed);
+
+        TextView retypeSeed = (TextView)  findViewById(R.id.retype_seed);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(RETYPE_SEED)) {
+            boolean retype = extras.getBoolean(RETYPE_SEED);
+            retypeSeed.setVisibility(retype ? View.VISIBLE : View.GONE);
+        }
 
         english = (RadioButton) findViewById(R.id.english);
         spanish = (RadioButton) findViewById(R.id.spanish);

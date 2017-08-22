@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
 
-    android:background="@drawable/login_background">
+              android:background="@drawable/login_background">
 
     <me.kaede.tagview.TagView
         android:id="@+id/seed"
@@ -29,10 +31,22 @@
         android:layout_marginBottom="5dp"
         android:gravity="center_horizontal" />
 
+    <crea.wallet.lite.widget.FontTextView
+        android:id="@+id/retype_seed"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:font="raleway_bold"
+        android:textColor="#ff9b9b"
+        android:gravity="center"
+        android:text="@string/retype_seed"
+        android:visibility="gone"/>
+
     <crea.wallet.lite.widget.keyboard.TextKeyboard
         android:id="@+id/text_keyboard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
 
     <RadioGroup
         android:layout_width="match_parent"

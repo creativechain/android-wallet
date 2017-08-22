@@ -134,4 +134,6 @@
     <string name="raise_fee_tx">Incremento de comisión</string>
     <string name="rbf_warning">Atención! Esta acción reemplaza una transacción ya emitida pero incrementa la comisión restándola de la cantidad enviada al destinatario.</string>
     <string name="rbf_tx_detail">Esta transacción fue emitida para incrementar la comisión de otra transacción.</string>
+    <string name="retype_seed">Por seguridad, vuelve a escribir las palabras que se mostraron previamente. El orden es importante.</string>
+    <string name="seed_not_match">La semilla detectada no coincide con la semilla generada.</string>
 </resources>

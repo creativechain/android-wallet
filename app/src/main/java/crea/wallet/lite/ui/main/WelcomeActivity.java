@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
@@ -36,6 +37,8 @@ import org.creativecoinj.wallet.Protos;
 import org.creativecoinj.wallet.Wallet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -171,10 +174,36 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
-                createPin();
+                retypeSeed();
             }
         });
         aDialog.show();
+    }
+
+    private void retypeSeed() {
+        IntentUtils.inputSeed(this, true);
+    }
+
+    private void verifySeed(List<String> retypeSeed) {
+        boolean match = true;
+        if (seed.size() == retypeSeed.size()) {
+            int length = seed.size();
+            for (int x = 0; x < length; x++) {
+                String s = seed.get(x);
+                String r = retypeSeed.get(x);
+                if (!s.equals(r)) {
+                    match = false;
+                    break;
+                }
+            }
+        }
+
+        if (match) {
+            createPin();
+        } else {
+            Toast.makeText(this, R.string.seed_not_match, Toast.LENGTH_LONG).show();
+            showMnemonicCode();
+        }
     }
 
     private void createPin() {
@@ -261,6 +290,9 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                 seed = data.getStringArrayListExtra(SeedActivity.EXTRA_SEED);
                 Log.d(TAG, "IMPORTED SEED: " + seed.toString());
                 showCreationTimeDialog();
+            } else if (requestCode == IntentUtils.RETYPE_SEED) {
+                String[] retypeSeed = data.getStringArrayExtra(SeedActivity.EXTRA_SEED);
+                verifySeed(Arrays.asList(retypeSeed));
             } else if (requestCode == IntentUtils.PIN) {
                 String pin = data.getStringExtra(PinActivity.EXTRA_CODE);
                 cypherWallet(pin);
