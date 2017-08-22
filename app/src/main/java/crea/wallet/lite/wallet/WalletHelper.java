@@ -289,7 +289,6 @@ public class WalletHelper {
         }
 
         try	{
-            //TODO IMPLEMENTAR NUEVOS ARCHIVOS BACKUP PARA LAS CUENTAS
             os = new FileOutputStream(Constants.WALLET.MAIN_WALLET_BACKUP_FILE);
             walletProto.writeTo(os);
         } catch (final IOException x) {
