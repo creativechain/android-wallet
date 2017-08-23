@@ -61,7 +61,11 @@ public class SeedActivity extends AppCompatActivity implements CompoundButton.On
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(RETYPE_SEED)) {
             boolean retype = extras.getBoolean(RETYPE_SEED);
-            retypeSeed.setVisibility(retype ? View.VISIBLE : View.GONE);
+
+            if (retype) {
+                setTitle(R.string.retype_seed_title);
+                retypeSeed.setVisibility(View.VISIBLE);
+            }
         }
 
         english = (RadioButton) findViewById(R.id.english);

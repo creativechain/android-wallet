@@ -137,5 +137,6 @@
     <string name="rbf_tx_detail">This transaction was issued to increase the fee of another transaction.</string>
     <string name="retype_seed">For security, retype the words previously shown. Order is important.</string>
     <string name="seed_not_match">The detected seed does not match with the generated seed.</string>
+    <string name="retype_seed_title">Retype seed</string>
 
 </resources>
