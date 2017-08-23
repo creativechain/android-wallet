@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.util.Task;
@@ -67,7 +68,7 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
             case MIGRATION:
                 try {
                     if (WalletHelper.INSTANCE.isWalletEncrypted()) {
-                        k = walletCrypt.generate(key);
+                        k = walletCrypt.generate(Configuration.getInstance().getPin());
                         WalletHelper.INSTANCE.decrypt(k);
                     } else {
                         k = key;
@@ -79,7 +80,7 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
                 } catch (Throwable e) {
                     Log.e(TAG, "Failed to decrypt wallet", e);
                 }
-
+                break;
             case MNEMONIC_CODE:
                 try {
                     if (WalletHelper.INSTANCE.isWalletEncrypted()) {

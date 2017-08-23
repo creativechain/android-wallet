@@ -21,6 +21,7 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.android.LogcatAppender;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import com.crashlytics.android.Crashlytics;
 import crea.wallet.lite.R;
 import crea.wallet.lite.background.DynamicFeeLoader;
 import crea.wallet.lite.background.PriceUpdater;
@@ -31,6 +32,7 @@ import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 import com.gotcreations.materialpin.managers.LockManager;
 
+import io.fabric.sdk.android.Fabric;
 import org.creativecoinj.core.Transaction;
 import org.creativecoinj.core.VerificationException;
 import org.creativecoinj.crypto.MnemonicCode;
@@ -71,6 +73,7 @@ public class WalletApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         INSTANCE = this;
         activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 

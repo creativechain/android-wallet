@@ -11,7 +11,10 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.SwitchPreferenceCompat;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.util.Arrays;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
@@ -42,7 +45,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final ListPreference feepreference = (ListPreference) findPreference("transaction_fee");
         FeeCategory category;
         if (feepreference.getValue() != null) {
-            category = FeeCategory.valueOf(feepreference.getValue());
+            try {
+                category = FeeCategory.valueOf(feepreference.getValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+                category = FeeCategory.PRIORITY;
+                conf.setFeeCategory(FeeCategory.PRIORITY);
+            }
         } else {
             category = conf.getFeeCategory();
         }
@@ -62,6 +71,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     index++;
                 }
                 FeeCategory category = FeeCategory.valueOf(values[index].toString());
+                Log.d(TAG, Arrays.toString(values) + ", " + Arrays.toString(entries) + ", INDEX=" + index);
                 String summary = entries[index] + ", " + conf.getTransactionFee(category).longValue() + " s/Kb";
                 feepreference.setSummary(summary);
                 return true;

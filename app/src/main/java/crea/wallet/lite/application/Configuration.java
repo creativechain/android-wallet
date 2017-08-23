@@ -159,12 +159,20 @@ public class Configuration {
 	}
 
 	public void setFeeCategory(FeeCategory category) {
-		prefs.edit().putString(PREFS_KEY_TRANSACTION_FEE_CATEGORY, category.toString()).apply();
+		prefs.edit().putString(PREFS_KEY_TRANSACTION_FEE, category.toString()).apply();
 	}
 
 	public FeeCategory getFeeCategory() {
 		String s = prefs.getString(PREFS_KEY_TRANSACTION_FEE, FeeCategory.PRIORITY.toString());
-		return FeeCategory.valueOf(s);
+		FeeCategory feeCategory = FeeCategory.PRIORITY;
+		try {
+			feeCategory = FeeCategory.valueOf(s);
+		} catch (Exception e) {
+			e.printStackTrace();
+			setFeeCategory(feeCategory);
+		}
+
+		return feeCategory;
 	}
 
 	public void setTransactionFee(FeeCategory category, Coin fee) {
