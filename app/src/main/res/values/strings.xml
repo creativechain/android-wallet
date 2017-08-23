@@ -138,5 +138,7 @@
     <string name="retype_seed">For security, retype the words previously shown. Order is important.</string>
     <string name="seed_not_match">The detected seed does not match with the generated seed.</string>
     <string name="retype_seed_title">Retype seed</string>
+    <string name="wallet_backup_detected">A backup of a previous wallet has been detected. If you create a new wallet this backup will be deleted. Do you want to recover the wallet from the backup?</string>
+    <string name="wallet_backup_detected_title">Wallet backup detected</string>
 
 </resources>

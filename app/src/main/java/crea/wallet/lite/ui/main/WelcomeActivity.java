@@ -20,25 +20,17 @@ import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
-import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.SeedActivity;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
 import crea.wallet.lite.wallet.WalletHelper;
 
-import org.creativecoinj.core.DumpedPrivateKey;
-import org.creativecoinj.core.Utils;
-import org.creativecoinj.crypto.DeterministicKey;
 import org.creativecoinj.crypto.MnemonicException;
-import org.creativecoinj.wallet.DeterministicSeed;
-import org.creativecoinj.wallet.KeyChainGroup;
-import org.creativecoinj.wallet.Protos;
-import org.creativecoinj.wallet.Wallet;
+import org.creativecoinj.wallet.UnreadableWalletException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -71,6 +63,38 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 
         optionCreate.setOnClickListener(this);
         optionGenerate.setOnClickListener(this);
+
+        //detectedBackup();
+    }
+
+    private void detectedBackup() {
+        if (Constants.WALLET.MAIN_WALLET_BACKUP_FILE.exists()) {
+            AlertDialog aDialog = DialogFactory.alert(this, R.string.wallet_backup_detected_title, R.string.wallet_backup_detected);
+            aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    fromBackup();
+                }
+            });
+
+            aDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            aDialog.show();
+        }
+    }
+
+    private void fromBackup() {
+        try {
+            WalletHelper.INSTANCE = WalletHelper.loadFromBackup();
+        } catch (UnreadableWalletException e) {
+            e.printStackTrace();
+        }
     }
 
     private void importSeed() {
