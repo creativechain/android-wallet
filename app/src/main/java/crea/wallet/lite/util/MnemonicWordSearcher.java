@@ -31,7 +31,6 @@ public class MnemonicWordSearcher {
             for (String s : wordMap) {
                 String sN = Normalizer.normalize(s, Normalizer.Form.NFD);
                 sN = sN.replaceAll("[^\\p{ASCII}]", "");
-                Log.d(TAG, "Normalized : " + s + " - " + sN);
                 if (sN.startsWith(startWith)) {
                     matches.add(s);
                     hasMatches = true;

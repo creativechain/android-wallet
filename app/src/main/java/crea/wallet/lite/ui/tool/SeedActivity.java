@@ -146,6 +146,9 @@ public class SeedActivity extends AppCompatActivity implements CompoundButton.On
         }
 
         toChecked.setChecked(true);
+        if (toChecked.equals(english)) {
+            loadSearcher("en");
+        }
     }
 
     @Override

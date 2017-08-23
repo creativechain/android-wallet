@@ -115,6 +115,8 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     private void showCreationTimeDialog() {
         View walletDateView = LayoutInflater.from(this).inflate(R.layout.wallet_time_dialog, null);
         final DatePicker datePicker = (DatePicker) walletDateView.findViewById(R.id.datePicker);
+        datePicker.setMaxDate(System.currentTimeMillis());
+        datePicker.setMinDate(Constants.WALLET.MIN_CREATION_TIME);
 
         AlertDialog aDialog = DialogFactory.alert(this, R.string.wallet_creation_date, walletDateView);
         aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
