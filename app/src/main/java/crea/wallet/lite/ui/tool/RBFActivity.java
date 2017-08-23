@@ -53,7 +53,7 @@ public class RBFActivity extends PrepareTxActivity {
     private TextView feeAmountBtc;
     private TextView feeAmountFiat;
     private View broadcastStatus;
-
+    private TxInfo txInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +86,9 @@ public class RBFActivity extends PrepareTxActivity {
 
             if (txHash != null) {
                 tx = wallet.getTransaction(txHash);
+                txInfo = new TxInfo(tx);
                 txHashView.setText(txHash.toString());
-                txFee.setText(tx.getFee().toFriendlyString());
+                txFee.setText(txInfo.getFee().toFriendlyString());
             }
 
 
