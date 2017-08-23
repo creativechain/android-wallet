@@ -299,6 +299,8 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                 String pin = data.getStringExtra(PinActivity.EXTRA_CODE);
                 cypherWallet(pin);
             }
+        } else if (resultCode == RESULT_CANCELED && requestCode == IntentUtils.RETYPE_SEED) {
+            showMnemonicCode();
         }
 
     }
