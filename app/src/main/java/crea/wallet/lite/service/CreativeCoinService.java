@@ -295,7 +295,11 @@ public class CreativeCoinService extends Service implements BlockchainService {
                             progressBar.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    progressBar.setText(getString(R.string.sync_time, remainingTime));
+                                    try {
+                                        progressBar.setText(getString(R.string.sync_time, remainingTime));
+                                    } catch (Exception e) {
+										Log.e(TAG, "Unable to show progress");
+                                    }
                                 }
                             });
                         }
