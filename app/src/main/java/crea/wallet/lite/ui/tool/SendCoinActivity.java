@@ -385,7 +385,6 @@ public class SendCoinActivity extends PrepareTxActivity {
         }
 
         if (!hasError) {
-            this.address = Address.fromBase58(NETWORK_PARAMETERS, addressEditText.getText().toString());
             processTransaction();
         }
     }
