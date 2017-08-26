@@ -215,7 +215,7 @@ public class WalletApplication extends Application {
                 throw new Error("bad wallet network parameters: " + WalletHelper.INSTANCE.getWalletParams().getId());
             }
             return true;
-        } else if (Constants.WALLET.MAIN_WALLET_BACKUP_FILE.exists()) {
+        } else if (Constants.WALLET.WALLET_BACKUP_FILE.exists()) {
             return restoreWalletFromBackup();
         }
         return false;
@@ -234,7 +234,7 @@ public class WalletApplication extends Application {
             WalletHelper.INSTANCE = WalletHelper.loadFromBackup();
             WalletHelper.INSTANCE.cleanup();
             resetBlockchain();
-            Log.i(TAG, "wallet restored from backup: '" + Constants.WALLET.MAIN_WALLET_BACKUP_FILE + "'");
+            Log.i(TAG, "wallet restored from backup: '" + Constants.WALLET.WALLET_BACKUP_FILE + "'");
             return true;
         } catch (UnreadableWalletException e) {
             e.printStackTrace();
@@ -253,7 +253,7 @@ public class WalletApplication extends Application {
     }
 
     public void migrateBackup(boolean checkIfExist) {
-        if (checkIfExist && Constants.WALLET.MAIN_WALLET_BACKUP_FILE.exists()) {
+        if (checkIfExist && Constants.WALLET.WALLET_BACKUP_FILE.exists()) {
             Log.e(TAG, "Wallet backup exist");
         } else {
             Log.d(TAG, "migrating automatic backup to protobuf");

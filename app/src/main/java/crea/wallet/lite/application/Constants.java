@@ -48,24 +48,6 @@ public final class Constants {
 
 		/** User-agent to use for network access. */
 		public static final String CLIENT_NAME = "CreativecoinWallet";
-
-		/** MIME type used for transmitting single transactions. */
-		public static final String MIMETYPE_TRANSACTION = "application/x-btctx";
-
-		/** MIME type used for transmitting wallet backups. */
-		public static final String MIMETYPE_WALLET_BACKUP = "application/x-bitcoin-wallet-backup";
-
-		/** MIME type used for synchronizing single ChipChap account */
-		public static final String MIMETYPE_CHIPCHAP_ACCOUNT = "application/x-chipchap-account";
-
-		/** Number of confirmations until a transaction is fully confirmed. */
-		public static final int MAX_NUM_CONFIRMATIONS = 7;
-
-		/** Default currency to use if all default mechanisms fail. */
-		public static final String DEFAULT_EXCHANGE_CURRENCY = "EUR";
-
-		/** Recipient e-mail address for reports. */
-		public static final String REPORT_EMAIL = "info@creativechain.org";
 	}
 
 	public final static class WALLET {
@@ -75,12 +57,11 @@ public final class Constants {
 
 		public static final String WALLET_PATH = APP.CREATIVECHAIN_PATH + "Wallet/";
 		public static final String WALLET_FILES_NAME = WALLET_PATH + "wallet";
-		public static final String WALLET_BACKUP_FILES_NAME = APP.BACKUP_FOLDER + "backup-protobuf";
+		public static final String WALLET_BACKUP_FILE_NAME = APP.BACKUP_FOLDER + "backup-protobuf";
 		public static final File FIRST_WALLET_FILE = new File(WALLET_FILES_NAME + FILES.FILENAME_NETWORK_SUFFIX);
-		public static final File ADDRESS_BOOK_FILE = new File(WALLET_PATH + "addressBook" + FILES.FILENAME_NETWORK_SUFFIX);
 
 		/** Filename of the automatic wallet backup. */
-		public static final File MAIN_WALLET_BACKUP_FILE = new File(APP.BACKUP_FOLDER + "backup-protobuf" + FILES.FILENAME_NETWORK_SUFFIX);
+		public static final File WALLET_BACKUP_FILE = new File(WALLET_BACKUP_FILE_NAME + FILES.FILENAME_NETWORK_SUFFIX);
 
 		/** Filename of the block store for storing the chain. */
 		public static final String BLOCKCHAIN_FILENAME = "chain" + FILES.FILENAME_NETWORK_SUFFIX;

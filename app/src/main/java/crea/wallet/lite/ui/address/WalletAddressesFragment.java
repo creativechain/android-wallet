@@ -99,15 +99,7 @@ public class WalletAddressesFragment extends AddressBookFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String a = WalletHelper.INSTANCE.currentMainReceiveAddress().toString();
-                BookAddress ba = BookAddress.resolveAddress(a);
-                Log.d(TAG, "Adding new Address: " + a);
-                if (ba != null && TextUtils.isEmpty(ba.getLabel())) {
-                    showEditDialog(new BookAddress().setAddress(a).setMine(true), false);
-                } else {
-                    showEditDialog(new BookAddress().setAddress(WalletHelper.INSTANCE.getNewAddress().toString()).setMine(true), false);
-                }
-
+                showEditDialog(new BookAddress().setAddress(WalletHelper.INSTANCE.getNewAddress().toString()).setMine(true), false);
             }
         });
     }

@@ -68,7 +68,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void detectedBackup() {
-        if (Constants.WALLET.MAIN_WALLET_BACKUP_FILE.exists()) {
+        if (Constants.WALLET.WALLET_BACKUP_FILE.exists()) {
             AlertDialog aDialog = DialogFactory.alert(this, R.string.wallet_backup_detected_title, R.string.wallet_backup_detected);
             aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                 @Override

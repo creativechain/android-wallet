@@ -34,9 +34,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -293,7 +290,7 @@ public class WalletHelper {
         }
 
         try	{
-            os = new FileOutputStream(Constants.WALLET.MAIN_WALLET_BACKUP_FILE);
+            os = new FileOutputStream(Constants.WALLET.WALLET_BACKUP_FILE);
             walletProto.writeTo(os);
         } catch (final IOException x) {
             Log.e(TAG, "problem writing key backup");
@@ -408,7 +405,7 @@ public class WalletHelper {
     }
 
     public static WalletHelper loadFromBackup() throws UnreadableWalletException {
-        return new WalletHelper(Wallet.loadFromFile(Constants.WALLET.MAIN_WALLET_BACKUP_FILE));
+        return new WalletHelper(Wallet.loadFromFile(Constants.WALLET.WALLET_BACKUP_FILE));
     }
 
     public List<Transaction> getPendingTransactions() {
