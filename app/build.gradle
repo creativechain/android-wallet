@@ -20,8 +20,8 @@ android {
         applicationId "crea.wallet.lite"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 12
-        versionName "0.2.1"
+        versionCode 13
+        versionName "0.2.2"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
