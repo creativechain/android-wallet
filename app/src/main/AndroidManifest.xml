@@ -94,9 +94,13 @@
         </activity>
         <activity android:name=".ui.tool.RBFActivity">
         </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="2418754685451bac1822594af5a7784277970f3e" />
+            android:value="2418754685451bac1822594af5a7784277970f3e"/>
+
+        <activity android:name=".ui.tool.CheckAddressActivity">
+        </activity>
     </application>
 
 </manifest>
