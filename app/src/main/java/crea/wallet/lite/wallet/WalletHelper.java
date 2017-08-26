@@ -102,6 +102,10 @@ public class WalletHelper {
         return this.wallet.currentReceiveAddress();
     }
 
+    public Address getNewAddress() {
+        return this.wallet.freshReceiveAddress();
+    }
+
     public int addIssuedAddressesToWatch() {
         return addWatchedAddresses(getReceiveAddresses());
     }

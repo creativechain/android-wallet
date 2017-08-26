@@ -89,7 +89,7 @@
     <string name="without_name">Sin nombre</string>
     <string name="broadcasting_transaction_in_nodes">Publicando transacción en %1$d nodos creativecoin.</string>
     <string name="invalid_bitcoin_address">Dirección creativecoin no válida</string>
-    <string name="address_not_found">No se han encontrado direcciones</string>
+    <string name="addresses_not_found">No se han encontrado direcciones</string>
     <string name="address_not_found_explain">Haz click en el botón de abajo para añadir una dirección a la lista.</string>
     <string name="delete">Eliminar</string>
     <string name="transactions_not_found">No se han encontrado transacciones</string>
@@ -138,4 +138,10 @@
     <string name="retype_seed_title">Escribe la semilla</string>
     <string name="wallet_backup_detected">Se ha detectado una copia de seguridad de una billetera anterior. Si creas una nueva billetera esta copia de seguridad será eliminada. Deseas recuperar la billetera desde la copia de seguridad?</string>
     <string name="wallet_backup_detected_title">Copia de seguridad detectada</string>
+    <string name="check_address_tool_explain">Esta función te permite comprobar si una dirección de CREA pertenece a esta billetera. Es útil cuando no sabes si una direccion de una transaccion es de tu billetera. Por supuesto, las direcciones de billeteras de papel nunca pertenecerán a tu billetera.</string>
+    <string name="address_to_check">Dirección a comprobar</string>
+    <string name="address_not_found">No se ha detectado niguna dirección</string>
+    <string name="address_belongs_wallet">La dirección pertenece a esta billetera</string>
+    <string name="address_no_belongs_wallet">La dirección no pertenece a esta billetera</string>
+    <string name="check_address">Comprobar dirección</string>
 </resources>

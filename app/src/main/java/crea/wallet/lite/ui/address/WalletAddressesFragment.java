@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,8 +100,14 @@ public class WalletAddressesFragment extends AddressBookFragment {
             @Override
             public void onClick(View view) {
                 String a = WalletHelper.INSTANCE.currentMainReceiveAddress().toString();
+                BookAddress ba = BookAddress.resolveAddress(a);
                 Log.d(TAG, "Adding new Address: " + a);
-                showEditDialog(new BookAddress().setAddress(a).setMine(true), false);
+                if (ba != null && TextUtils.isEmpty(ba.getLabel())) {
+                    showEditDialog(new BookAddress().setAddress(a).setMine(true), false);
+                } else {
+                    showEditDialog(new BookAddress().setAddress(WalletHelper.INSTANCE.getNewAddress().toString()).setMine(true), false);
+                }
+
             }
         });
     }

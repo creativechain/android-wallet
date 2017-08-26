@@ -25,6 +25,7 @@ import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
 import crea.wallet.lite.service.CreativeCoinService;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;
 import crea.wallet.lite.ui.address.AddressBookActivity;
+import crea.wallet.lite.ui.tool.CheckAddressActivity;
 import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.TransactionAdapter;
 import crea.wallet.lite.util.CoinConverter;
@@ -232,6 +233,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             case R.id.action_address_book:
                 Intent bookIntent = new Intent(this, AddressBookActivity.class);
                 startActivity(bookIntent);
+                break;
+            case R.id.action_check_address:
+                Intent checkIntent = new Intent(this, CheckAddressActivity.class);
+                startActivity(checkIntent);
                 break;
             case R.id.action_settings:
                 Intent settings = new Intent(this, SettingsActivity.class);

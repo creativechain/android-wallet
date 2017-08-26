@@ -92,7 +92,7 @@
     <string name="broadcasting_transaction_in_nodes">Broadcasting transaction in %1$d Creativecoin nodes.</string>
     <string name="transactions_not_found">We have not found any transactions</string>
     <string name="transactions_not_found_explain">Up to now we have not found any incoming transactions or outgoing of this wallet.</string>
-    <string name="address_not_found">No addresses were found</string>
+    <string name="addresses_not_found">No addresses were found</string>
     <string name="address_not_found_explain">Click on the button below to add a Creativecoin address to the list.</string>
     <string name="delete">Delete</string>
     <string name="transaction_fees_explain">Commission of transactions per KB. Transactions with commissions low and takes longer to be confirmed.</string>
@@ -140,5 +140,11 @@
     <string name="retype_seed_title">Retype seed</string>
     <string name="wallet_backup_detected">A backup of a previous wallet has been detected. If you create a new wallet this backup will be deleted. Do you want to recover the wallet from the backup?</string>
     <string name="wallet_backup_detected_title">Wallet backup detected</string>
+    <string name="check_address_tool_explain">This function allows you to check if a CREA address belongs to this wallet. It is useful when you do not know if a transaction address is in your wallet. Of course, paper wallet addresses will never belong in your wallet.</string>
+    <string name="address_to_check">Address to check</string>
+    <string name="address_not_found">No address detected</string>
+    <string name="address_belongs_wallet">The address belongs to this wallet!</string>
+    <string name="address_no_belongs_wallet">The address does not belong in this wallet</string>
+    <string name="check_address">Check address</string>
 
 </resources>

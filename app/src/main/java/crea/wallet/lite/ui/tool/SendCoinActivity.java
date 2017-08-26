@@ -63,7 +63,6 @@ public class SendCoinActivity extends PrepareTxActivity {
     private View acceptBtn;
     private String currency;
     private Task<String> keyTask;
-    private Address address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,10 +159,7 @@ public class SendCoinActivity extends PrepareTxActivity {
     }
 
     private Address getAddress() {
-
-        if (address != null) {
-            return address;
-        } else if (!FormUtils.isEmpty(addressEditText) && WalletUtils.isValidAddress(NETWORK_PARAMETERS, addressEditText.getText().toString())) {
+        if (!FormUtils.isEmpty(addressEditText) && WalletUtils.isValidAddress(NETWORK_PARAMETERS, addressEditText.getText().toString())) {
             return Address.fromBase58(NETWORK_PARAMETERS, addressEditText.getText().toString());
         }
 

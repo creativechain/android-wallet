@@ -29,15 +29,15 @@
             android:paddingTop="10dp">
 
             <EditText
+                android:id="@+id/wallet_user_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/wallet_user_name_edit_text"
                 android:hint="@string/crea_address"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorPrimary"
                 android:maxLines="1"
+                android:paddingLeft="10dp"
                 android:singleLine="true"
-                android:visibility="visible" />
+                android:textColor="@color/colorPrimary"
+                android:visibility="visible"/>
 
         </LinearLayout>
 

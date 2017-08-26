@@ -25,6 +25,14 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_check_address"
+        android:title="@string/check_address"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="3"
+        app:showAsAction="ifRoom" />
+
+
+    <item
         android:id="@+id/action_settings"
         android:title="@string/settings"
         android:icon="@drawable/ic_settings"
