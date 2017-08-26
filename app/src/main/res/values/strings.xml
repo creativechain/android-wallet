@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CREA Wallet</string>
+    <string name="app_name" translatable="false">CREA Wallet</string>
     <string name="available_amount">Available amount</string>
     <string name="bitcoin_address">Creativecoin address</string>
     <string name="blockchain_download">Blockchain download</string>

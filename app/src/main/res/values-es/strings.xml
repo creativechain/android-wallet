@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Creativechain Wallet</string>
     <string name="available_amount">Cantidad disponible</string>
     <string name="bitcoin_address">Dirección creativecoin</string>
     <string name="blockchain_download">Descarga de la cadena de bloques</string>
