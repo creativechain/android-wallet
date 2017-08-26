@@ -680,7 +680,11 @@ public class CreativeCoinService extends Service implements BlockchainService {
 			peerGroup.removeDisconnectedEventListener(peerConnectivityListener);
 			peerGroup.removeConnectedEventListener(peerConnectivityListener);
 			peerGroup.removeWallet(WalletHelper.INSTANCE.getWallet());
-			peerGroup.stop();
+			try {
+				peerGroup.stop();
+			} catch (IllegalStateException e) {
+				Log.e(TAG, "PeerGroup started? " + peerGroup.isRunning(), e);
+			}
 
 			Log.i(TAG, "peergroup stopped");
 		}
