@@ -161,6 +161,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 generateWallet();
+                creationTime = Constants.WALLET.MIN_CREATION_TIME;
             }
         });
 
