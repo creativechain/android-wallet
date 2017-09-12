@@ -44,7 +44,7 @@ public class WalletAddressesFragment extends AddressBookFragment {
                 switch (id) {
                     case R.id.action_copy:
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("Bitcoin address", address.getAddress());
+                        ClipData clip = ClipData.newPlainText("Creativecoin address", address.getAddress());
                         clipboard.setPrimaryClip(clip);
                         Toast.makeText(getActivity(), getString(R.string.address_copied_to_clipboard), Toast.LENGTH_SHORT).show();
                         break;
