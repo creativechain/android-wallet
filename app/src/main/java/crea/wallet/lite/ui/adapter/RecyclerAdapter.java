@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -94,5 +95,11 @@ public abstract class RecyclerAdapter<VH extends RecyclerView.ViewHolder, Item> 
 
     public boolean isEmpty() {
         return getItemCount() == 0;
+    }
+
+    public void replace(Collection<Item> items) {
+        this.itemList.clear();
+        this.itemList.addAll(items);
+        notifyDataChanged();
     }
 }

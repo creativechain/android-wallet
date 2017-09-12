@@ -3,6 +3,7 @@ package crea.wallet.lite.ui.tool;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import crea.wallet.lite.R;
@@ -36,7 +38,10 @@ public class PeerListActivity extends AppCompatActivity {
     };
 
     private RecyclerView list;
+    private ConnectedPeerAdapter adapter;
     private View noPeers;
+    private Handler peerHandler;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,9 @@ public class PeerListActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         list.setLayoutManager(layoutManager);
+
+        adapter = new ConnectedPeerAdapter(this, new ArrayList<ConnectedPeer>());
+        list.setAdapter(adapter);
     }
 
     private void getPeerList() {
@@ -62,9 +70,7 @@ public class PeerListActivity extends AppCompatActivity {
         noPeers.setVisibility(peerList.isEmpty() ? View.VISIBLE : View.GONE);
         list.setVisibility(peerList.isEmpty() ? View.GONE : View.VISIBLE);
 
-        ConnectedPeerAdapter adapter = new ConnectedPeerAdapter(this, peerList);
-        list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        adapter.replace(peerList);
     }
 
     @Override
@@ -80,16 +86,41 @@ public class PeerListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setUpHandler() {
+        if (peerHandler == null) {
+            peerHandler = new Handler();
+        }
+    }
+
+    private void startHandler() {
+        setUpHandler();
+        peerHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getPeerList();
+                peerHandler.postDelayed(this, 1000);
+            }
+        }, 1000);
+    }
+
+    private void stopHandler() {
+        peerHandler.removeCallbacksAndMessages(null);
+        peerHandler = null;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         getPeerList();
         registerReceiver(BLOCKCHAIN_RECEIVER, new IntentFilter(BlockchainBroadcastReceiver.ACTION_PEERS_CHANGED));
+        startHandler();
+
     }
 
     @Override
     protected void onPause() {
         unregisterReceiver(BLOCKCHAIN_RECEIVER);
+        stopHandler();
         super.onPause();
     }
 }
