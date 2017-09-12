@@ -90,7 +90,7 @@ public final class Constants {
 		public static final String BLOCKEXPLORER_TEST_URL = "https://testnet.blockexplorer.com/";
 		public static final String BLOCKEXPLORER_URL = "https://search.creativechain.net/tx/";
 
-		public static final String FEES_URL = "https://wallet.schildbach.de/fees";
+		public static final String FEES_URL = "https://www.creativecoin.tk/fees";
 	}
 
 	public final static class FILES {
