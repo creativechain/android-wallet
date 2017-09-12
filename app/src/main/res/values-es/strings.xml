@@ -150,4 +150,5 @@
     <string name="wallet_not_connected">Billetera no conectada</string>
     <string name="wallet_not_connected_explain">La billetera esta intentando conectarse a la red. Espera un momento.</string>
     <string name="network_monitor">Monitor de Red</string>
+    <string name="cannot_export_seed">"No se ha podido exportar la semilla. "</string>
 </resources>

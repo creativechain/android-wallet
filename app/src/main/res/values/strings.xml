@@ -152,5 +152,6 @@
     <string name="blocks">%1$d blocks</string>
     <string name="ms" translatable="false">%1$d ms</string>
     <string name="network_monitor">Network monitor</string>
+    <string name="cannot_export_seed">The seed could not be exported.</string>
 
 </resources>

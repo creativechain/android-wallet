@@ -159,6 +159,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (data != null && !data.isEmpty()) {
                     final String seed = data.getString("exported");
                     showMnemonicDialog(seed);
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.cannot_export_seed), Toast.LENGTH_LONG).show();
                 }
             }
         }, WalletExporter.MNEMONIC_CODE).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
