@@ -1,9 +1,6 @@
 package crea.wallet.lite.coin;
 
-import android.text.TextUtils;
-
 import org.creativecoinj.core.AbstractCoin;
-import org.creativecoinj.core.Monetary;
 import org.creativecoinj.utils.MonetaryFormat;
 
 import java.math.BigDecimal;
