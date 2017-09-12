@@ -821,11 +821,22 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
 	private void broadcastPeers() {
 		if (peerGroup != null && peerGroup.isRunning()) {
-			ArrayList<ConnectedPeer> peers = ConnectedPeer.wrapAsList(peerGroup.getConnectedPeers());
-			Intent peerIntent = new Intent(BlockchainBroadcastReceiver.ACTION_PEERS_CHANGED);
-			peerIntent.putExtra("peers", peers);
-			Log.e(TAG, "Broadcasting " + peers.size() + " peers");
-			sendBroadcast(peerIntent);
+			new AsyncTask<Void, Void, ArrayList<ConnectedPeer>>() {
+
+				@Override
+				protected ArrayList<ConnectedPeer> doInBackground(Void... params) {
+					return ConnectedPeer.wrapAsList(peerGroup.getConnectedPeers());
+				}
+
+				@Override
+				protected void onPostExecute(ArrayList<ConnectedPeer> peers) {
+					Intent peerIntent = new Intent(BlockchainBroadcastReceiver.ACTION_PEERS_CHANGED);
+					peerIntent.putExtra("peers", peers);
+					Log.e(TAG, "Broadcasting " + peers.size() + " peers");
+					sendBroadcast(peerIntent);
+				}
+			}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
 		}
 	}
 }
