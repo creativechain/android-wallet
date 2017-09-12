@@ -3,6 +3,7 @@ package crea.wallet.lite.coin;
 import android.text.TextUtils;
 
 import org.creativecoinj.core.AbstractCoin;
+import org.creativecoinj.core.Monetary;
 import org.creativecoinj.utils.MonetaryFormat;
 
 import java.math.BigDecimal;
@@ -14,8 +15,9 @@ import java.math.BigDecimal;
 public class Bitcoin extends AbstractCoin {
 
     private static final long serialVersionUID = -1188579869483422890L;
-    private static final MonetaryFormat PLAIN_FORMAT = MonetaryFormat.BTC.minDecimals(0).repeatOptionalDecimals(1, 8).noCode();
-    private static final MonetaryFormat FRIENDLY_FORMAT = MonetaryFormat.BTC.minDecimals(2).repeatOptionalDecimals(1, 6).postfixCode();
+    private static final MonetaryFormat PLAIN_FORMAT = (new MonetaryFormat()).shift(0).minDecimals(2).repeatOptionalDecimals(1, 8).noCode();
+    private static final MonetaryFormat FRIENDLY_FORMAT = MonetaryFormat.BTC.minDecimals(2).repeatOptionalDecimals(1, 6)
+            .code(0, "BTC").code(1, "mBTC").code(2, "µBTC").postfixCode();
 
     public Bitcoin(long value) {
         super(value, "BTC", 8);
