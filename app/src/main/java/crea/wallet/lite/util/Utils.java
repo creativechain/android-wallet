@@ -44,6 +44,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import crea.wallet.lite.application.Constants;
+
 /**
  * Created by personal on 12/22/14.
  */
@@ -337,5 +339,14 @@ public class Utils {
 
     public static <T> T[] listToArray(List<T> list) {
         return (T[]) list.toArray();
+    }
+
+    public static long normalizeWalletTime(long millis) {
+        long genesisTime = Constants.WALLET.MIN_CREATION_TIME * 1000;
+        if (millis < genesisTime) {
+            return genesisTime;
+        }
+
+        return millis;
     }
 }

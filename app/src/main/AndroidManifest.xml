@@ -92,9 +92,14 @@
         </activity>
         <activity android:name=".ui.tool.PaperWalletActivity">
         </activity>
-        <activity android:name=".ui.tool.RBFActivity">
+        <activity android:name=".ui.tool.RBFActivity"
+            android:screenOrientation="portrait">
         </activity>
-
+        <activity
+            android:name=".ui.tool.PeerListActivity"
+            android:label="@string/network_monitor"
+            android:screenOrientation="portrait">
+        </activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="2418754685451bac1822594af5a7784277970f3e"/>

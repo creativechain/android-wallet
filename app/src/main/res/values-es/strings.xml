@@ -144,4 +144,10 @@
     <string name="address_belongs_wallet">La dirección pertenece a esta billetera</string>
     <string name="address_no_belongs_wallet">La dirección no pertenece a esta billetera</string>
     <string name="check_address">Comprobar dirección</string>
+    <string name="blocks">%1$d bloques</string>
+    <string name="ms"></string>
+    <string name="protocol_version_dots">Protocolo: %1$d</string>
+    <string name="wallet_not_connected">Billetera no conectada</string>
+    <string name="wallet_not_connected_explain">La billetera esta intentando conectarse a la red. Espera un momento.</string>
+    <string name="network_monitor">Monitor de Red</string>
 </resources>

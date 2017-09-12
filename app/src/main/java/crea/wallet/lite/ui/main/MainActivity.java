@@ -26,6 +26,7 @@ import crea.wallet.lite.service.CreativeCoinService;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;
 import crea.wallet.lite.ui.address.AddressBookActivity;
 import crea.wallet.lite.ui.tool.CheckAddressActivity;
+import crea.wallet.lite.ui.tool.PeerListActivity;
 import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.TransactionAdapter;
 import crea.wallet.lite.util.CoinConverter;
@@ -241,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             case R.id.action_settings:
                 Intent settings = new Intent(this, SettingsActivity.class);
                 startActivity(settings);
+                break;
+            case R.id.action_network:
+                Intent network = new Intent(this, PeerListActivity.class);
+                startActivity(network);
         }
         return super.onOptionsItemSelected(item);
     }

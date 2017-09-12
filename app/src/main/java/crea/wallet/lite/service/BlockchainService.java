@@ -35,6 +35,7 @@ public interface BlockchainService {
 
 	String ACTION_CANCEL_COINS_RECEIVED = BlockchainService.class.getPackage().getName() + ".cancel_coins_received";
 	String ACTION_RESET_BLOCKCHAIN = BlockchainService.class.getPackage().getName() + ".reset_blockchain";
+	String ACTION_SEND_PEERS = BlockchainService.class.getPackage().getName() + ".send_peers";
 	String ACTION_BROADCAST_TRANSACTION = BlockchainService.class.getPackage().getName() + ".broadcast_transaction";
 	String ACTION_BROADCAST_TRANSACTION_HASH = "hash";
 

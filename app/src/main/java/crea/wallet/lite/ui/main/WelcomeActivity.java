@@ -24,6 +24,7 @@ import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.SeedActivity;
 import crea.wallet.lite.util.DialogFactory;
 import crea.wallet.lite.util.IntentUtils;
+import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 
 import org.creativecoinj.crypto.MnemonicException;
@@ -140,7 +141,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         View walletDateView = LayoutInflater.from(this).inflate(R.layout.wallet_time_dialog, null);
         final DatePicker datePicker = (DatePicker) walletDateView.findViewById(R.id.datePicker);
         datePicker.setMaxDate(System.currentTimeMillis());
-        datePicker.setMinDate(Constants.WALLET.MIN_CREATION_TIME);
+        datePicker.setMinDate(Constants.WALLET.MIN_CREATION_TIME * 1000);
 
         AlertDialog aDialog = DialogFactory.alert(this, R.string.wallet_creation_date, walletDateView);
         aDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
@@ -161,7 +162,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 generateWallet();
-                creationTime = Constants.WALLET.MIN_CREATION_TIME;
             }
         });
 
@@ -169,6 +169,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void generateWallet() {
+        creationTime = Utils.normalizeWalletTime(creationTime);
         setProgressText(R.string.generating_wallet);
         showProgress(true);
         new AsyncTask<Void, Void, Void>() {

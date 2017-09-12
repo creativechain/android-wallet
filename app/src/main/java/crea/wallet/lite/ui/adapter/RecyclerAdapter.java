@@ -22,7 +22,7 @@ public abstract class RecyclerAdapter<VH extends RecyclerView.ViewHolder, Item> 
     }
 
     protected Activity activity;
-    private List<Item> itemList = new ArrayList<>();
+    protected List<Item> itemList = new ArrayList<>();
     private OnItemClickListener<Item> onItemClickListener;
 
     public RecyclerAdapter(Activity activity) {

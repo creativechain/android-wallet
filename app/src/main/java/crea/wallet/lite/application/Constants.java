@@ -35,7 +35,7 @@ import java.io.File;
  * @author Andreas Schildbach
  */
 public final class Constants {
-	public static final boolean TEST = BuildConfig.DEBUG;
+	public static final boolean TEST = false;
 
 	/** Network this wallet is on (e.g. testnet or mainnet). */
 	public final static class APP {
@@ -53,7 +53,7 @@ public final class Constants {
 	public final static class WALLET {
 		public static final NetworkParameters NETWORK_PARAMETERS = TEST ? TestNet3Params.get() : MainNetParams.get();
 		public static final Context CONTEXT = new Context(NETWORK_PARAMETERS);
-		public static final long MIN_CREATION_TIME = 1493683200000L;
+		public static final long MIN_CREATION_TIME = NETWORK_PARAMETERS.getGenesisBlock().getTimeSeconds() + 1;
 
 		public static final String WALLET_PATH = APP.CREATIVECHAIN_PATH + "Wallet/";
 		public static final String WALLET_FILES_NAME = WALLET_PATH + "wallet";

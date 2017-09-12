@@ -31,6 +31,12 @@
         android:orderInCategory="3"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_network"
+        android:title="@string/network_monitor"
+        android:icon="@drawable/ic_network_monitor"
+        android:orderInCategory="3"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_settings"

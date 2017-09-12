@@ -7,6 +7,10 @@ import android.content.Intent;
 import org.creativecoinj.core.Sha256Hash;
 import org.creativecoinj.core.Transaction;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import crea.wallet.lite.connection.ConnectedPeer;
 import crea.wallet.lite.wallet.WalletHelper;
 
 /**
@@ -24,6 +28,7 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
     public static final String LAST_BLOCK_RECEIVED = BASE_ACTION + ".last_block_received";
     public static final String BLOCKCHAIN_RESET = BASE_ACTION + ".blockchain_reset";
     public static final String ACTION_SYNC_STARTED = BASE_ACTION + ".sync_started";
+    public static final String ACTION_PEERS_CHANGED = BASE_ACTION + ".peers_changed";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -45,6 +50,9 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
             onBlockChainReset();
         } else if (action.equals(ACTION_SYNC_STARTED)) {
             onSyncStarted();
+        } else if (action.equals(ACTION_PEERS_CHANGED)) {
+            List<ConnectedPeer> peers = (List<ConnectedPeer>) intent.getExtras().getSerializable("peers");
+            onPeers(peers);
         }
     }
 
@@ -69,6 +77,10 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
     }
 
     public void onSyncStarted() {
+
+    }
+
+    public void onPeers(List<ConnectedPeer> peers) {
 
     }
 }

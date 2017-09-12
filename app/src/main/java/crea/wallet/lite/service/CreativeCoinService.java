@@ -47,6 +47,7 @@ import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
+import crea.wallet.lite.connection.ConnectedPeer;
 import crea.wallet.lite.ui.base.TransactionActivity;
 import crea.wallet.lite.ui.main.MainActivity;
 import crea.wallet.lite.util.TimeUtils;
@@ -247,11 +248,13 @@ public class CreativeCoinService extends Service implements BlockchainService {
 		@Override
 		public void onPeerConnected(final Peer peer, final int peerCount) {
 			Log.i(TAG, "Connected " + peer.getAddress().toString());
+			broadcastPeers();
 		}
 
 		@Override
 		public void onPeerDisconnected(final Peer peer, final int peerCount) {
 			Log.i(TAG, "Disconnected " + peer.getAddress().toString());
+			broadcastPeers();
 		}
 
 		@Override
@@ -656,10 +659,12 @@ public class CreativeCoinService extends Service implements BlockchainService {
             } else if (ACTION_BROADCAST_TRANSACTION.equals(action)) {
                 broadcastTransactionPendingTx(intent);
             } else if (ACTION_RESET_BLOCKCHAIN.equals(action)) {
-                Log.i(TAG, "will remove blockchain on service shutdown");
+				Log.i(TAG, "will remove blockchain on service shutdown");
 
-                resetBlockchainOnShutdown = true;
-                stopSelf();
+				resetBlockchainOnShutdown = true;
+				stopSelf();
+			} else if (ACTION_SEND_PEERS.equals(action)) {
+				broadcastPeers();
             } else if (peerGroup != null && peerGroup.isRunning()) {
                 broadcastSyncStarted();
             }
@@ -812,5 +817,15 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
     private void broadcastSyncStarted() {
 		sendBroadcast(new Intent(ACTION_SYNC_STARTED));
+	}
+
+	private void broadcastPeers() {
+		if (peerGroup != null && peerGroup.isRunning()) {
+			ArrayList<ConnectedPeer> peers = ConnectedPeer.wrapAsList(peerGroup.getConnectedPeers());
+			Intent peerIntent = new Intent(BlockchainBroadcastReceiver.ACTION_PEERS_CHANGED);
+			peerIntent.putExtra("peers", peers);
+			Log.e(TAG, "Broadcasting " + peers.size() + " peers");
+			sendBroadcast(peerIntent);
+		}
 	}
 }
