@@ -117,7 +117,7 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
 
     private String getMnemonicCodeAsString(List<String> mnemonicCode) {
         Log.d(TAG, "seed: " + mnemonicCode);
-        return TextUtils.join(" ", mnemonicCode);
+        return TextUtils.join(", ", mnemonicCode);
     }
 
     @Override
