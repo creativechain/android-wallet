@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.creativecoinj.core.Address;
+
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.WalletApplication;
@@ -99,8 +101,24 @@ public class WalletAddressesFragment extends AddressBookFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showEditDialog(new BookAddress().setAddress(WalletHelper.INSTANCE.getNewAddress().toString()).setMine(true), false);
+                showEditDialog(new BookAddress().setAddress(getNextAddress().toString()).setMine(true), false);
             }
         });
+    }
+
+    private Address getNextAddress() {
+        Address a = WalletHelper.INSTANCE.currentMainReceiveAddress();
+        BookAddress ba = BookAddress.resolveAddress(a);
+
+        if (ba == null) {
+            Log.d(TAG, "Address " + a.toString() + " not found.");
+            return a;
+        } else {
+            Log.d(TAG, "Address " + a.toString() + " found. Generating new...");
+            a = WalletHelper.INSTANCE.getNewAddress();
+        }
+
+        Log.d(TAG, "Returning " + a.toString());
+        return a;
     }
 }
