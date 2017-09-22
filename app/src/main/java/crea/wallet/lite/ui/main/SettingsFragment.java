@@ -104,7 +104,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         seedPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                IntentUtils.checkPin(getActivity());
+                IntentUtils.checkPin(SettingsFragment.this);
                 return true;
             }
         });

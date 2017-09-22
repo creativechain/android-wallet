@@ -10,6 +10,10 @@
           android:title="@string/edit_address"
           app:showAsAction="never" />
 
+    <item android:id="@+id/action_export"
+          android:title="@string/export_private_key"
+          app:showAsAction="never" />
+
     <item android:id="@+id/action_show_qr"
           android:title="@string/show_qr"
           app:showAsAction="never" />

@@ -11,9 +11,15 @@ import crea.wallet.lite.db.WalletCrypt;
 import crea.wallet.lite.util.Task;
 import crea.wallet.lite.wallet.WalletHelper;
 
+import org.creativecoinj.core.Address;
+import org.creativecoinj.core.DumpedPrivateKey;
+import org.creativecoinj.core.ECKey;
 import org.creativecoinj.wallet.DeterministicSeed;
+import org.creativecoinj.wallet.Wallet;
 
 import java.util.List;
+
+import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 /**
  * Created by ander on 25/06/15.
@@ -21,6 +27,8 @@ import java.util.List;
 public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
 
     private static final String TAG = "WalletExporter";
+
+    public static final int PRIV_KEY = 2;
     /**
      * Method to export the MnemonicCode valueOf a wallet.
      */
@@ -29,8 +37,10 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
      * Method to export the DeterministicSeed valueOf a wallet.
      */
     public static final int MIGRATION = 0;
+
     private String key;
     private Task<Bundle> task;
+    private Address address;
     private int mode = 0;
 
     /**
@@ -52,9 +62,11 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
      * @param key the key of wallet.
      * @param task the Task that will be executed in Exception error.
      */
-    public WalletExporter(String key, Task<Bundle> task) {
+    public WalletExporter(String key, Address address, Task<Bundle> task) {
         this.key = key;
         this.task = task;
+        this.address = address;
+        this.mode = PRIV_KEY;
     }
 
     @Override
@@ -65,6 +77,25 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
         Bundle bundle = new Bundle();
 
         switch (mode) {
+            case PRIV_KEY:
+                k = key;
+                if (WalletHelper.INSTANCE.isWalletEncrypted()) {
+                    Log.d(TAG, "pass: " + key);
+                    Log.d(TAG, "Decrypting with: " + org.creativecoinj.core.Utils.HEX.encode(k.getBytes()));
+                    WalletHelper.INSTANCE.decrypt(k);
+                } else {
+                    Log.d(TAG, "Wallet not encrypted");
+                }
+
+                ECKey ecKey = WalletHelper.INSTANCE.getKey(address);
+                DumpedPrivateKey dKey = ecKey.getPrivateKeyEncoded(NETWORK_PARAMETERS);
+                String encodedKey = dKey.toBase58();
+                bundle.putString("exported_key", encodedKey);
+                Log.e(TAG, "Exported key: " + encodedKey);
+
+                WalletHelper.INSTANCE.encrypt(k);
+                WalletHelper.INSTANCE.save();
+                return bundle;
             case MIGRATION:
                 try {
                     if (WalletHelper.INSTANCE.isWalletEncrypted()) {

@@ -1,12 +1,17 @@
 package crea.wallet.lite.ui.address;
 
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +19,21 @@ import android.widget.Toast;
 
 import org.creativecoinj.core.Address;
 
+import crea.wallet.lite.background.WalletExporter;
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.ui.adapter.BookAddressAdapter;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;
 import crea.wallet.lite.ui.base.AddressBookFragment;
+import crea.wallet.lite.ui.tool.PinActivity;
+import crea.wallet.lite.util.DialogFactory;
+import crea.wallet.lite.util.IntentUtils;
+import crea.wallet.lite.util.QR;
+import crea.wallet.lite.util.Task;
 import crea.wallet.lite.wallet.WalletHelper;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by ander on 17/11/16.
@@ -29,6 +42,7 @@ public class WalletAddressesFragment extends AddressBookFragment {
 
     private static final String TAG = "WalletAddressesFragment";
 
+    private Address exportAddress;
     @Override
     protected int getLayout() {
         return R.layout.fragment_wallet_address;
@@ -52,6 +66,10 @@ public class WalletAddressesFragment extends AddressBookFragment {
                         break;
                     case R.id.action_edit:
                         showEditDialog(address, false);
+                        break;
+                    case R.id.action_export:
+                        exportAddress = address.toBtcAddress();
+                        IntentUtils.checkPin(WalletAddressesFragment.this);
                         break;
                     case R.id.action_show_qr:
                         showQR(address);
@@ -120,5 +138,54 @@ public class WalletAddressesFragment extends AddressBookFragment {
 
         Log.d(TAG, "Returning " + a.toString());
         return a;
+    }
+
+    private void exportPrivKey(String pin) {
+        final ProgressDialog pDialog = DialogFactory.progress(getActivity(), R.string.private_key, R.string.getting_private_key);
+        pDialog.setCancelable(false);
+        pDialog.show();
+        new WalletExporter(pin, exportAddress, new Task<Bundle>() {
+            @Override
+            public void doTask(Bundle data) {
+                pDialog.dismiss();
+                if (data != null && !data.isEmpty()) {
+                    final String seed = data.getString("exported_key");
+                    showPrivKey(seed);
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.cannot_export_seed), Toast.LENGTH_LONG).show();
+                }
+            }
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void showPrivKey(final String privKey) {
+        AlertDialog aDialog = DialogFactory.alert(getActivity(), R.string.private_key, privKey);
+        aDialog.setMessage(privKey);
+        aDialog.setCancelable(false);
+        aDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        aDialog.setButton(AlertDialog.BUTTON_POSITIVE,getResources().getString(R.string.to_qr_code), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                Bitmap qr = QR.fromString(privKey);
+                QR.getCoinQrDialog(getActivity(), qr, null).show();
+            }
+        });
+        aDialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == IntentUtils.PIN) {
+                String pin = data.getStringExtra(PinActivity.EXTRA_CODE);
+                exportPrivKey(pin);
+            }
+        }
     }
 }

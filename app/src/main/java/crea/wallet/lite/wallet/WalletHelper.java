@@ -14,6 +14,7 @@ import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Block;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.Context;
+import org.creativecoinj.core.ECKey;
 import org.creativecoinj.core.InsufficientMoneyException;
 import org.creativecoinj.core.NetworkParameters;
 import org.creativecoinj.core.Sha256Hash;
@@ -39,6 +40,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 import static crea.wallet.lite.application.Constants.WALLET.CONTEXT;
+import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 /**
  * Created by ander on 17/09/15.
@@ -101,6 +103,21 @@ public class WalletHelper {
 
     public Address getNewAddress() {
         return this.wallet.freshReceiveAddress();
+    }
+
+    public List<ECKey> getReceivedKeys() {
+        return this.wallet.getIssuedReceiveKeys();
+    }
+
+    public ECKey getKey(Address address) {
+        List<ECKey> keys = getReceivedKeys();
+        for (ECKey ecKey : keys) {
+            if (address.toString().equals(ecKey.toAddress(NETWORK_PARAMETERS).toString())) {
+                return ecKey;
+            }
+        }
+
+        return null;
     }
 
     public int addIssuedAddressesToWatch() {
@@ -255,6 +272,7 @@ public class WalletHelper {
     }
 
     public void encrypt(CharSequence key) {
+        Context.propagate(CONTEXT);
         if (wallet.isEncrypted()) {
             Log.e(TAG, "Wallet is already encrypted.");
             return;

@@ -34,9 +34,4 @@ public class SettingsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        settingsFragment.onActivityResult(requestCode, resultCode, data);
-    }
 }

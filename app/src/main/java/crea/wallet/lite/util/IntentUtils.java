@@ -61,6 +61,12 @@ public class IntentUtils {
         activity.startActivityForResult(pinIntent, PIN);
     }
 
+    public static void checkPin(Fragment fragment) {
+        Intent pinIntent = new Intent(fragment.getActivity(), PinActivity.class);
+        pinIntent.putExtra(AppLock.EXTRA_TYPE, AppLock.UNLOCK_PIN);
+        fragment.startActivityForResult(pinIntent, PIN);
+    }
+
     public static void raiseFee(Activity activity, Transaction tx) {
         Intent feeIntent = new Intent(activity, RBFActivity.class);
         feeIntent.putExtra(RBFActivity.TRANSACTION_ID, tx.getHash());
