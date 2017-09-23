@@ -1,5 +1,5 @@
 <resources>
-    <string name="available_amount">Cantidad disponible</string>
+    <string name="available_amount">Balance</string>
     <string name="bitcoin_address">Dirección creativecoin</string>
     <string name="blockchain_download">Descarga de la cadena de bloques</string>
     <string name="synchronization_in_progress">Sincronización en progreso</string>
@@ -153,4 +153,6 @@
     <string name="export_private_key">Exportar clave privada</string>
     <string name="getting_private_key">Exportando clave privada</string>
     <string name="private_key">Clave privada</string>
+    <string name="copied">Copiado!</string>
+    <string name="transaction">Transacción</string>
 </resources>
