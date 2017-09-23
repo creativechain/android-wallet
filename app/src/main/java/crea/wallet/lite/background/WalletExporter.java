@@ -113,10 +113,10 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
                 }
                 break;
             case MNEMONIC_CODE:
+                k = key;
                 try {
                     if (WalletHelper.INSTANCE.isWalletEncrypted()) {
                         Log.d(TAG, "pass: " + key);
-                        k = key;
                         Log.d(TAG, "Decrypting with: " + org.creativecoinj.core.Utils.HEX.encode(k.getBytes()));
                         WalletHelper.INSTANCE.decrypt(k);
                     } else {
