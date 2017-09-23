@@ -127,13 +127,10 @@ public class QR {
             gos.close();
 
             final byte[] gzippedBytes = bos.toByteArray();
-            final boolean useCompressioon = gzippedBytes.length < bytes.length;
+            final boolean useCompression = gzippedBytes.length < bytes.length;
 
-            final StringBuilder str = new StringBuilder();
-            str.append(useCompressioon ? 'Z' : '-');
-            str.append(Base43.encode(useCompressioon ? gzippedBytes : bytes));
-
-            return str.toString();
+            return String.valueOf(useCompression ? 'Z' : '-') +
+                    Base43.encode(useCompression ? gzippedBytes : bytes);
         } catch (final IOException x) {
             throw new RuntimeException(x);
         }
