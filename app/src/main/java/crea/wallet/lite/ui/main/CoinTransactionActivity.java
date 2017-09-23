@@ -64,7 +64,7 @@ public class CoinTransactionActivity extends TransactionActivity {
         TxInfo txInfo = new TxInfo(transaction);
         confirmations.setText(String.valueOf(transaction.getConfidence().getDepthInBlocks()));
 
-        Coin coinAmount = txInfo.getAmountReceived();
+        Coin coinAmount = txInfo.isSentFromUser() ? txInfo.getAmountSend() : txInfo.getAmountReceived();
         Coin coinFee = txInfo.getFee();
         amount.setText(coinAmount.toFriendlyString());
         fee.setText(coinFee.toFriendlyString());
