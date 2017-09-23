@@ -89,7 +89,7 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
                 }
 
                 DeterministicKey ecKey = WalletHelper.INSTANCE.getKey(address);
-                String encodedKey = ecKey.serializePrivB58(NETWORK_PARAMETERS);
+                String encodedKey = ecKey.getPrivateKeyAsWiF(NETWORK_PARAMETERS);
                 bundle.putString("exported_key", encodedKey);
                 Log.e(TAG, "Exported key: " + encodedKey);
 
