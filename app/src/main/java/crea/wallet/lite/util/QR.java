@@ -10,10 +10,9 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.ViewGroup;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,40 +49,29 @@ public class QR {
         return fromString(uri.toString());
     }
 
-    public static Bitmap fromCoinUri(String address, Coin amount) {
+    public static Bitmap fromAddress(String address, Coin amount) {
         return fromUri(Uri.parse("creativecoin:" + address + (amount != null ? "?amount=" + amount.toPlainString() : "")));
     }
 
-    public static Bitmap fromCoinUri(String address) {
-        return fromCoinUri(address, null);
+    public static Bitmap fromAddress(Address address) {
+        return fromAddress(address.toString(), null);
     }
 
-    public static Bitmap fromCoinUri(Address address) {
-        return fromCoinUri(address.toString(), null);
-    }
-
-    public static AlertDialog getCoinQrDialog(final Activity activity, Bitmap qr, final String text) {
+    public static AlertDialog getQrDialog(final Activity activity, Bitmap qr, int titleId, final String text) {
         boolean hasText = text == null || !text.isEmpty();
-        LinearLayout dialogView = new LinearLayout(activity);
-        dialogView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-        dialogView.setOrientation(LinearLayout.VERTICAL);
 
-        ImageView qrView = new ImageView(activity);
+        View v = LayoutInflater.from(activity).inflate(R.layout.qrdialog, null);
+
+        ImageView qrView = (ImageView) v.findViewById(R.id.qrview);
         qrView.setImageBitmap(qr);
-        qrView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        dialogView.addView(qrView);
 
         if (hasText) {
-            TextView addressView = new TextView(activity);
-            addressView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            TextView addressView = (TextView) v.findViewById(R.id.text);
             addressView.setText(text);
-            addressView.setGravity(Gravity.CENTER);
-            addressView.setPadding(0, Utils.convertDpToPixel(5, activity), 0, Utils.convertDpToPixel(5, activity));
-            dialogView.addView(addressView);
         }
 
-        AlertDialog alertDialog = DialogFactory.alert(activity, R.string.bitcoin_address, dialogView);
-        alertDialog.setCancelable(false);
+        AlertDialog alertDialog = DialogFactory.alert(activity, titleId, v);
+
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -100,7 +88,7 @@ public class QR {
                     clipboard.setPrimaryClip(clip);
                     Log.wtf(TAG, "Clipboard copy: " + clipboard.getPrimaryClip().toString());
 
-                    Toast.makeText(activity, android.R.string.copy, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.copied, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -108,17 +96,29 @@ public class QR {
         return alertDialog;
     }
 
-    public static AlertDialog getCoinQrDialog(Activity activity, String data) {
+    public static AlertDialog getAddressQrDialog(Activity activity, String data) {
         if (!data.startsWith("creativecoin:")) {
             data = "creativecoin:" + data;
         }
-        return getCoinQrDialog(activity, fromString(data), null);
+        return getQrDialog(activity, fromString(data), R.string.bitcoin_address, null);
     }
 
-    public static AlertDialog getCoinQrDialog(final Activity activity, final Address address) {
-        return getCoinQrDialog(activity, fromCoinUri(address), address.toString());
+    public static AlertDialog getAddressQrDialog(final Activity activity, final Address address) {
+        return getQrDialog(activity, fromAddress(address), R.string.bitcoin_address, address.toString());
     }
 
+    public static AlertDialog getPrivKeyQrDialog(final Activity activity, String privKey) {
+        return getQrDialog(activity, fromString(privKey), R.string.private_key, privKey);
+    }
+
+    public static AlertDialog getMnemonicQrDialog(Activity activity, String mnemonic) {
+        return getQrDialog(activity, fromString(mnemonic), R.string.mnemonic_code, null);
+    }
+
+    public static AlertDialog getTransactionQrDialog(Activity activity, TxInfo txInfo) {
+        byte[] txBytes = txInfo.getRaw();
+        return getQrDialog(activity, fromString(encodeCompressBinary(txBytes)), R.string.transaction, txInfo.getHashAsString());
+    }
     public static String encodeCompressBinary(final byte[] bytes) {
         try {
             final ByteArrayOutputStream bos = new ByteArrayOutputStream(bytes.length);

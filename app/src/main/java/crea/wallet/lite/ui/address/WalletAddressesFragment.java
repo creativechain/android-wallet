@@ -159,24 +159,7 @@ public class WalletAddressesFragment extends AddressBookFragment {
     }
 
     private void showPrivKey(final String privKey) {
-        AlertDialog aDialog = DialogFactory.alert(getActivity(), R.string.private_key, privKey);
-        aDialog.setMessage(privKey);
-        aDialog.setCancelable(false);
-        aDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        aDialog.setButton(AlertDialog.BUTTON_POSITIVE,getResources().getString(R.string.to_qr_code), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                Bitmap qr = QR.fromString(privKey);
-                QR.getCoinQrDialog(getActivity(), qr, null).show();
-            }
-        });
-        aDialog.show();
+        QR.getPrivKeyQrDialog(getActivity(), privKey).show();
     }
 
     @Override

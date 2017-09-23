@@ -14,6 +14,7 @@ import crea.wallet.lite.wallet.WalletHelper;
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.DumpedPrivateKey;
 import org.creativecoinj.core.ECKey;
+import org.creativecoinj.crypto.DeterministicKey;
 import org.creativecoinj.wallet.DeterministicSeed;
 import org.creativecoinj.wallet.Wallet;
 
@@ -87,9 +88,8 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
                     Log.d(TAG, "Wallet not encrypted");
                 }
 
-                ECKey ecKey = WalletHelper.INSTANCE.getKey(address);
-                DumpedPrivateKey dKey = ecKey.getPrivateKeyEncoded(NETWORK_PARAMETERS);
-                String encodedKey = dKey.toBase58();
+                DeterministicKey ecKey = WalletHelper.INSTANCE.getKey(address);
+                String encodedKey = ecKey.serializePrivB58(NETWORK_PARAMETERS);
                 bundle.putString("exported_key", encodedKey);
                 Log.e(TAG, "Exported key: " + encodedKey);
 

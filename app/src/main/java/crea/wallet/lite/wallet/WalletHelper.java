@@ -19,6 +19,7 @@ import org.creativecoinj.core.InsufficientMoneyException;
 import org.creativecoinj.core.NetworkParameters;
 import org.creativecoinj.core.Sha256Hash;
 import org.creativecoinj.core.Transaction;
+import org.creativecoinj.crypto.DeterministicKey;
 import org.creativecoinj.crypto.KeyCrypter;
 import org.creativecoinj.crypto.MnemonicException;
 import org.creativecoinj.wallet.CoinSelector;
@@ -109,11 +110,12 @@ public class WalletHelper {
         return this.wallet.getIssuedReceiveKeys();
     }
 
-    public ECKey getKey(Address address) {
+    public DeterministicKey getKey(Address address) {
+
         List<ECKey> keys = getReceivedKeys();
         for (ECKey ecKey : keys) {
             if (address.toString().equals(ecKey.toAddress(NETWORK_PARAMETERS).toString())) {
-                return ecKey;
+                return (DeterministicKey) ecKey;
             }
         }
 

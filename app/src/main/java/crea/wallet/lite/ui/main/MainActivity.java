@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void showQRCode(final Address ea) {
         Log.e(TAG, "Address: " + ea.toString());
-        AlertDialog a = QR.getCoinQrDialog(this, ea);
+        AlertDialog a = QR.getAddressQrDialog(this, ea);
         a.setCancelable(true);
         a.show();
     }
@@ -302,9 +302,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         startActivity(browserIntent);
                         break;
                     case R.id.action_show_qr:
-                        byte[] txBytes = txInfo.getRaw();
-                        Bitmap txBitmap = QR.fromString(QR.encodeCompressBinary(txBytes));
-                        QR.getCoinQrDialog(MainActivity.this, txBitmap, txInfo.getHashAsString()).show();
+                        QR.getTransactionQrDialog(MainActivity.this, txInfo).show();
                         break;
                     case R.id.action_change_fee:
                         handleChangeFeeAction(txInfo);

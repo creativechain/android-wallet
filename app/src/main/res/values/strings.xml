@@ -156,5 +156,7 @@
     <string name="export_private_key">Export private key</string>
     <string name="private_key">Private key</string>
     <string name="getting_private_key">Exporting private key</string>
+    <string name="copied">Copied!</string>
+    <string name="transaction">Transaction</string>
 
 </resources>

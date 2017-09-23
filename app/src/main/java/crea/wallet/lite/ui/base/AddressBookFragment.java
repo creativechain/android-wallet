@@ -121,7 +121,7 @@ public abstract class AddressBookFragment extends FragmentContext {
     }
 
     protected void showQR(BookAddress address) {
-        QR.getCoinQrDialog(getActivity(), address.getAddress()).show();
+        QR.getAddressQrDialog(getActivity(), address.getAddress()).show();
     }
 
     public abstract CharSequence getTitle();
