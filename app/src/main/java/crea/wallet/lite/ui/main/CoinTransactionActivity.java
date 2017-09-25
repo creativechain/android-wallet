@@ -11,11 +11,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
-import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.ui.base.TransactionActivity;
-import crea.wallet.lite.util.TxInfo;
+import crea.wallet.lite.util.wrapper.TxInfo;
 
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.Transaction;

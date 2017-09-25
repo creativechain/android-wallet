@@ -50,8 +50,8 @@ import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
 import crea.wallet.lite.connection.ConnectedPeer;
 import crea.wallet.lite.ui.base.TransactionActivity;
 import crea.wallet.lite.ui.main.MainActivity;
-import crea.wallet.lite.util.TimeUtils;
-import crea.wallet.lite.util.TxInfo;
+import crea.wallet.lite.util.wrapper.TimeUtils;
+import crea.wallet.lite.util.wrapper.TxInfo;
 import crea.wallet.lite.wallet.WalletHelper;
 
 import org.creativecoinj.core.Block;

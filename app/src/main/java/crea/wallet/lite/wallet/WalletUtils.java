@@ -25,8 +25,8 @@ import android.text.style.TypefaceSpan;
 import android.util.Log;
 
 import crea.wallet.lite.application.Constants;
-import crea.wallet.lite.util.Hex;
-import crea.wallet.lite.util.Iso8601Format;
+import crea.wallet.lite.util.encoders.Hex;
+import crea.wallet.lite.util.system.Iso8601Format;
 import com.google.common.base.Charsets;
 
 import org.creativecoinj.core.Address;

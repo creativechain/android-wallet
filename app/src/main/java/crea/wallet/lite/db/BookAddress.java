@@ -59,7 +59,7 @@ public class BookAddress extends Model {
         return this;
     }
 
-    public Address toBtcAddress() {
+    public Address toAddress() {
         return Address.fromBase58(NETWORK_PARAMETERS, address);
     }
 

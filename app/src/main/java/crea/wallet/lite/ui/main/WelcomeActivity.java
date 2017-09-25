@@ -22,8 +22,8 @@ import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.SeedActivity;
-import crea.wallet.lite.util.DialogFactory;
-import crea.wallet.lite.util.IntentUtils;
+import crea.wallet.lite.util.wrapper.DialogFactory;
+import crea.wallet.lite.util.wrapper.IntentUtils;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 

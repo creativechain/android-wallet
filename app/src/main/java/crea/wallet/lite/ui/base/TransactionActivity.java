@@ -11,7 +11,7 @@ import android.view.View;
 import org.creativecoinj.core.Sha256Hash;
 import org.creativecoinj.core.Transaction;
 
-import crea.wallet.lite.util.DialogFactory;
+import crea.wallet.lite.util.wrapper.DialogFactory;
 import crea.wallet.lite.wallet.WalletHelper;
 
 /**

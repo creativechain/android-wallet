@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import crea.wallet.lite.util.Typefaces;
+import crea.wallet.lite.util.wrapper.Typefaces;
 
 /**
  * Created by ander on 10/03/16.

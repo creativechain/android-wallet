@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import crea.wallet.lite.R;
-import crea.wallet.lite.util.Permissions;
+import crea.wallet.lite.util.wrapper.Permissions;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import com.google.zxing.Result;

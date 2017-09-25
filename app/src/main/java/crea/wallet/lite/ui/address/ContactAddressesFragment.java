@@ -22,7 +22,7 @@ import crea.wallet.lite.ui.adapter.RecyclerAdapter;
 import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.BookAddressAdapter;
 import crea.wallet.lite.ui.base.AddressBookFragment;
-import crea.wallet.lite.util.IntentUtils;
+import crea.wallet.lite.util.wrapper.IntentUtils;
 
 import org.creativecoinj.core.Address;
 import org.creativecoinj.uri.BitcoinURI;

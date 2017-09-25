@@ -4,12 +4,9 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
@@ -19,7 +16,7 @@ import android.widget.Toast;
 
 import org.creativecoinj.core.Address;
 
-import crea.wallet.lite.background.WalletExporter;
+import crea.wallet.lite.util.task.WalletExporter;
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.WalletApplication;
@@ -27,10 +24,10 @@ import crea.wallet.lite.ui.adapter.BookAddressAdapter;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;
 import crea.wallet.lite.ui.base.AddressBookFragment;
 import crea.wallet.lite.ui.tool.PinActivity;
-import crea.wallet.lite.util.DialogFactory;
-import crea.wallet.lite.util.IntentUtils;
-import crea.wallet.lite.util.QR;
-import crea.wallet.lite.util.Task;
+import crea.wallet.lite.util.wrapper.DialogFactory;
+import crea.wallet.lite.util.wrapper.IntentUtils;
+import crea.wallet.lite.util.wrapper.QR;
+import crea.wallet.lite.util.task.Task;
 import crea.wallet.lite.wallet.WalletHelper;
 
 import static android.app.Activity.RESULT_OK;
@@ -68,7 +65,7 @@ public class WalletAddressesFragment extends AddressBookFragment {
                         showEditDialog(address, false);
                         break;
                     case R.id.action_export:
-                        exportAddress = address.toBtcAddress();
+                        exportAddress = address.toAddress();
                         IntentUtils.checkPin(WalletAddressesFragment.this);
                         break;
                     case R.id.action_show_qr:

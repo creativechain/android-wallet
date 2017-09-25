@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import crea.wallet.lite.R;
-import crea.wallet.lite.util.Typefaces;
+import crea.wallet.lite.util.wrapper.Typefaces;
 
 
 /**

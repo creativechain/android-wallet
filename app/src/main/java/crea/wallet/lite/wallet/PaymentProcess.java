@@ -8,12 +8,10 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import crea.wallet.lite.R;
-import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.WalletApplication;
-import crea.wallet.lite.db.WalletCrypt;
-import crea.wallet.lite.util.DialogFactory;
-import crea.wallet.lite.util.Task;
-import crea.wallet.lite.util.TaskExceptionHandler;
+import crea.wallet.lite.util.wrapper.DialogFactory;
+import crea.wallet.lite.util.task.Task;
+import crea.wallet.lite.util.task.TaskExceptionHandler;
 
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
@@ -24,7 +22,6 @@ import org.creativecoinj.crypto.KeyCrypterException;
 import org.creativecoinj.wallet.SendRequest;
 import org.creativecoinj.wallet.Wallet;
 
-import java.io.File;
 import java.util.List;
 
 

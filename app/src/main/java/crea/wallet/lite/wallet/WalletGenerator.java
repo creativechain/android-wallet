@@ -3,16 +3,14 @@ package crea.wallet.lite.wallet;
 import android.util.Log;
 
 import crea.wallet.lite.application.Constants;
-import crea.wallet.lite.util.Sha384Hash;
 
-import org.creativecoinj.crypto.MnemonicCode;
 import org.creativecoinj.crypto.MnemonicException;
 import org.creativecoinj.wallet.DeterministicSeed;
 import org.creativecoinj.wallet.Wallet;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+
 import java.util.List;
 
 /**

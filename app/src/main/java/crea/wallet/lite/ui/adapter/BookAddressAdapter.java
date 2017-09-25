@@ -10,7 +10,7 @@ import android.widget.TextView;
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
-import crea.wallet.lite.util.CoinConverter;
+import crea.wallet.lite.util.coin.CoinConverter;
 import crea.wallet.lite.wallet.WalletHelper;
 
 import org.creativecoinj.core.AbstractCoin;

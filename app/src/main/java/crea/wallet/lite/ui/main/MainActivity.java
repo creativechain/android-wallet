@@ -2,7 +2,6 @@ package crea.wallet.lite.ui.main;
 
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -29,10 +28,10 @@ import crea.wallet.lite.ui.tool.CheckAddressActivity;
 import crea.wallet.lite.ui.tool.PeerListActivity;
 import crea.wallet.lite.ui.tool.SendCoinActivity;
 import crea.wallet.lite.ui.adapter.TransactionAdapter;
-import crea.wallet.lite.util.CoinConverter;
-import crea.wallet.lite.util.IntentUtils;
-import crea.wallet.lite.util.QR;
-import crea.wallet.lite.util.TxInfo;
+import crea.wallet.lite.util.coin.CoinConverter;
+import crea.wallet.lite.util.wrapper.IntentUtils;
+import crea.wallet.lite.util.wrapper.QR;
+import crea.wallet.lite.util.wrapper.TxInfo;
 import crea.wallet.lite.wallet.WalletHelper;
 
 import org.creativecoinj.core.AbstractCoin;

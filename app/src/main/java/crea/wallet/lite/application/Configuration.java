@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-import crea.wallet.lite.coin.CoinUtils;
+import crea.wallet.lite.util.coin.CoinUtils;
 import crea.wallet.lite.wallet.FeeCategory;
 
 /**

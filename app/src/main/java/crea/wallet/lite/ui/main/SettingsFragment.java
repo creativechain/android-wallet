@@ -19,12 +19,12 @@ import java.util.Arrays;
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.WalletApplication;
-import crea.wallet.lite.background.WalletExporter;
+import crea.wallet.lite.util.task.WalletExporter;
 import crea.wallet.lite.ui.tool.PinActivity;
-import crea.wallet.lite.util.DialogFactory;
-import crea.wallet.lite.util.IntentUtils;
-import crea.wallet.lite.util.QR;
-import crea.wallet.lite.util.Task;
+import crea.wallet.lite.util.wrapper.DialogFactory;
+import crea.wallet.lite.util.wrapper.IntentUtils;
+import crea.wallet.lite.util.wrapper.QR;
+import crea.wallet.lite.util.task.Task;
 import crea.wallet.lite.wallet.FeeCategory;
 
 

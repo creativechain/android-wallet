@@ -10,20 +10,17 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.WalletApplication;
-import crea.wallet.lite.background.WalletExporter;
+import crea.wallet.lite.util.task.WalletExporter;
 import crea.wallet.lite.ui.tool.PinActivity;
-import crea.wallet.lite.ui.tool.SeedActivity;
-import crea.wallet.lite.util.DialogFactory;
-import crea.wallet.lite.util.IntentUtils;
-import crea.wallet.lite.util.Permissions;
-import crea.wallet.lite.util.Task;
+import crea.wallet.lite.util.wrapper.DialogFactory;
+import crea.wallet.lite.util.wrapper.IntentUtils;
+import crea.wallet.lite.util.wrapper.Permissions;
+import crea.wallet.lite.util.task.Task;
 import crea.wallet.lite.wallet.WalletHelper;
 
 public class SplashActivity extends AppCompatActivity {

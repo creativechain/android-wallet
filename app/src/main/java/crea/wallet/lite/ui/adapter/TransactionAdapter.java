@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
-import crea.wallet.lite.util.CoinConverter;
-import crea.wallet.lite.util.TxInfo;
+import crea.wallet.lite.util.coin.CoinConverter;
+import crea.wallet.lite.util.wrapper.TxInfo;
 
 import com.google.common.collect.Lists;
 

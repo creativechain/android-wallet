@@ -13,7 +13,7 @@ import android.widget.TextView;
 import org.creativecoinj.crypto.MnemonicCode;
 
 import crea.wallet.lite.R;
-import crea.wallet.lite.util.MnemonicWordSearcher;
+import crea.wallet.lite.util.wrapper.MnemonicWordSearcher;
 import crea.wallet.lite.widget.keyboard.OnButtonPressedListener;
 import crea.wallet.lite.widget.keyboard.TextKeyboard;
 

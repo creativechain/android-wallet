@@ -19,9 +19,9 @@ import org.creativecoinj.core.Address;
 import crea.wallet.lite.db.BookAddress;
 import crea.wallet.lite.R;
 import crea.wallet.lite.ui.adapter.BookAddressAdapter;
-import crea.wallet.lite.util.DialogFactory;
-import crea.wallet.lite.util.FormUtils;
-import crea.wallet.lite.util.QR;
+import crea.wallet.lite.util.wrapper.DialogFactory;
+import crea.wallet.lite.util.wrapper.FormUtils;
+import crea.wallet.lite.util.wrapper.QR;
 
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
