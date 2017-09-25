@@ -69,7 +69,6 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
     @Override
     protected Bundle doInBackground(Void... voids) {
         long creationTime;
-        WalletCrypt walletCrypt = WalletCrypt.getInstance();
         String k = null;
         Bundle bundle = new Bundle();
 
@@ -95,6 +94,7 @@ public class WalletExporter extends AsyncTask<Void, Void, Bundle> {
             case MIGRATION:
                 try {
                     if (WalletHelper.INSTANCE.isWalletEncrypted()) {
+                        WalletCrypt walletCrypt = WalletCrypt.getInstance();
                         k = walletCrypt.generate(Configuration.getInstance().getPin());
                         WalletHelper.INSTANCE.decrypt(k);
                     } else {
