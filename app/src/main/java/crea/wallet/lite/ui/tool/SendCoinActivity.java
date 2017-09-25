@@ -335,10 +335,9 @@ public class SendCoinActivity extends PrepareTxActivity {
         toFiatAmount.setTextColor(normalColorBlue);
         boolean emptyWallet = sendAllMoney.isChecked();
 
-        String amountString = amountEditText.getText().toString().replace(" CREA", "");
-        if (Utils.isNumber(amountString)) {
-            double amount = Double.parseDouble(amountString);
-            Coin amountToSent = (Coin) CoinUtils.valueOf("CREA", amount);
+        Coin amountToSent = getAmountToSent();
+        if (!amountToSent.isZero()) {
+
             FeeCalculation feeCalculation;
 
             if (emptyWallet) {
@@ -382,7 +381,7 @@ public class SendCoinActivity extends PrepareTxActivity {
             hasError = true;
         }
 
-        if (!FormUtils.containsDecimal(amountEditText)) {
+        if (!getAmountToSent().isZero()) {
             amountEditText.setError(error);
             hasError = true;
         }
@@ -392,7 +391,17 @@ public class SendCoinActivity extends PrepareTxActivity {
         }
     }
 
-    public void processTransaction() {
+    private Coin getAmountToSent() {
+        String amountString = amountEditText.getText().toString().replace(" CREA", "");
+        if (Utils.isNumber(amountString)) {
+            double amount = Double.parseDouble(amountString);
+            return (Coin) CoinUtils.valueOf("CREA", amount);
+        }
+
+        return Coin.ZERO;
+    }
+
+    private void processTransaction() {
         broadcastStatus.setVisibility(View.VISIBLE);
         keyTask = new Task<String>() {
             @Override
