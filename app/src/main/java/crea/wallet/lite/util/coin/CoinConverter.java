@@ -19,12 +19,14 @@ public class CoinConverter {
 
     public CoinConverter amount(AbstractCoin amount) {
         amountToConvert = amount;
+        Log.e(TAG, "AmountToConvert: " + amount.toFriendlyString());
         calculate();
         return this;
     }
 
     public CoinConverter price(AbstractCoin price) {
         this.price = price;
+        Log.e(TAG, "Price: " + price.toFriendlyString());
         this.amountConverted = CoinUtils.valueOf(price.getCurrencyCode(), 0);
         calculate();
         return this;

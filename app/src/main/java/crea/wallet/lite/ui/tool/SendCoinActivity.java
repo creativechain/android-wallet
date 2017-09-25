@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.text.TextUtilsCompat;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Constants;
+import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.util.coin.CoinUtils;
 import crea.wallet.lite.ui.main.PrepareTxActivity;
 import crea.wallet.lite.util.coin.CoinConverter;
@@ -37,6 +40,7 @@ import org.creativecoinj.core.Coin;
 import org.creativecoinj.uri.BitcoinURI;
 import org.creativecoinj.uri.BitcoinURIParseException;
 import org.creativecoinj.wallet.SendRequest;
+import org.spongycastle.util.test.NumberParsing;
 
 import static crea.wallet.lite.application.Constants.WALLET.DONATION_ADDRESS;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
@@ -120,8 +124,8 @@ public class SendCoinActivity extends PrepareTxActivity {
 
         amountTextListener = new OnTextChangeListener() {
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String number = charSequence.toString();
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String number = s.toString();
                 checkAvailableAmount(number, amountEditText);
             }
         };
@@ -288,7 +292,8 @@ public class SendCoinActivity extends PrepareTxActivity {
         int id = editText.getId();
         int errorColor = getResources().getColor(R.color.red);
 
-        if (number.matches("-?\\d+(\\.\\d+)?")) {
+
+        if (Utils.isNumber(number)) {
 
             CoinConverter converter = new CoinConverter();
             AbstractCoin price = conf.getPriceForMainCurrency();
@@ -298,9 +303,10 @@ public class SendCoinActivity extends PrepareTxActivity {
                     converter.amount(CoinUtils.valueOf("CREA", amount)).price(price);
                     toFiatAmount.setText(converter.toString());
                 } else  {
-                    double fiatDouble = 1 / price.getValue();
+                    AbstractCoin unit = CoinUtils.valueOf(currency, 1);
+                    long fiatDouble = unit.getValue() * Coin.COIN.getValue() / price.getValue();
                     AbstractCoin fiatPrice = CoinUtils.valueOf("CREA", fiatDouble);
-                    converter.amount(CoinUtils.valueOf(conf.getMainCurrency(), amount))
+                    converter.amount(CoinUtils.valueOf(currency, amount))
                             .price(fiatPrice);
                     amountEditText.setText(converter.toString());
                 }
@@ -329,9 +335,10 @@ public class SendCoinActivity extends PrepareTxActivity {
         toFiatAmount.setTextColor(normalColorBlue);
         boolean emptyWallet = sendAllMoney.isChecked();
 
-        if (FormUtils.containsDecimal(amountEditText)) {
-            double btcAmount = Double.parseDouble(amountEditText.getText().toString());
-            Coin amountToSent = Coin.valueOf(Math.round(btcAmount * 1e8d));
+        String amountString = amountEditText.getText().toString().replace(" CREA", "");
+        if (Utils.isNumber(amountString)) {
+            double amount = Double.parseDouble(amountString);
+            Coin amountToSent = (Coin) CoinUtils.valueOf("CREA", amount);
             FeeCalculation feeCalculation;
 
             if (emptyWallet) {

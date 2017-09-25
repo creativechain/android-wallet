@@ -160,77 +160,6 @@ public class Utils {
         return id;
     }
 
-    public static long[] getLongValues(JSONArray jsonArray) throws JSONException {
-        int length = jsonArray.length();
-        long[] values;
-        if (length == 0) {
-            values = new long[1];
-            values[0] = 0;
-            return values;
-        }
-        values = new long[length];
-
-        for (int x = 0; x < length; x++) {
-            values[x] = jsonArray.getInt(x);
-        }
-
-        return values;
-    }
-
-    public static List<String> getSEPACountries(Activity activity) {
-
-        AssetManager assetMan = activity.getAssets();
-        List<String> prefixCountry = new ArrayList<>();
-        try {
-            InputStream is = assetMan.open("sepacountrieslist.xml");
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-            org.w3c.dom.Element rootElement = doc.getDocumentElement();
-            NodeList countries = rootElement.getElementsByTagName("row");
-//            Log.d(TAG, "Total countries: " + countries.getLength());
-
-            for (int i = 0; i < countries.getLength(); i++) {
-                org.w3c.dom.Element countryElement = (org.w3c.dom.Element) countries.item(i);
-                if (countryElement.getElementsByTagName("Col10").item(0).hasChildNodes()) {
-                    String countryCode2Letter = countryElement.getElementsByTagName("Col10").item(0).getFirstChild().getNodeValue();
-                    String country = countryElement.getElementsByTagName("Col1").item(0).getFirstChild().getNodeValue();
-                    prefixCountry.add(countryCode2Letter + " " + country);
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-
-        return prefixCountry;
-    }
-
-    public static long toNanoCoins(String value) {
-        double val = Double.parseDouble(value) * 1e8d;
-        return BigDecimal.valueOf(val).longValue();
-    }
-
-    public static String[] getCountryNamesByISOCode(String... isoCodes) {
-        String[] countries = new String[isoCodes.length];
-        for (int x = 0; x < isoCodes.length; x++) {
-            countries[x] = getCountryNameByISOCode(isoCodes[x]);
-        }
-
-        return countries;
-    }
-
-    public static String getCountryNameByISOCode(String isoCode) {
-        isoCode = isoCode.toUpperCase();
-        if (isoCode.equals("EZ")) {
-            return  "Eurozone";
-        }
-
-        return new Locale("", isoCode).getDisplayCountry();
-    }
-
     public static String findByRegularExpression(CharSequence input, String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher matcher = p.matcher(input);
@@ -348,5 +277,15 @@ public class Utils {
         }
 
         return millis;
+    }
+
+    public static boolean isNumber(String text) {
+        try {
+            Double.parseDouble(text);
+            return true;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

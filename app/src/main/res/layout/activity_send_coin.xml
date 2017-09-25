@@ -81,7 +81,7 @@
             <EditText
                 android:id="@+id/to_fiat_amount"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.4"
                 android:hint="@string/amount_in_currency"
                 android:textSize="13dp"
