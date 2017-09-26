@@ -99,11 +99,15 @@ public class QR {
         return alertDialog;
     }
 
-    public static AlertDialog getAddressQrDialog(Activity activity, String data) {
-        if (!data.startsWith("creativecoin:")) {
-            data = "creativecoin:" + data;
+    public static AlertDialog getAddressQrDialog(Activity activity, String address) {
+        String data = "creativecoin:";
+        if (address.startsWith("creativecoin:")) {
+            data = address;
+            address = address.replace("creativecoin:", "");
+        } else {
+            data += address;
         }
-        return getQrDialog(activity, fromString(data), R.string.bitcoin_address, null);
+        return getQrDialog(activity, fromString(data), R.string.bitcoin_address, address);
     }
 
     public static AlertDialog getAddressQrDialog(final Activity activity, final Address address) {

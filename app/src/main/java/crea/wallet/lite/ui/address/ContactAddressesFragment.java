@@ -76,7 +76,7 @@ public class ContactAddressesFragment extends AddressBookFragment {
                         startActivity(sendIntent);
                         break;
                     case R.id.action_delete:
-                        address.delete();
+                        address.secureDelete();
                         notifyDataChanged();
                         break;
 

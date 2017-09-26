@@ -58,10 +58,12 @@ public final class Constants {
 		public static final String WALLET_PATH = APP.CREATIVECHAIN_PATH + "Wallet/";
 		public static final String WALLET_FILES_NAME = WALLET_PATH + "wallet";
 		public static final String WALLET_BACKUP_FILE_NAME = APP.BACKUP_FOLDER + "backup-protobuf";
+		public static final String ADDRESS_BOOK_FILE_NAME = APP.BACKUP_FOLDER + "address_book";
 		public static final File FIRST_WALLET_FILE = new File(WALLET_FILES_NAME + FILES.FILENAME_NETWORK_SUFFIX);
 
 		/** Filename of the automatic wallet backup. */
 		public static final File WALLET_BACKUP_FILE = new File(WALLET_BACKUP_FILE_NAME + FILES.FILENAME_NETWORK_SUFFIX);
+		public static final File ADDRESS_BOOK_FILE = new File(ADDRESS_BOOK_FILE_NAME + FILES.FILENAME_NETWORK_SUFFIX);
 
 		/** Filename of the block store for storing the chain. */
 		public static final String BLOCKCHAIN_FILENAME = "chain" + FILES.FILENAME_NETWORK_SUFFIX;

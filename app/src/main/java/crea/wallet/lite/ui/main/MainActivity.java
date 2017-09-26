@@ -40,6 +40,7 @@ import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.Transaction;
 import org.creativecoinj.wallet.Wallet;
 
+import static crea.wallet.lite.application.Constants.WALLET.ADDRESS_BOOK_FILE;
 import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC_STARTED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.BLOCKCHAIN_RESET;
@@ -210,6 +211,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void invalidateAddressBook() {
+        if (!ADDRESS_BOOK_FILE.exists()) {
+            Log.e(TAG, "AddressBok doesn't exists");
+            BookAddress.saveContacts(ADDRESS_BOOK_FILE);
+        }
+
+        BookAddress.loadContacts(ADDRESS_BOOK_FILE);
         BookAddress.add(WalletHelper.INSTANCE.getReceiveAddresses(), true);
     }
 

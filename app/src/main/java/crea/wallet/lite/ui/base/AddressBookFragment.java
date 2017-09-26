@@ -23,6 +23,7 @@ import crea.wallet.lite.util.wrapper.DialogFactory;
 import crea.wallet.lite.util.wrapper.FormUtils;
 import crea.wallet.lite.util.wrapper.QR;
 
+import static crea.wallet.lite.application.Constants.WALLET.ADDRESS_BOOK_FILE;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 /**
@@ -93,7 +94,7 @@ public abstract class AddressBookFragment extends FragmentContext {
                     String label = editLabel.getText().toString().trim();
                     address.setAddress(addressString)
                             .setLabel(label)
-                            .save();
+                            .secureSave();
                     aDialog.dismiss();
                     notifyDataChanged();
                 }
