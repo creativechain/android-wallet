@@ -177,30 +177,20 @@ public class WalletApplication extends Application {
 
     private boolean loadWalletHelper() {
         if (walletFile.exists()) {
-            FileInputStream walletStream = null;
 
             try	{
                 Log.e(TAG, "Loading wallet...");
-                walletStream = new FileInputStream(walletFile);
                 WalletHelper.INSTANCE = WalletHelper.fromWallet();
                 Log.e(TAG, "Wallets loaded successfully");
                 if (!WalletHelper.INSTANCE.getWalletParams().equals(Constants.WALLET.NETWORK_PARAMETERS)) {
                     throw new UnreadableWalletException("bad wallet network parameters: " + WalletHelper.INSTANCE.getWalletParams().getId());
                 }
 
-            } catch (final FileNotFoundException | UnreadableWalletException x)	{
+            } catch (final UnreadableWalletException x)	{
                 Log.e(TAG, "Problem loading wallet", x);
                 Toast.makeText(WalletApplication.this, x.getClass().getName(), Toast.LENGTH_LONG).show();
 
                 restoreWalletFromBackup();
-            } finally{
-                if (walletStream != null) {
-                    try	{
-                        walletStream.close();
-                    } catch (final IOException x) {
-                        // swallow
-                    }
-                }
             }
 
             if (!WalletHelper.INSTANCE.isConsistentWallet()) {

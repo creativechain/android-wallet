@@ -22,7 +22,6 @@ public final class WalletGenerator {
 
     private Wallet wallet;
     private List<String> words;
-    private int numOfWallets;
     private long creationTime;
     private boolean isNewAccount = false;
     private boolean forceOverride = false;
