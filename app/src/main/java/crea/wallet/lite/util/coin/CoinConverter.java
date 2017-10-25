@@ -54,12 +54,20 @@ public class CoinConverter {
         return amountConverted;
     }
 
-    @Override
-    public String toString() {
+    public String toString(boolean withCurrency) {
         if (amountConverted == null) {
             return "0.00";
         }
 
-        return amountConverted.toFriendlyString();
+        if (withCurrency) {
+            return amountConverted.toFriendlyString();
+        }
+
+        return amountConverted.toPlainString();
+    }
+
+    @Override
+    public String toString() {
+        return toString(true);
     }
 }

@@ -301,14 +301,14 @@ public class SendCoinActivity extends PrepareTxActivity {
             if (amount > 0) {
                 if (id == amountEditText.getId()) {
                     converter.amount(CoinUtils.valueOf("CREA", amount)).price(price);
-                    toFiatAmount.setText(converter.toString());
+                    toFiatAmount.setText(converter.toString(false));
                 } else  {
                     AbstractCoin unit = CoinUtils.valueOf(currency, 1);
                     long fiatDouble = unit.getValue() * Coin.COIN.getValue() / price.getValue();
                     AbstractCoin fiatPrice = CoinUtils.valueOf("CREA", fiatDouble);
                     converter.amount(CoinUtils.valueOf(currency, amount))
                             .price(fiatPrice);
-                    amountEditText.setText(converter.toString());
+                    amountEditText.setText(converter.toString(false));
                 }
 
                 calculateFee();
@@ -381,7 +381,7 @@ public class SendCoinActivity extends PrepareTxActivity {
             hasError = true;
         }
 
-        if (!getAmountToSent().isZero()) {
+        if (getAmountToSent().isZero()) {
             amountEditText.setError(error);
             hasError = true;
         }
