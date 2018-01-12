@@ -35,7 +35,7 @@ import java.io.File;
  * @author Andreas Schildbach
  */
 public final class Constants {
-	public static final boolean TEST = false;
+	public static final boolean TEST = true;
 
 	/** Network this wallet is on (e.g. testnet or mainnet). */
 	public final static class APP {
@@ -56,9 +56,9 @@ public final class Constants {
 		public static final long MIN_CREATION_TIME = NETWORK_PARAMETERS.getGenesisBlock().getTimeSeconds() + 1;
 
 		public static final String WALLET_PATH = APP.CREATIVECHAIN_PATH + "Wallet/";
-		public static final String WALLET_FILES_NAME = WALLET_PATH + "wallet";
+		public static final String WALLET_FILES_NAME = WALLET_PATH + "wallet" + (TEST ? "-test" : "");
 		public static final String WALLET_BACKUP_FILE_NAME = APP.BACKUP_FOLDER + "backup-protobuf";
-		public static final String ADDRESS_BOOK_FILE_NAME = APP.BACKUP_FOLDER + "address_book";
+		public static final String ADDRESS_BOOK_FILE_NAME = APP.BACKUP_FOLDER + "address_book" + (TEST ? "-test" : "");
 		public static final File FIRST_WALLET_FILE = new File(WALLET_FILES_NAME + FILES.FILENAME_NETWORK_SUFFIX);
 
 		/** Filename of the automatic wallet backup. */

@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,11 +87,33 @@ public class BookAddress extends Model {
     }
 
     public static List<BookAddress> find(boolean walletAddresses) {
-        return new Select().from(BookAddress.class).where("mine = " + (walletAddresses ? 1 : 0)).execute();
+        List<BookAddress> bookAddresses =  new Select().from(BookAddress.class).where("mine = " + (walletAddresses ? 1 : 0)).execute();
+        List<BookAddress> returnAddresses = new ArrayList<>();
+        for (BookAddress ba : bookAddresses) {
+            try {
+                Address.fromBase58(NETWORK_PARAMETERS, ba.getAddress());
+                returnAddresses.add(ba);;
+            } catch (Exception ignore) {
+
+            }
+        }
+
+        return returnAddresses;
     }
 
     public static List<BookAddress> findAll() {
-        return new Select().from(BookAddress.class).execute();
+        List<BookAddress> bookAddresses =  new Select().from(BookAddress.class).execute();
+        List<BookAddress> returnAddresses = new ArrayList<>();
+        for (BookAddress ba : bookAddresses) {
+            try {
+                Address.fromBase58(NETWORK_PARAMETERS, ba.getAddress());
+                returnAddresses.add(ba);;
+            } catch (Exception ignore) {
+
+            }
+        }
+
+        return returnAddresses;
     }
 
     public static BookAddress resolveLabel(String label) {

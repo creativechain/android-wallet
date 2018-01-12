@@ -15,13 +15,13 @@ android {
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "crea.wallet.lite"
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 15
-        versionName "0.2.4"
+        versionName " 0.2.4"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
@@ -55,6 +55,7 @@ repositories {
     maven { url "https://github.com/omadahealth/omada-nexus/raw/master/release" }
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+    google()
 }
 
 dependencies {
