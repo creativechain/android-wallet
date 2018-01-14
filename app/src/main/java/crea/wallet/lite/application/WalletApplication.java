@@ -43,8 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -260,14 +258,16 @@ public class WalletApplication extends Application {
 
     public void processDirectTransaction(final Transaction tx) throws VerificationException {
         if (WalletHelper.INSTANCE.isTransactionRelevant(tx)) {
-            WalletHelper.INSTANCE.receivePending(tx, null);
+            //WalletHelper.INSTANCE.receivePending(tx, null);
             broadcastTransaction(tx);
         }
     }
 
     public void broadcastTransaction(final Transaction tx)	{
+        byte[] rawTx = tx.bitcoinSerialize();
         final Intent intent = new Intent(BlockchainService.ACTION_BROADCAST_TRANSACTION, null, this, CreativeCoinService.class);
-        intent.putExtra(BlockchainService.ACTION_BROADCAST_TRANSACTION_HASH, tx.getHash());
+
+        intent.putExtra(BlockchainService.ACTION_BROADCAST_RAW_TRANSACTION, rawTx);
         startService(intent);
     }
 

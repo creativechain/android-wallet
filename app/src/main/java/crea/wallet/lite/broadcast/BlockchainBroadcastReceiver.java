@@ -13,6 +13,8 @@ import java.util.List;
 import crea.wallet.lite.connection.ConnectedPeer;
 import crea.wallet.lite.wallet.WalletHelper;
 
+import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
+
 /**
  * Created by ander on 15/11/16.
  */
@@ -25,6 +27,7 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
     public static final String PRICE_UPDATE = BASE_ACTION + ".price_update";
     public static final String TRANSACTION_SENT = BASE_ACTION + ".trasaction_sent";
     public static final String TRANSACTION_RECEIVED = BASE_ACTION + ".trasaction_received";
+    public static final String TRANSACTION_REJECTED = BASE_ACTION + ".trasaction_rejected";
     public static final String LAST_BLOCK_RECEIVED = BASE_ACTION + ".last_block_received";
     public static final String BLOCKCHAIN_RESET = BASE_ACTION + ".blockchain_reset";
     public static final String ACTION_SYNC_STARTED = BASE_ACTION + ".sync_started";
@@ -44,6 +47,10 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
             String txHash = intent.getExtras().getString("txId");
             Transaction t = WalletHelper.INSTANCE.getTransaction(Sha256Hash.wrap(txHash));
             onTransactionSend(t);
+        } else if (action.equals(TRANSACTION_REJECTED)) {
+            byte[] rawTx = intent.getExtras().getByteArray("rawTx");
+            Transaction tx = new Transaction(NETWORK_PARAMETERS, rawTx);
+            onTransactionRejected(tx);
         } else if (action.equals(LAST_BLOCK_RECEIVED)) {
             onLastDownloadedBlock();
         } else if (action.equals(BLOCKCHAIN_RESET)) {
@@ -69,6 +76,10 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
     }
 
     public void onTransactionReceived(Transaction transaction) {
+
+    }
+
+    public void onTransactionRejected(Transaction transaction) {
 
     }
 

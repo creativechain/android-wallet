@@ -22,5 +22,6 @@
     <color name="unconfirmed_input">#90de7a</color>
     <color name="prepared_transaction">#283d20</color>
     <color name="red">#ff5766</color>
+    <color name="yellow">#dcb827</color>
     <color name="unconfirmed_output">#ff738e</color>
 </resources>

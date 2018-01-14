@@ -10,6 +10,7 @@ import org.creativecoinj.core.TransactionConfidence;
 public interface PaymentProcessListener extends TransactionConfidence.Listener{
 
     void onSuccess(Transaction tx);
+    void onRejected(Transaction tx);
     void onInsufficientMoney(Coin missing);
     void onInvalidEncryptionKey();
     void onSigning();

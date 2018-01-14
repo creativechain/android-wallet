@@ -47,6 +47,7 @@
     <string name="sending_transaction">Sending the transaction…</string>
     <string name="transaction_sent">The transaction has been sent!</string>
     <string name="transaction_failed">There has been an error!</string>
+    <string name="transaction_rejected">The transaction has been rejected by most nodes!</string>
     <string name="invalid_encryption_key">Has not been able to sign the transaction because the signature key is invalid.</string>
     <string name="already_spent_funds">There are other transactions pending that have already spent the funds.</string>
     <string name="details">Details</string>

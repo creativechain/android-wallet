@@ -28,7 +28,7 @@
             android:title="@string/show_exchange_value"
             android:key="show_exchange_value"
             android:summary="@string/show_exchange_value_summary"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
         <android.support.v7.preference.ListPreference
             android:title="@string/price_update_interval"

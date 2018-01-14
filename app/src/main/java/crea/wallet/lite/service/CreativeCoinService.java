@@ -42,6 +42,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.common.util.concurrent.FutureCallback;
+
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
@@ -59,19 +61,22 @@ import org.creativecoinj.core.BlockChain;
 import org.creativecoinj.core.CheckpointManager;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.FilteredBlock;
+import org.creativecoinj.core.Message;
 import org.creativecoinj.core.Peer;
 import org.creativecoinj.core.PeerGroup;
+import org.creativecoinj.core.RejectMessage;
+import org.creativecoinj.core.RejectedTransactionException;
 import org.creativecoinj.core.Sha256Hash;
 import org.creativecoinj.core.StoredBlock;
 import org.creativecoinj.core.Transaction;
 import org.creativecoinj.core.TransactionBroadcast;
 import org.creativecoinj.core.TransactionConfidence.ConfidenceType;
+import org.creativecoinj.core.Utils;
 import org.creativecoinj.core.listeners.DownloadProgressTracker;
 import org.creativecoinj.core.listeners.PeerConnectedEventListener;
 import org.creativecoinj.core.listeners.PeerDisconnectedEventListener;
+import org.creativecoinj.core.listeners.PreMessageReceivedEventListener;
 import org.creativecoinj.net.discovery.DnsAndSeedPeerDiscovery;
-import org.creativecoinj.net.discovery.DnsDiscovery;
-import org.creativecoinj.net.discovery.SeedPeers;
 import org.creativecoinj.store.BlockStore;
 import org.creativecoinj.store.BlockStoreException;
 import org.creativecoinj.store.SPVBlockStore;
@@ -91,9 +96,12 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.annotation.Nullable;
+
 import static crea.wallet.lite.application.Constants.WALLET.CONTEXT;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.ACTION_SYNC_STARTED;
+import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_REJECTED;
 
 
 /**
@@ -116,7 +124,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 		public void onCoinsReceived(Wallet wallet, final Transaction tx, Coin coin, Coin coin1) {
             org.creativecoinj.core.Context.propagate(CONTEXT);
 
-			Log.e(TAG,"Coins received!");
+			Log.e(TAG,"Coins received! " + tx.toString());
 
             TxInfo txInfo = new TxInfo(tx);
 
@@ -787,10 +795,32 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
 	public void broadcastTransactionPendingTx(Intent data) {
 		if (peerGroup != null) {
-			final Sha256Hash hash = (Sha256Hash) data.getSerializableExtra(ACTION_BROADCAST_TRANSACTION_HASH);
-			final Transaction tx = WalletHelper.INSTANCE.getTransaction(hash);
-			Log.i(TAG, "broadcasting transaction " + tx.getHash().toString());
+			byte[] rawTx = data.getByteArrayExtra(ACTION_BROADCAST_RAW_TRANSACTION);
+
+			Transaction tx = new Transaction(NETWORK_PARAMETERS, rawTx);
+			final Sha256Hash hash = tx.getHash();
+
+			Log.i(TAG, "broadcasting transaction " + hash.toString());
 			TransactionBroadcast tb = peerGroup.broadcastTransaction(tx);
+			tb.setTransactionCallback(new FutureCallback<Transaction>() {
+				@Override
+				public void onSuccess(@Nullable Transaction transaction) {
+					WalletHelper.INSTANCE.commitTx(transaction);
+				}
+
+				@Override
+				public void onFailure(Throwable throwable) {
+					if (throwable instanceof RejectedTransactionException) {
+						RejectedTransactionException rte = (RejectedTransactionException) throwable;
+						Log.e(TAG, "Transaction rejected! " + rte.getTransaction().getHashAsString());
+
+						Intent rejectIntent = new Intent(TRANSACTION_REJECTED);
+						rejectIntent.putExtra("rawTx", rte.getTransaction().bitcoinSerialize());
+
+						sendBroadcast(rejectIntent);
+					}
+				}
+			});
 
 		} else {
 			Log.i(TAG, "Tx not available");

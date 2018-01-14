@@ -21,6 +21,7 @@ import crea.wallet.lite.wallet.PaymentProcessListener;
 import crea.wallet.lite.wallet.WalletHelper;
 
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_RECEIVED;
+import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_REJECTED;
 import static crea.wallet.lite.broadcast.BlockchainBroadcastReceiver.TRANSACTION_SENT;
 
 /**
@@ -40,6 +41,11 @@ public abstract class PrepareTxActivity extends AppCompatActivity {
         public void onTransactionReceived(Transaction transaction) {
             wallet = WalletHelper.INSTANCE.getWallet();
         }
+
+        @Override
+        public void onTransactionRejected(Transaction transaction) {
+            CONFIDENCE_LISTENER.onRejected(transaction);
+        }
     };
 
     protected final PaymentProcessListener CONFIDENCE_LISTENER = new AbstractPaymentProcessListener() {
@@ -57,6 +63,12 @@ public abstract class PrepareTxActivity extends AppCompatActivity {
         public void onSuccess(Transaction tx) {
             PrepareTxActivity.this.tx = tx;
             onTransactionState(State.SENT);
+        }
+
+        @Override
+        public void onRejected(Transaction tx) {
+            PrepareTxActivity.this.tx = tx;
+            onTransactionState(State.REJECTED);
         }
 
         @Override
@@ -140,6 +152,7 @@ public abstract class PrepareTxActivity extends AppCompatActivity {
     private void registerReceiver() {
         IntentFilter filter = new IntentFilter(TRANSACTION_SENT);
         filter.addAction(TRANSACTION_RECEIVED);
+        filter.addAction(TRANSACTION_REJECTED);
         registerReceiver(TRANSACTION_RECEIVER, filter);
     }
 

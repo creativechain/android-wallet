@@ -46,6 +46,7 @@
     <string name="sending_transaction">Enviando la transacción…</string>
     <string name="transaction_sent">¡La transacción se ha enviado!</string>
     <string name="transaction_failed">¡Ha habido un error!</string>
+    <string name="transaction_rejected">¡La transacción ha sido rechazada por la mayoría de los nodos!</string>
     <string name="invalid_encryption_key">No se ha podido firmar la transacción porque la clave de firma no es válida.</string>
     <string name="already_spent_funds">Hay otras transacciones pendientes que ya han gastado estos fondos.</string>
     <string name="details">Detalles</string>
