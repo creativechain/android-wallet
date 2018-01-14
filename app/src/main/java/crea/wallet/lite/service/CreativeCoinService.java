@@ -64,10 +64,13 @@ import org.creativecoinj.core.PeerGroup;
 import org.creativecoinj.core.Sha256Hash;
 import org.creativecoinj.core.StoredBlock;
 import org.creativecoinj.core.Transaction;
+import org.creativecoinj.core.TransactionBroadcast;
 import org.creativecoinj.core.TransactionConfidence.ConfidenceType;
 import org.creativecoinj.core.listeners.DownloadProgressTracker;
 import org.creativecoinj.core.listeners.PeerConnectedEventListener;
 import org.creativecoinj.core.listeners.PeerDisconnectedEventListener;
+import org.creativecoinj.net.discovery.DnsAndSeedPeerDiscovery;
+import org.creativecoinj.net.discovery.DnsDiscovery;
 import org.creativecoinj.net.discovery.SeedPeers;
 import org.creativecoinj.store.BlockStore;
 import org.creativecoinj.store.BlockStoreException;
@@ -277,7 +280,6 @@ public class CreativeCoinService extends Service implements BlockchainService {
 
         @Override
         public void onChainDownloadStarted(Peer peer, int blocksLeft) {
-            peerGroup.setMinBroadcastConnections(1);
             broadcastPendingTx();
             if (!rateStarted) {
                 rateStarted = true;
@@ -306,6 +308,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
                                 }
                             });
                         }
+
                         rateHandler.postDelayed(this, 1000);
                     }
                 });
@@ -407,7 +410,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 				peerGroup = new PeerGroup(NETWORK_PARAMETERS, blockChain);
 				peerGroup.setDownloadTxDependencies(0); // recursive implementation causes StackOverflowError
 				peerGroup.setBloomFilteringEnabled(true);
-                peerGroup.setMinBroadcastConnections(1);
+                peerGroup.setMinBroadcastConnections(2);
 				addWallets();
 
 				peerGroup.setUserAgent(Constants.APP.CLIENT_NAME, Constants.APP.VERSION);
@@ -420,7 +423,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 				peerGroup.setConnectTimeoutMillis(Constants.PEER_TIMEOUT_MS);
 				peerGroup.setPeerDiscoveryTimeoutMillis(Constants.PEER_DISCOVERY_TIMEOUT_MS);
 
-				peerGroup.addPeerDiscovery(new SeedPeers(NETWORK_PARAMETERS));
+				peerGroup.addPeerDiscovery(new DnsAndSeedPeerDiscovery(NETWORK_PARAMETERS));
 
 				new AsyncTask<Void, Void, Void>() {
 
@@ -787,7 +790,7 @@ public class CreativeCoinService extends Service implements BlockchainService {
 			final Sha256Hash hash = (Sha256Hash) data.getSerializableExtra(ACTION_BROADCAST_TRANSACTION_HASH);
 			final Transaction tx = WalletHelper.INSTANCE.getTransaction(hash);
 			Log.i(TAG, "broadcasting transaction " + tx.getHash().toString());
-			peerGroup.broadcastTransaction(tx);
+			TransactionBroadcast tb = peerGroup.broadcastTransaction(tx);
 
 		} else {
 			Log.i(TAG, "Tx not available");

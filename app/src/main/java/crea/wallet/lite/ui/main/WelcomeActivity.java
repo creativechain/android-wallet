@@ -33,6 +33,7 @@ import org.creativecoinj.wallet.UnreadableWalletException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -170,6 +171,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 
     private void generateWallet() {
         creationTime = Utils.normalizeWalletTime(creationTime);
+        Log.e(TAG, "Creating seed on " + new Date(creationTime).toLocaleString());
         setProgressText(R.string.generating_wallet);
         showProgress(true);
         new AsyncTask<Void, Void, Void>() {

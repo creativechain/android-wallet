@@ -35,7 +35,7 @@ import java.io.File;
  * @author Andreas Schildbach
  */
 public final class Constants {
-	public static final boolean TEST = true;
+	public static final boolean TEST = false;
 
 	/** Network this wallet is on (e.g. testnet or mainnet). */
 	public final static class APP {

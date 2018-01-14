@@ -11,6 +11,7 @@ import org.creativecoinj.wallet.Wallet;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,6 +62,7 @@ public final class WalletGenerator {
 
             seed = new DeterministicSeed(words, null, "", creationTime);
 
+            Log.e(TAG, "Created seed date " + new Date(seed.getCreationTimeSeconds() * 1000).toLocaleString());
             wallet = Wallet.fromSeed(Constants.WALLET.NETWORK_PARAMETERS, seed);
 
             if (encryptionKey != null && !encryptionKey.toString().isEmpty()) {
