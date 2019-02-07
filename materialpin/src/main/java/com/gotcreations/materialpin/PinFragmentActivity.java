@@ -5,11 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.gotcreations.materialpin.interfaces.LifeCycleInterface;
 import com.gotcreations.materialpin.managers.AppLockActivity;
+
+import androidx.fragment.app.FragmentActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Created by stoyan and olivier on 1/12/15.

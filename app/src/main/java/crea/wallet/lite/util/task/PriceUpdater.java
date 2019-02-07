@@ -9,6 +9,7 @@ import crea.wallet.lite.util.coin.CoinUtils;
 import com.zanjou.http.debug.Logger;
 import com.zanjou.http.request.Request;
 import com.zanjou.http.response.OkJsonResponseListener;
+import com.zanjou.http.response.ResponseData;
 
 import org.creativecoinj.core.AbstractCoin;
 import org.json.JSONArray;
@@ -41,9 +42,9 @@ public class PriceUpdater extends Updater {
                             .setResponseListener(new OkJsonResponseListener() {
 
                                 @Override
-                                public void onOkResponse(String content) {
+                                public void onOkResponse(ResponseData responseData) {
                                     try {
-                                        JSONArray jarray = new JSONArray(content);
+                                        JSONArray jarray = new JSONArray(responseData.getDataAsString());
                                         JSONObject jsonObject = new JSONObject();
                                         jsonObject.put("data", jarray);
                                         onOkResponse(jsonObject);

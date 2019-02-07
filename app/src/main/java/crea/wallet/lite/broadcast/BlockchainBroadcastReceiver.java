@@ -46,7 +46,7 @@ public abstract class BlockchainBroadcastReceiver extends BroadcastReceiver {
         } else if (action.equals(TRANSACTION_RECEIVED)) {
             String txHash = intent.getExtras().getString("txId");
             Transaction t = WalletHelper.INSTANCE.getTransaction(Sha256Hash.wrap(txHash));
-            onTransactionSend(t);
+            onTransactionReceived(t);
         } else if (action.equals(TRANSACTION_REJECTED)) {
             byte[] rawTx = intent.getExtras().getByteArray("rawTx");
             Transaction tx = new Transaction(NETWORK_PARAMETERS, rawTx);

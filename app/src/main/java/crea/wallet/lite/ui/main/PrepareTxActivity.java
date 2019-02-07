@@ -2,8 +2,8 @@ package crea.wallet.lite.ui.main;
 
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.Transaction;

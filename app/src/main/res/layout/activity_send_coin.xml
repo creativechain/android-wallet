@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/transaction_fee"
-                app:font="roboto_bold"
+                app:c_font="roboto_bold"
                 android:textColor="@color/gray_2e2"/>
 
             <RadioButton
@@ -142,7 +142,7 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/wallet_accept_btn"
@@ -167,7 +167,7 @@
                 <crea.wallet.lite.widget.FontTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:font="material_icon"
+                    app:c_font="material_icon"
                     android:text="\ue061"
                     android:textColor="@color/green"
                     android:id="@+id/transaction_status_icon"/>
@@ -175,7 +175,7 @@
                 <crea.wallet.lite.widget.FontTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:font="roboto_light"
+                    app:c_font="roboto_light"
                     android:layout_marginLeft="5dp"
                     android:text="Sending...."
                     android:id="@+id/transaction_status"/>
@@ -194,7 +194,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    app:font="roboto_light"
+                    app:c_font="roboto_light"
                     android:text="mxJgZr7izoBQ73rL4HRuLvW3gKrkKpixC5"/>
 
                 <crea.wallet.lite.widget.FontTextView
@@ -202,7 +202,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    app:font="roboto_bold"
+                    app:c_font="roboto_bold"
                     android:text="0.236252 BTC"
                     android:gravity="right"/>
             </LinearLayout>
@@ -220,7 +220,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    app:font="roboto_light"
+                    app:c_font="roboto_light"
                     android:text="@string/network_fee"/>
 
                 <LinearLayout
@@ -233,7 +233,7 @@
                         android:id="@+id/fee_amount_btc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:font="roboto_bold"
+                        app:c_font="roboto_bold"
                         android:text="0.006252 BTC"
                         android:gravity="right"/>
 
@@ -241,7 +241,7 @@
                         android:id="@+id/fee_amount_fiat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:font="roboto_bold"
+                        app:c_font="roboto_bold"
                         android:text="4.25 €"
                         android:gravity="right"/>
                 </LinearLayout>
@@ -250,7 +250,7 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
     <Button

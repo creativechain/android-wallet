@@ -10,7 +10,7 @@
     android:background="@color/white_blurred"
     tools:context=".ui.main.CoinTransactionActivity">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:contentPadding="10dp">
@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/transaction_hash"
-                app:font="roboto_bold"
+                app:c_font="roboto_bold"
                 android:textSize="15sp"/>
 
             <crea.wallet.lite.widget.FontTextView
@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/amount_dots"
                     
-                    app:font="roboto_bold"/>
+                    app:c_font="roboto_bold"/>
 
                 <TextView
                     android:id="@+id/amount"
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/confirmations"
                     
-                    app:font="roboto_bold"/>
+                    app:c_font="roboto_bold"/>
 
                 <TextView
                     android:id="@+id/confirmations"
@@ -102,9 +102,9 @@
             </LinearLayout>
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/sender_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/sender"
-                app:font="roboto_bold"
+                app:c_font="roboto_bold"
                 android:textSize="15sp"/>
 
             <crea.wallet.lite.widget.FontTextView
@@ -132,9 +132,9 @@
                 android:textIsSelectable="true"
                 android:text="Bárcenas \n(1AdeSusCuentaEnSuizaJAsdA)" />
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/addressee_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/addressee"
-                app:font="roboto_bold"
+                app:c_font="roboto_bold"
                 android:textSize="15sp"/>
 
             <crea.wallet.lite.widget.FontTextView
@@ -163,9 +163,9 @@
                 android:textIsSelectable="true"
                 android:text="My wallet (1ASsdrgSDFwASdqdWERfgvsdsfASdfw)" />
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/rbf_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -183,5 +183,5 @@
                 android:layout_height="wrap_content"
                 android:text="@string/rbf_tx_detail"/>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

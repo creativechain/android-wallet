@@ -2,7 +2,7 @@ package crea.wallet.lite.util.wrapper;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.QRScannerActivity;

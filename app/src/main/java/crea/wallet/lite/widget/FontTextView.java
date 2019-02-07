@@ -49,7 +49,7 @@ public class FontTextView extends TextView {
     private void initialize(AttributeSet attrs) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.FontTextView);
 
-        setFont(a.getInteger(R.styleable.FontTextView_font, ROBOTO_REGULAR));
+        setFont(a.getInteger(R.styleable.FontTextView_c_font, ROBOTO_REGULAR));
         setTextType(a.getInteger(R.styleable.FontTextView_text_type, PLAIN));
         a.recycle();
     }

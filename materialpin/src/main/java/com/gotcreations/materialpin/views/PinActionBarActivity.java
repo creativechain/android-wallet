@@ -1,8 +1,9 @@
 package com.gotcreations.materialpin.views;
 
-import android.support.v7.app.ActionBarActivity;
 
 import com.gotcreations.materialpin.interfaces.LifeCycleInterface;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by stoyan and olivier on 1/12/15.
@@ -10,7 +11,7 @@ import com.gotcreations.materialpin.interfaces.LifeCycleInterface;
  * Then to enable PinCode blocking, you must call
  * {@link com.gotcreations.materialpin.managers.LockManager#enableAppLock(android.content.Context, Class)}
  */
-public class PinActionBarActivity extends ActionBarActivity {
+public class PinActionBarActivity extends AppCompatActivity {
     private static LifeCycleInterface mLifeCycleListener;
 
     @Override

@@ -36,7 +36,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:font="raleway_bold"
+        app:c_font="raleway_bold"
         android:textColor="#ff9b9b"
         android:gravity="center"
         android:text="@string/retype_seed"

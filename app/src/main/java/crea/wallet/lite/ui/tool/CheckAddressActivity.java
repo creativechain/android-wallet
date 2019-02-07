@@ -1,8 +1,8 @@
 package crea.wallet.lite.ui.tool;
 
-import android.support.annotation.ColorRes;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.ColorRes;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;

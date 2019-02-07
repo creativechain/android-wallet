@@ -18,14 +18,14 @@
         <crea.wallet.lite.widget.FontTextView
             android:id="@+id/label"
             android:layout_height="wrap_content"
-            app:font="roboto_bold"
+            app:c_font="roboto_bold"
             android:hint="@string/without_name"
             android:layout_width="match_parent"/>
 
         <crea.wallet.lite.widget.FontTextView
             android:id="@+id/address_btc"
             android:layout_height="wrap_content"
-            app:font="roboto_regular"
+            app:c_font="roboto_regular"
             android:text="mr2G767iatrFxjMBRhwjskLg9XLSVTmEwK"
             android:layout_width="match_parent"
             android:textSize="12sp"/>
@@ -42,7 +42,7 @@
             android:id="@+id/amount_btc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:font="roboto_regular"
+            app:c_font="roboto_regular"
             android:layout_weight="0.5"
             android:gravity="right|center_vertical"
             android:hint="0.0256 btc"
@@ -54,7 +54,7 @@
             android:id="@+id/amount_fiat"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:font="roboto_regular"
+            app:c_font="roboto_regular"
             android:layout_weight="0.5"
             android:gravity="right|center_vertical"
             android:hint="89.36 eur"

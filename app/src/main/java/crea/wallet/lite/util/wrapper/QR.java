@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +18,6 @@ import android.widget.Toast;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.util.encoders.Base43;
-import crea.wallet.lite.util.wrapper.DialogFactory;
-import crea.wallet.lite.util.wrapper.TxInfo;
 
 import net.glxn.qrgen.android.QRCode;
 

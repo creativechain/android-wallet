@@ -16,7 +16,7 @@
             android:id="@+id/key_q"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="Q"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -27,7 +27,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="W"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -39,7 +39,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="E"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -51,7 +51,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="R"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -63,7 +63,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="T"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -75,7 +75,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="Y"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -87,7 +87,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="U"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -99,7 +99,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="I"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -111,7 +111,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="O"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -123,7 +123,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="P"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -142,7 +142,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="A"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -154,7 +154,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="S"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -166,7 +166,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="D"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -178,7 +178,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="F"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -190,7 +190,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="G"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -202,7 +202,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="H"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -214,7 +214,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="J"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -226,7 +226,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="K"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -238,7 +238,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="L"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -266,7 +266,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="Z"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -278,7 +278,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="X"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -290,7 +290,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="C"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -302,7 +302,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="V"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -314,7 +314,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="B"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -326,7 +326,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="N"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"
@@ -338,7 +338,7 @@
         <crea.wallet.lite.widget.FontTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:font="raleway_bold"
+            app:c_font="raleway_bold"
             android:text="M"
             android:textSize="30dp"
             android:textColor="@color/text_effect_white_disabled_white"

@@ -9,6 +9,7 @@ import com.google.common.base.Stopwatch;
 import com.zanjou.http.debug.Logger;
 import com.zanjou.http.request.Request;
 import com.zanjou.http.response.BaseResponseListener;
+import com.zanjou.http.response.ResponseData;
 import com.zanjou.http.response.ResponseListener;
 
 import org.creativecoinj.core.Coin;
@@ -94,7 +95,7 @@ public class DynamicFeeLoader extends AsyncTask<Void, Map<FeeCategory, Coin>, Vo
                     final Coin rate = Coin.valueOf(Long.parseLong(fields[1]));
                     dynamicFees.put(category, rate);
                 } catch (IllegalArgumentException x) {
-                    Log.w("Cannot parse line, ignoring: '" + line + "'", x);
+                    Log.w("Cannot parse line : '" + line + "'", x);
                 }
             }
         } catch (final Exception x) {
@@ -114,14 +115,14 @@ public class DynamicFeeLoader extends AsyncTask<Void, Map<FeeCategory, Coin>, Vo
                 .addHeader("User-Agent", BuildConfig.APPLICATION_ID + "/" + BuildConfig.VERSION_NAME)
                 .setResponseListener(new BaseResponseListener() {
                     @Override
-                    public void onErrorResponse(int i, String s) {
+                    public void onErrorResponse(ResponseData responseData) {
 
                     }
 
                     @Override
-                    public void onOkResponse(String s) {
+                    public void onOkResponse(ResponseData responseData) {
                         try {
-                            Map<FeeCategory, Coin> staticFees = parseFees(new ByteArrayInputStream(s.getBytes()));
+                            Map<FeeCategory, Coin> staticFees = parseFees(new ByteArrayInputStream(responseData.getData()));
                             publishProgress(staticFees);
                         } catch (IOException e) {
                             throw new RuntimeException(e);

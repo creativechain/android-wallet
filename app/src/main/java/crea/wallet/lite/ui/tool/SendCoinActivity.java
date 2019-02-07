@@ -1,11 +1,11 @@
 package crea.wallet.lite.ui.tool;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.text.TextUtilsCompat;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Constants;
+import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
+import crea.wallet.lite.connection.ConnectedPeer;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.util.coin.CoinUtils;
 import crea.wallet.lite.ui.main.PrepareTxActivity;
@@ -40,7 +42,8 @@ import org.creativecoinj.core.Coin;
 import org.creativecoinj.uri.BitcoinURI;
 import org.creativecoinj.uri.BitcoinURIParseException;
 import org.creativecoinj.wallet.SendRequest;
-import org.spongycastle.util.test.NumberParsing;
+
+import java.util.List;
 
 import static crea.wallet.lite.application.Constants.WALLET.DONATION_ADDRESS;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;

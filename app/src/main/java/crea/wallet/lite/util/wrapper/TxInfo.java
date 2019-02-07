@@ -1,13 +1,12 @@
 package crea.wallet.lite.util.wrapper;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
 import org.creativecoinj.core.Address;
 import org.creativecoinj.core.Coin;
 import org.creativecoinj.core.Transaction;
-import org.creativecoinj.core.TransactionInput;
 import org.creativecoinj.core.TransactionOutput;
 
 import java.util.ArrayList;

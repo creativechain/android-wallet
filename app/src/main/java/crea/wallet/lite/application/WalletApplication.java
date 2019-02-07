@@ -10,7 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.multidex.MultiDex;
+import androidx.multidex.MultiDex;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.Toast;

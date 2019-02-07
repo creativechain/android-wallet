@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:id="@+id/root_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -93,7 +93,7 @@
                                 android:textSize="22sp"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                app:font="roboto_bold"
+                                app:c_font="roboto_bold"
                                 android:ellipsize="end"/>
 
                             <crea.wallet.lite.widget.FontTextView
@@ -103,7 +103,7 @@
                                 android:id="@+id/total_fiat"
                                 android:textColor="@color/textColorSecondary"
                                 android:textSize="14sp"
-                                app:font="roboto_light"
+                                app:c_font="roboto_light"
                                 android:gravity="end"
                                 android:maxLines="2" />
 
@@ -133,7 +133,7 @@
                                         android:textColor="@color/textColorSecondary"
                                         android:textSize="10dp"
                                         android:text="0.00 €"
-                                        app:font="roboto_bold"
+                                        app:c_font="roboto_bold"
                                         android:visibility="visible" />
 
                                     <crea.wallet.lite.widget.FontTextView
@@ -144,7 +144,7 @@
                                         android:textColor="@color/textColorSecondary"
                                         android:textSize="10dp"
                                         android:gravity="right"
-                                        app:font="roboto_light"
+                                        app:c_font="roboto_light"
                                         android:layout_weight="0.5" />
 
                                 </LinearLayout>
@@ -164,7 +164,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp">
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/transaction_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -182,7 +182,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/transactions_not_found"
-                            app:font="roboto_bold"
+                            app:c_font="roboto_bold"
                             android:gravity="center"
                             android:textSize="30dp" />
 
@@ -191,7 +191,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:text="@string/transactions_not_found_explain"
-                            app:font="roboto_light"
+                            app:c_font="roboto_light"
                             android:gravity="center"
                             android:textSize="16dp" />
 
@@ -200,7 +200,7 @@
             </LinearLayout>
         </RelativeLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </FrameLayout>

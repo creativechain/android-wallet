@@ -2,11 +2,11 @@ package crea.wallet.lite.ui.base;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +23,6 @@ import crea.wallet.lite.util.wrapper.DialogFactory;
 import crea.wallet.lite.util.wrapper.FormUtils;
 import crea.wallet.lite.util.wrapper.QR;
 
-import static crea.wallet.lite.application.Constants.WALLET.ADDRESS_BOOK_FILE;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
 
 /**

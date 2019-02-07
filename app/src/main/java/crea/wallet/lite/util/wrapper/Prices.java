@@ -1,6 +1,6 @@
 package crea.wallet.lite.util.wrapper;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.util.coin.CoinUtils;

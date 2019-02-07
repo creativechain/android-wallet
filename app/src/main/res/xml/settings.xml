@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen
+<androidx.preference.PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/settings">
 
-    <android.support.v7.preference.PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/notifications">
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:title="@string/enable_notifications"
             android:summary="@string/enable_notifications_globally"
             android:key="notif_transactions"
             android:defaultValue="true" />
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/coin_settings">
 
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:title="@string/exchange_currency"
             android:summary="@string/exchange_currency_explain"
             android:key="main_currency"
             android:entries="@array/currency_entries"
             android:entryValues="@array/currency_values"/>
 
-        <android.support.v7.preference.CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:title="@string/show_exchange_value"
             android:key="show_exchange_value"
             android:summary="@string/show_exchange_value_summary"
             android:defaultValue="true" />
 
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:title="@string/price_update_interval"
             android:key="price_update_interval"
             android:entries="@array/price_interval_entries"
             android:entryValues="@array/price_interval_values"
             android:defaultValue="300000"/>
 
-        <android.support.v7.preference.ListPreference
+        <androidx.preference.ListPreference
             android:title="@string/transaction_fees"
             android:summary="@string/transaction_fees_explain"
             android:key="transaction_fee"
             android:entries="@array/fees_entries"
             android:entryValues="@array/fees_values"/>
 
-        <android.support.v7.preference.CheckBoxPreference
+        <androidx.preference.CheckBoxPreference
             android:title="@string/allow_spent_unconfirmed_tx"
             android:key="spend_unconfirmed_tx"
             android:summary="@string/allow_spent_unconfirmed_tx_summary"
             android:defaultValue="false" />
 
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory
+    <androidx.preference.PreferenceCategory
         android:title="@string/advanced_options">
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:title="@string/disconnect_idle_detected"
             android:key="idle_detection"
             android:summary="@string/disconnect_idle_detected_summary"
             android:defaultValue="true" />
 
-        <android.support.v7.preference.Preference
+        <androidx.preference.Preference
             android:title="@string/export_seed"
             android:summary="@string/export_seed_explain"
             android:key="export_seed" />
 
-        <android.support.v7.preference.SwitchPreferenceCompat
+        <androidx.preference.SwitchPreferenceCompat
             android:title="@string/reset_blockchain"
             android:key="delete_blockchain"
             android:summary="@string/not_recommended"/>
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

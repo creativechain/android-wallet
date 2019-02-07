@@ -18,7 +18,7 @@
         android:text="@string/welcome_title"
         android:gravity="center_horizontal"
         android:textColor="@android:color/white"
-        app:font="roboto_light"
+        app:c_font="roboto_light"
         android:textSize="20sp"/>
 
     <crea.wallet.lite.widget.FontTextView
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/welcome_start"
-            app:font="roboto_bold"
+            app:c_font="roboto_bold"
             android:layout_marginBottom="10dp"
             android:textColor="@color/gray_868"
             android:gravity="center"/>
@@ -147,7 +147,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
-            app:font="material_icon"
+            app:c_font="material_icon"
             android:text="\ue83b"
             android:gravity="center"
             android:textColor="@color/green"

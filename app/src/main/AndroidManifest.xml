@@ -106,6 +106,13 @@
 
         <activity android:name=".ui.tool.CheckAddressActivity">
         </activity>
+
+        <provider
+            android:name="com.activeandroid.content.ContentProvider"
+            android:authorities="${applicationId}"
+            android:enabled="true"
+            android:exported="false">
+        </provider>
     </application>
 
 </manifest>

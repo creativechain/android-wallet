@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="@string/check_address_tool_explain"/>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp">
@@ -27,7 +27,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="@color/colorPrimary"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <crea.wallet.lite.widget.FontTextView
         android:id="@+id/check_result"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        app:font="roboto_bold"
+        app:c_font="roboto_bold"
         android:textSize="18dp"
         android:text="@string/address_not_found"/>
 </LinearLayout>
