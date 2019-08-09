@@ -52,7 +52,7 @@ public class PeerListActivity extends AppCompatActivity {
         noPeers = findViewById(R.id.no_peers);
         list = (RecyclerView) findViewById(R.id.peer_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.setOrientation(RecyclerView.VERTICAL);
         list.setLayoutManager(layoutManager);
 
         adapter = new ConnectedPeerAdapter(this, new ArrayList<ConnectedPeer>());

@@ -314,7 +314,7 @@ public class Configuration {
 	}
 
 	public boolean isExchangeValueEnabled() {
-		return prefs.getBoolean(PREFS_KEY_SHOW_EXCHANGE_VALUE, false);
+		return prefs.getBoolean(PREFS_KEY_SHOW_EXCHANGE_VALUE, true);
 	}
 
 	public long getPriceUpdateInterval() {

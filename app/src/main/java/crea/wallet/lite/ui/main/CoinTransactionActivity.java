@@ -74,7 +74,7 @@ public class CoinTransactionActivity extends TransactionActivity {
         txHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url  + transaction.getHashAsString()));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url  + transaction.getHashAsString() + ".htm"));
                 startActivity(browserIntent);
             }
         });

@@ -29,7 +29,10 @@ public class ConnectedPeer implements Serializable {
     }
 
     public ConnectedPeer(Peer peer) {
-        this(peer.getAddress().getAddr().getHostName(), peer.getPeerVersionMessage().subVer, peer.getPeerVersionMessage().clientVersion, peer.getBestHeight(), peer.getLastPingTime());
+        this(peer.getAddress().getAddr().getHostAddress() + ":" + peer.getAddress().getPort(),
+                peer.getPeerVersionMessage().subVer, peer.getPeerVersionMessage().clientVersion,
+                peer.getBestHeight(), peer.getLastPingTime());
+
 
     }
 

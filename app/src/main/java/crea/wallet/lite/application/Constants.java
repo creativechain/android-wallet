@@ -82,17 +82,12 @@ public final class Constants {
 	}
 
 	public static final class URLS {
-		private static final String BITEASY_API_URL_PROD = "https://api.biteasy.com/v2/btc/mainnet/";
-		private static final String BITEASY_API_URL_TEST = "https://api.biteasy.com/v2/btc/testnet/";
-
-		/** Base URL for blockchain API. */
-		public static final String BITEASY_API_URL = TEST ? BITEASY_API_URL_TEST : BITEASY_API_URL_PROD;
 
 		public static final String BLOCKEXPLORER_PROD_URL = "https://search.creativechain.net/api/getrawtransaction?txid=";
 		public static final String BLOCKEXPLORER_TEST_URL = "https://testnet.blockexplorer.com/";
-		public static final String BLOCKEXPLORER_URL = "https://search.creativechain.net/tx/";
+		public static final String BLOCKEXPLORER_URL = "https://chainz.cryptoid.info/crea/tx.dws?";
 
-		public static final String FEES_URL = "https://www.creativecoin.tk/fees";
+		public static final String FEES_URL = "https://www.owldevelopers.site/fees";
 	}
 
 	public final static class FILES {
