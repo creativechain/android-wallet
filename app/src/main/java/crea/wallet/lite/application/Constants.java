@@ -101,11 +101,17 @@ public final class Constants {
 		public static final File DATA_DIRECTORY = WalletApplication.INSTANCE.getFilesDir();
 	}
 
+	public static final class SWAP {
+		public static final String PEER = "54.36.218.81";
+		public static final String CREA_NODES_URL = "https://nodes.creary.net";
+		public static final String PLATFORM_API = "https://api.creary.net";
+		public static final String CLIENT_ID = "2_5m5bfv6tqc8wckgwcwcggk04000kogw4k880w0go00c0sks0c8";
+		public static final String CLIENT_SECRET = "5966sp4f2gsgscsskwg8cwsk0gwckwck8kgg8gksw048kwo4gg";
+	}
+
 	/** Maximum size of backups. Files larger will be rejected. */
 	public static final long BACKUP_MAX_CHARS = 10000000;
 	public static final char CHAR_THIN_SPACE = '\u2009';
-	public static final char CURRENCY_PLUS_SIGN = '\uff0b';
-	public static final char CURRENCY_MINUS_SIGN = '\uff0d';
 
 	public static final BaseEncoding HEX = BaseEncoding.base16().lowerCase();
 

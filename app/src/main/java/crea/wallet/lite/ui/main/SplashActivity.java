@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
-import crea.wallet.lite.application.WalletApplication;
+import crea.wallet.lite.ui.tool.SwapLoginActivity;
 import crea.wallet.lite.util.task.WalletExporter;
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.util.wrapper.DialogFactory;
@@ -22,6 +22,8 @@ import crea.wallet.lite.util.wrapper.IntentUtils;
 import crea.wallet.lite.util.wrapper.Permissions;
 import crea.wallet.lite.util.task.Task;
 import crea.wallet.lite.wallet.WalletHelper;
+
+import static crea.wallet.lite.application.WalletApplication.INSTANCE;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -38,6 +40,8 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }, 1500);
         }
+
+        INSTANCE.requestAccessToken();
     }
 
     private void launch() {
@@ -50,9 +54,9 @@ public class SplashActivity extends AppCompatActivity {
 
     private void toHomeActivity() {
         if (Configuration.getInstance().isNewSecurityModeActive()) {
-            WalletApplication.INSTANCE.startBlockchainService(true);
+            //WalletApplication.INSTANCE.startBlockchainService(true);
 
-            Intent i = new Intent(this, MainActivity.class);
+            Intent i = new Intent(this, SwapLoginActivity.class);
             startActivity(i);
             finish();
         } else {
@@ -74,7 +78,7 @@ public class SplashActivity extends AppCompatActivity {
         aDialog.show();
     }
     private void toWelcomeActivity() {
-        WalletApplication.INSTANCE.startBlockchainService(true);
+        INSTANCE.startBlockchainService(true);
 
         Intent i = new Intent(this, WelcomeActivity.class);
         startActivity(i);

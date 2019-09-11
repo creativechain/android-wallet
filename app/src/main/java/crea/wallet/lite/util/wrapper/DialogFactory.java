@@ -12,6 +12,7 @@ import android.view.View;
 
 
 import crea.wallet.lite.R;
+import crea.wallet.lite.swap.api.ApiError;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -198,6 +199,15 @@ public class DialogFactory {
 
         return dialog;
 
+    }
+
+    public static AlertDialog error(Activity activity, ApiError apiError) {
+        switch (apiError) {
+            case LOGIN_FAILED:
+                return error(activity, "Error", "Invalid username or password.");
+            default:
+                return error(activity, "Error", "Unknown error");
+        }
     }
 
     public static void removeDialogsFrom(Class<? extends Context> clazz) {

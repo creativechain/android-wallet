@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#0052dd</color>
     <color name="colorPrimaryBlurred">#862b47ff</color>
     <color name="colorAccent">#ff5766</color>
+    <color name="colorPrimaryTranslucent">#7E0073FF</color>
 
     <color name="textColorPrimary">#3b3b3c</color>
     <color name="textColorSecondary">#efefef</color>

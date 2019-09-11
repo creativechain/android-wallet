@@ -159,5 +159,23 @@
     <string name="getting_private_key">Exporting private key</string>
     <string name="copied">Copied!</string>
     <string name="transaction">Transaction</string>
+    <string name="swap_welcome">The Creativecoin network is obsolete since 02/19/2019 12:00 CET. Instead the Crea network has been created. The coins you have in this wallet will be sent to the new network at the rate of 1: 1. Before proceeding with the process it is necessary to register in order to claim your coins. You can do it at https://creary.net/welcome.</string>
+    <string name="swap_already_registered">I\'m already registered</string>
+    <string name="swap_login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="swap_checking_account">Checking account…</string>
+    <string name="swap_total_amount">Total amount: %s CREA</string>
+    <string name="swap_to_receive_amount">To receive amount: %s CREA</string>
+    <string name="make_swap">Make swap</string>
+    <string name="swap_signatures">Creating signatures</string>
+    <string name="swap_signing">Signing  random message…</string>
+    <string name="swap_sending">Swap request</string>
+    <string name="swap_sending_message">Sending a swap request…</string>
+    <string name="swap_success">Swap successfully</string>
+    <string name="swap_success_message">The swap was successful. Check the amount sent to @%s</string>
+    <string name="swap_confirmation">Swap confirmation</string>
+    <string name="swap_confirmation_message">You will exchange your coins. New currencies will be sent to @%s. This process is IRREVERSIBLE. Make sure the username is correct.</string>
+    <string name="swap_no_addresses">No selected addresses</string>
 
 </resources>

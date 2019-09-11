@@ -22,6 +22,7 @@ import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.ui.tool.SeedActivity;
+import crea.wallet.lite.ui.tool.SwapLoginActivity;
 import crea.wallet.lite.util.wrapper.DialogFactory;
 import crea.wallet.lite.util.wrapper.IntentUtils;
 import crea.wallet.lite.util.Utils;
@@ -290,9 +291,9 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void toHomeActivity() {
-        WalletApplication.INSTANCE.startBlockchainService(true);
+        //WalletApplication.INSTANCE.startBlockchainService(true);
 
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, SwapLoginActivity.class);
         startActivity(i);
         finish();
     }

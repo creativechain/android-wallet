@@ -31,6 +31,8 @@ import crea.wallet.lite.ui.tool.PinActivity;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.wallet.WalletHelper;
 import com.gotcreations.materialpin.managers.LockManager;
+import com.zanjou.http.request.Request;
+import com.zanjou.http.response.JsonResponseListener;
 
 import io.fabric.sdk.android.Fabric;
 import org.creativecoinj.core.Transaction;
@@ -38,6 +40,8 @@ import org.creativecoinj.core.VerificationException;
 import org.creativecoinj.crypto.MnemonicCode;
 import org.creativecoinj.crypto.MnemonicException;
 import org.creativecoinj.wallet.UnreadableWalletException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,8 +97,8 @@ public class WalletApplication extends Application {
         blockchainServiceResetBlockchainIntent = new Intent(
                 BlockchainService.ACTION_RESET_BLOCKCHAIN, null, this, CreativeCoinService.class);
 
-        new PriceUpdater().start();
-        new DynamicFeeLoader(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        //new PriceUpdater().start();
+        //new DynamicFeeLoader(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         walletFile = Constants.WALLET.FIRST_WALLET_FILE;
         if (loadWalletHelper()) {
             afterLoadWallet();
@@ -329,6 +333,31 @@ public class WalletApplication extends Application {
         startService(blockchainServiceResetBlockchainIntent);
     }
 
+    public void requestAccessToken() {
+        Request.create(Constants.SWAP.PLATFORM_API + "/oauth/v2/token")
+                .setLogger(new com.zanjou.http.debug.Logger(com.zanjou.http.debug.Logger.ERROR))
+                .setMethod(Request.GET)
+                .addParameter("grant_type", "client_credentials")
+                .addParameter("client_id", Constants.SWAP.CLIENT_ID)
+                .addParameter("client_secret", Constants.SWAP.CLIENT_SECRET)
+                .setResponseListener(new JsonResponseListener() {
+                    @Override
+                    public void onOkResponse(JSONObject jsonObject) throws JSONException {
+                        String accessToken = jsonObject.getString("access_token");
+                        Configuration.getInstance().setAccessToken(accessToken);
+                    }
+
+                    @Override
+                    public void onErrorResponse(JSONObject jsonObject) throws JSONException {
+
+                    }
+
+                    @Override
+                    public void onParseError(JSONException e) {
+
+                    }
+                }).execute();
+    }
 
     @Override
     protected void attachBaseContext(Context base) {

@@ -38,24 +38,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
+import androidx.core.app.NotificationCompat;
 
-import crea.wallet.lite.R;
-import crea.wallet.lite.application.Configuration;
-import crea.wallet.lite.application.Constants;
-import crea.wallet.lite.application.WalletApplication;
-import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
-import crea.wallet.lite.connection.ConnectedPeer;
-import crea.wallet.lite.ui.base.TransactionActivity;
-import crea.wallet.lite.ui.main.MainActivity;
-import crea.wallet.lite.util.wrapper.TimeUtils;
-import crea.wallet.lite.util.wrapper.TxInfo;
-import crea.wallet.lite.wallet.WalletHelper;
+import com.google.common.util.concurrent.FutureCallback;
 
 import org.creativecoinj.core.Block;
 import org.creativecoinj.core.BlockChain;
@@ -73,7 +61,9 @@ import org.creativecoinj.core.TransactionConfidence.ConfidenceType;
 import org.creativecoinj.core.listeners.DownloadProgressTracker;
 import org.creativecoinj.core.listeners.PeerConnectedEventListener;
 import org.creativecoinj.core.listeners.PeerDisconnectedEventListener;
-import org.creativecoinj.net.discovery.DnsAndSeedPeerDiscovery;
+import org.creativecoinj.net.discovery.MultiplexingDiscovery;
+import org.creativecoinj.net.discovery.PeerDiscovery;
+import org.creativecoinj.net.discovery.PeerDiscoveryException;
 import org.creativecoinj.store.BlockStore;
 import org.creativecoinj.store.BlockStoreException;
 import org.creativecoinj.store.SPVBlockStore;
@@ -83,17 +73,32 @@ import org.creativecoinj.wallet.Wallet;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nullable;
+
+import crea.wallet.lite.R;
+import crea.wallet.lite.application.Configuration;
+import crea.wallet.lite.application.Constants;
+import crea.wallet.lite.application.WalletApplication;
+import crea.wallet.lite.broadcast.BlockchainBroadcastReceiver;
+import crea.wallet.lite.connection.ConnectedPeer;
+import crea.wallet.lite.ui.base.TransactionActivity;
+import crea.wallet.lite.ui.main.MainActivity;
+import crea.wallet.lite.util.wrapper.TimeUtils;
+import crea.wallet.lite.util.wrapper.TxInfo;
+import crea.wallet.lite.wallet.WalletHelper;
 
 import static crea.wallet.lite.application.Constants.WALLET.CONTEXT;
 import static crea.wallet.lite.application.Constants.WALLET.NETWORK_PARAMETERS;
@@ -430,7 +435,38 @@ public class CreativeCoinService extends Service implements BlockchainService {
 				peerGroup.setConnectTimeoutMillis(Constants.PEER_TIMEOUT_MS);
 				peerGroup.setPeerDiscoveryTimeoutMillis(Constants.PEER_DISCOVERY_TIMEOUT_MS);
 
-				peerGroup.addPeerDiscovery(new DnsAndSeedPeerDiscovery(NETWORK_PARAMETERS));
+				peerGroup.addPeerDiscovery(new PeerDiscovery() {
+					private final PeerDiscovery normalPeerDiscovery = MultiplexingDiscovery
+							.forServices(NETWORK_PARAMETERS, 0);
+
+					@Override
+					public InetSocketAddress[] getPeers(final long services, final long timeoutValue,
+														final TimeUnit timeoutUnit) throws PeerDiscoveryException {
+						final List<InetSocketAddress> peers = new LinkedList<InetSocketAddress>();
+
+						boolean needsTrimPeersWorkaround = false;
+
+						final InetSocketAddress addr = new InetSocketAddress(Constants.SWAP.PEER, NETWORK_PARAMETERS.getPort());
+						if (addr.getAddress() != null) {
+							peers.add(addr);
+							needsTrimPeersWorkaround = true;
+						}
+
+						peers.addAll(Arrays.asList(normalPeerDiscovery.getPeers(services, timeoutValue, timeoutUnit)));
+
+						// workaround because PeerGroup will shuffle peers
+						if (needsTrimPeersWorkaround)
+							while (peers.size() >= maxConnectedPeers)
+								peers.remove(peers.size() - 1);
+
+						return peers.toArray(new InetSocketAddress[0]);
+					}
+
+					@Override
+					public void shutdown() {
+						normalPeerDiscovery.shutdown();
+					}
+				});
 
 				new AsyncTask<Void, Void, Void>() {
 
@@ -805,7 +841,9 @@ public class CreativeCoinService extends Service implements BlockchainService {
 				@Override
 				public void run() {
 					org.creativecoinj.core.Context.propagate(Constants.WALLET.CONTEXT);
-					TransactionBroadcast tb = peerGroup.broadcastTransaction(tx, 2, new FutureCallback<Transaction>() {
+					TransactionBroadcast tb = peerGroup.broadcastTransaction(tx, 2);
+
+					tb.setTransactionCallback(new FutureCallback<Transaction>() {
 						@Override
 						public void onSuccess(@Nullable Transaction transaction) {
 							Log.d(TAG, "Transaction broadcasted succesfully!");

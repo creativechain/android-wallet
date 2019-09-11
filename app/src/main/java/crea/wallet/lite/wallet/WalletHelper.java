@@ -19,11 +19,13 @@ import org.creativecoinj.core.InsufficientMoneyException;
 import org.creativecoinj.core.NetworkParameters;
 import org.creativecoinj.core.Sha256Hash;
 import org.creativecoinj.core.Transaction;
+import org.creativecoinj.crypto.ChildNumber;
 import org.creativecoinj.crypto.DeterministicKey;
 import org.creativecoinj.crypto.KeyCrypter;
 import org.creativecoinj.crypto.MnemonicException;
 import org.creativecoinj.wallet.CoinSelector;
 import org.creativecoinj.wallet.DeterministicSeed;
+import org.creativecoinj.wallet.KeyChain;
 import org.creativecoinj.wallet.Protos;
 import org.creativecoinj.wallet.SendRequest;
 import org.creativecoinj.wallet.UnreadableWalletException;
@@ -36,7 +38,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
@@ -106,6 +112,10 @@ public class WalletHelper {
         return this.wallet.freshReceiveAddress();
     }
 
+    public Address getNewAddress(KeyChain.KeyPurpose keyPurpose) {
+        return this.wallet.freshAddress(keyPurpose);
+    }
+
     public List<ECKey> getReceivedKeys() {
         return this.wallet.getIssuedReceiveKeys();
     }
@@ -135,6 +145,28 @@ public class WalletHelper {
         if (list.size() == 0) {
             list.add(wallet.freshReceiveAddress());
         }
+        return list;
+    }
+
+    public List<Address> getAllAddressesForSwap() {
+        List<Address> list = wallet.getIssuedReceiveAddresses();
+
+        //Adding Receive Addresses
+        while (list.size() < 100) {
+            list.add(wallet.freshReceiveAddress());
+        }
+
+        //Getting change addresses
+        int issuedKeys = wallet.getActiveKeyChain().getIssuedInternalKeys();
+        for (int x = 0; x < issuedKeys; x++) {
+            ChildNumber cn = new ChildNumber(x, false);
+            List<ChildNumber> cns = new ArrayList<>();
+            cns.add(ChildNumber.ZERO_HARDENED);
+            cns.add(ChildNumber.ONE);
+            cns.add(cn);
+            ECKey key = wallet.getKeyByPath(cns);
+            list.add(key.toAddress(NETWORK_PARAMETERS));
+        }
 
         return list;
     }
@@ -157,6 +189,42 @@ public class WalletHelper {
 
     public Coin getAddressBalance(String address) {
         return getAddressBalance(Address.fromBase58(Constants.WALLET.NETWORK_PARAMETERS, address));
+    }
+
+    public Map<String, String> signMessage(final String key, String message, Address... addresses) {
+        try {
+            Map<String, String> signedMessages = new HashMap<>();
+
+            Context.propagate(CONTEXT);
+            if (wallet.isEncrypted()) {
+                wallet.decrypt(key);
+            }
+
+            Log.d(TAG, "Messages to sign: " + addresses.length);
+
+            for (Address address : addresses) {
+                ECKey ecKey = wallet.findKeyFromPubHash(address.getHash160());
+                assert ecKey.toAddress(NETWORK_PARAMETERS).toBase58().equals(address.toBase58());
+                String signedMessage = ecKey.signMessage(message);
+                signedMessages.put(address.toBase58(), signedMessage);
+            }
+
+            Log.d(TAG, "Signed Messages: " + signedMessages.size());
+            new Thread() {
+                @Override
+                public void run() {
+                    Context.propagate(CONTEXT);
+                    encrypt(key);
+                }
+            }.start();
+
+            return signedMessages;
+
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public void singTransaction(final CharSequence tryKey, SendRequest sReq) {

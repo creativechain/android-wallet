@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/parent_item_row"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:padding="10dp">
+    android:layout_height="50dp"
+    android:background="@color/colorPrimaryTranslucent"
+    android:clickable="true"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp"
+    android:padding="5dp"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.7"
-        android:orientation="vertical">
-
-        <crea.wallet.lite.widget.FontTextView
-            android:id="@+id/label"
-            android:layout_height="wrap_content"
-            app:c_font="roboto_bold"
-            android:hint="@string/without_name"
-            android:layout_width="match_parent"/>
+        android:orientation="vertical"
+        android:gravity="center_vertical">
 
         <crea.wallet.lite.widget.FontTextView
             android:id="@+id/address_btc"
@@ -46,18 +45,6 @@
             android:layout_weight="0.5"
             android:gravity="right|center_vertical"
             android:hint="0.0256 btc"
-            android:textSize="12sp"
-            android:maxLines="1"
-            android:ellipsize="end"/>
-
-        <crea.wallet.lite.widget.FontTextView
-            android:id="@+id/amount_fiat"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:c_font="roboto_regular"
-            android:layout_weight="0.5"
-            android:gravity="right|center_vertical"
-            android:hint="89.36 eur"
             android:textSize="12sp"
             android:maxLines="1"
             android:ellipsize="end"/>

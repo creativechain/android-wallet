@@ -333,6 +333,14 @@ public class Configuration {
 		return prefs.getBoolean(PREFS_KEY_NEW_SECURITY_MODE, false);
 	}
 
+	public void setAccessToken(String accessToken) {
+		prefs.edit().putString("access_token", accessToken).apply();
+	}
+
+	public String getAccessToken() {
+		return prefs.getString("access_token", "");
+	}
+
 	public static Configuration getInstance() {
 		return new Configuration(WalletApplication.INSTANCE);
 	}

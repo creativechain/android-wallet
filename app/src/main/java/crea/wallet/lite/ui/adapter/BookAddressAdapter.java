@@ -72,7 +72,6 @@ public class BookAddressAdapter extends RecyclerAdapter<BookAddressAdapter.ViewH
             label = (TextView) v.findViewById(R.id.label);
             address = (TextView) v.findViewById(R.id.address_btc);
             amountBtc = (TextView) v.findViewById(R.id.amount_btc);
-            amountFiat = (TextView) v.findViewById(R.id.amount_fiat);
             amountView =  v.findViewById(R.id.balance);
         }
     }
