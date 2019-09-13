@@ -1,8 +1,5 @@
 package crea.wallet.lite.ui.tool;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -10,6 +7,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.zanjou.http.debug.Logger;
 import com.zanjou.http.request.Request;
@@ -27,13 +26,14 @@ import crea.wallet.lite.application.Configuration;
 import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.application.WalletApplication;
 import crea.wallet.lite.ui.adapter.AddressBalanceItem;
+import crea.wallet.lite.ui.base.BaseSwapActivity;
 import crea.wallet.lite.util.Utils;
 import crea.wallet.lite.util.wrapper.DialogFactory;
 import crea.wallet.lite.util.wrapper.IntentUtils;
 
 import static crea.wallet.lite.wallet.WalletHelper.INSTANCE;
 
-public class SwapActivity extends AppCompatActivity {
+public class SwapActivity extends BaseSwapActivity {
 
     private List<AddressBalanceItem> addressBalanceItems;
     private String username;
@@ -114,9 +114,10 @@ public class SwapActivity extends AppCompatActivity {
                     public void onOkResponse(JSONObject jsonObject) throws JSONException {
                         pDialog.dismiss();
                         AlertDialog aDialog = DialogFactory.successAlert(SwapActivity.this, R.string.swap_success, getString(R.string.swap_success_message, username));
-                        aDialog.setButton(Dialog.BUTTON_POSITIVE, getString(R.string.make_swap), new DialogInterface.OnClickListener() {
+                        aDialog.setButton(Dialog.BUTTON_POSITIVE, getString(R.string.finish), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
                                 finish();
                             }
                         });
@@ -131,6 +132,7 @@ public class SwapActivity extends AppCompatActivity {
                         aDialog.setButton(Dialog.BUTTON_POSITIVE, getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
                                 finish();
                             }
                         });

@@ -1,7 +1,5 @@
 package crea.wallet.lite.ui.tool;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +11,11 @@ import android.widget.Toast;
 import crea.wallet.lite.R;
 import crea.wallet.lite.swap.api.ApiError;
 import crea.wallet.lite.swap.process.AccountManager;
+import crea.wallet.lite.ui.base.BaseSwapActivity;
 import crea.wallet.lite.util.task.Task;
 import crea.wallet.lite.util.wrapper.DialogFactory;
 
-public class SwapLoginActivity extends AppCompatActivity {
+public class SwapLoginActivity extends BaseSwapActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +60,5 @@ public class SwapLoginActivity extends AppCompatActivity {
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
         }
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        DialogFactory.removeDialogsFrom(getClass());
-        super.onDestroy();
     }
 }

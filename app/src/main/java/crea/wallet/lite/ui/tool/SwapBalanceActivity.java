@@ -1,16 +1,15 @@
 package crea.wallet.lite.ui.tool;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.zanjou.http.debug.Logger;
 import com.zanjou.http.request.Request;
@@ -22,10 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import crea.wallet.lite.R;
 import crea.wallet.lite.application.Configuration;
@@ -33,11 +30,11 @@ import crea.wallet.lite.application.Constants;
 import crea.wallet.lite.ui.adapter.AddressBalanceItem;
 import crea.wallet.lite.ui.adapter.RecyclerAdapter;
 import crea.wallet.lite.ui.adapter.SwapAddressAdapter;
-import crea.wallet.lite.wallet.WalletHelper;
+import crea.wallet.lite.ui.base.BaseSwapActivity;
 
 import static crea.wallet.lite.wallet.WalletHelper.INSTANCE;
 
-public class SwapBalanceActivity extends AppCompatActivity  implements SwipeRefreshLayout.OnRefreshListener {
+public class SwapBalanceActivity extends BaseSwapActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "SwapBalanceActivity";
 

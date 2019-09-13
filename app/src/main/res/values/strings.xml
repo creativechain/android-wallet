@@ -159,7 +159,8 @@
     <string name="getting_private_key">Exporting private key</string>
     <string name="copied">Copied!</string>
     <string name="transaction">Transaction</string>
-    <string name="swap_welcome">The Creativecoin network is obsolete since 02/19/2019 12:00 CET. Instead the Crea network has been created. The coins you have in this wallet will be sent to the new network at the rate of 1: 1. Before proceeding with the process it is necessary to register in order to claim your coins. You can do it at https://creary.net/welcome.</string>
+    <string name="swap_welcome">Last 19th Feb 2019 @ 12:00 CET there was a swap of the Creativecoin blockchain. This means that a new blockchain (CREA Network) with a different structure has been created. CREA 1.0 owners can exchange their coins to CREA 2.0. The coins you have in this wallet will be sent to the new network at 1:1 ratio. To start this process it is necessary to create a user account in the new network to be able to claim your CREA 2.0 coins. You can create a @user in the dapp https://creary.net/welcome.\n\n
+        For further information about the migration process, please check this link: https://creaproject.io/crea-2-swap-en/</string>
     <string name="swap_already_registered">I\'m already registered</string>
     <string name="swap_login">Login</string>
     <string name="username">Username</string>
@@ -177,5 +178,6 @@
     <string name="swap_confirmation">Swap confirmation</string>
     <string name="swap_confirmation_message">You will exchange your coins. New currencies will be sent to @%s. This process is IRREVERSIBLE. Make sure the username is correct.</string>
     <string name="swap_no_addresses">No selected addresses</string>
+    <string name="finish">Finish</string>
 
 </resources>
